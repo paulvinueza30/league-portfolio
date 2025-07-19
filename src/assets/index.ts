@@ -1,3 +1,4 @@
-import runeButton from "./buttons/rune-button.png";
+export * from "./buttons";
+export * from "./summoner-spells";
 
-export default runeButton;
+export * as summonerSpells from "./summoner-spells";

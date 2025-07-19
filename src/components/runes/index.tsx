@@ -7,7 +7,7 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 
-import runeButton from "@/assets";
+import { runeButton } from "@/assets/buttons";
 
 import { ChevronUp, ChevronDown, Check } from "lucide-react";
 
