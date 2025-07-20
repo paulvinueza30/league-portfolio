@@ -11,12 +11,12 @@ import { runeButton } from "@/assets/buttons";
 
 import { ChevronUp, ChevronDown, Check } from "lucide-react";
 
-import { type ReactNode, useState } from "react"; // ✅
+import { type ReactNode, useState } from "react";
 export default function RuneSelection() {
   const [runeLabel, setRuneLabel] = useState<string>("Projects");
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [activeModal, setActiveModal] = useState<ReactNode | null>(null);
-
+  console.log(activeModal);
   const runePages: Record<string, ReactNode> = {
     Projects: <h1>Projects</h1>,
 
