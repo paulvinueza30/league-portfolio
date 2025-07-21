@@ -24,11 +24,11 @@ export default function SummonerSpells() {
   ];
 
   return (
-    <div className="w-fit h-fit flex gap-1 items-center select-none">
+    <div className="w-fit h-fit flex gap-4 items-center select-none">
       {summonerSpells.map((s) => (
         <Button
           key={s.name}
-          className="w-8 h-8 p-0 rounded-none"
+          className="w-12 h-12 p-0 rounded-none"
           onClick={() => window.open(s.link, "_blank", "noopener,noreferrer")}
         >
           <img src={s.img} alt={s.name + "icon"} draggable={false} />

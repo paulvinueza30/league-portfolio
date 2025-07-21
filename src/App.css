@@ -3,11 +3,10 @@
 
 @custom-variant dark (&:is(.dark *));
 
+html,
+body,
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  @apply h-screen w-screen m-0 p-0;
 }
 
 .animated-background {
@@ -137,9 +136,6 @@
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
   body {
     @apply bg-background text-foreground;
   }

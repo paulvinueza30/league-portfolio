@@ -42,7 +42,7 @@ export default function RuneSelection() {
         />
       </Button>
       <DropdownMenu>
-        <DropdownMenuTrigger className="border-3 border-[#98A0A9] bg-[#2e373f] h-12 w-xs flex justify-between items-center px-3">
+        <DropdownMenuTrigger className="border-3 border-[#98A0A9] bg-[#2e373f] h-12 w-2xs flex justify-between items-center px-3">
           <span className="text-lg text-[#BCAC88]">{runeLabel}</span>
           <div className="flex flex-col text-[#797B6F]">
             <ChevronUp className="w-2.5 h-2.5" />

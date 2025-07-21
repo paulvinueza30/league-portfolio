@@ -13,15 +13,15 @@ function PlayerSeperator() {
 
 function PlayerCard() {
   return (
-    <div className="flex flex-row gap-4g w-full items-center">
+    <div className="flex flex-row gap-4 w-full items-center">
       <img
         className="w-24 h-24 rounded-[10vw] border-2 border-[#87714D]"
         src={devRole}
         alt="Software engineer dev role"
       />
-      <div className="flex flex-col text-left text-[#CAB15A] text-lg tracking-widest">
+      <div className="flex flex-col text-left text-[#CAB15A] text-md tracking-widest">
         <h4>Declaring Intent</h4>
-        <h2 className="uppercase font-bold text-xl">Full Stack Dev</h2>
+        <h2 className="uppercase font-bold text-lg">Full Stack Dev</h2>
         <h3>Paul Vinueza</h3>
       </div>
     </div>
@@ -31,12 +31,12 @@ function PlayerCard() {
 export default function PlayerSection() {
   return (
     <div className="flex-col justify-items-start w-full">
-      <h1 className="uppercase font-bold text-[#929189] tracking-widest ml-2 ">
+      <h1 className="uppercase font-bold text-[#929189] tracking-widest ml-5 mb-3">
         First Pick
       </h1>
-      <div className="flex flex-row w-full">
+      <div className="flex flex-row w-full gap-3">
         <div className="bg-[#FABE0B] w-2" />
-        <div className="w-full">
+        <div className="w-full flex flex-col gap-4">
           <PlayerSeperator />
           <PlayerCard />
           <PlayerSeperator />

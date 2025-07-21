@@ -151,7 +151,7 @@ export default function SocialPanel() {
                 src={e.img}
                 alt={e.name}
                 draggable={false}
-                className="w-12 h-12"
+                className="w-14 h-12"
               />
             </PopoverTrigger>
             <PopoverContent side="top" className="select-none rounded-none">
