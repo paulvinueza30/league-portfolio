@@ -4,13 +4,14 @@ import "./App.css";
 // import BMSection from "./components/bm-section";
 // import QueueInfo from "./components/queueInfo";
 // import SocialPanel from "./components/social-panel";
-import MatchIntro from "@/components/match-intro";
+// import MatchIntro from "@/components/match-intro";
+import PlayerSection from "./components/player-section";
 
 function App() {
   return (
     <>
       <div className="flex justify-center items-center border-8 h-screen">
-        <MatchIntro />
+        <PlayerSection />
       </div>
     </>
   );
