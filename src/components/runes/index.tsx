@@ -200,7 +200,7 @@ export default function RuneSelection() {
           <img
             src={runeButton}
             alt="rune button"
-            className="w-12 h-12"
+            className="w-8 h-8"
             draggable={false}
           />
         </DialogTrigger>
