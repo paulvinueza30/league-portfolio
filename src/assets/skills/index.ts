@@ -3,7 +3,7 @@ import cLogo from "./C.png";
 import dbeaverLogo from "./DBeaver.png";
 import fastApiLogo from "./FastAPI.png";
 import ginLogo from "./gin.png";
-import awsLogo from "./icons8-amazon-web-services-50.png";
+import awsLogo from "./aws.png";
 import dockerLogo from "./icons8-docker-50.png";
 import expressLogo from "./icons8-express-js-50.png";
 import figmaLogo from "./icons8-figma-50.png";
@@ -26,6 +26,10 @@ import viteLogo from "./Vite.js.png";
 import yarnLogo from "./Yarn.png";
 import typescriptLogo from "./icons8-typescript-50.png";
 import tailwindLogo from "./icons8-tailwindcss-50.png";
+// TODO: CLASSIFY THESE
+import vercelLogo from "./vercel.png";
+import mernLogo from "./mern.png";
+import mvcLogo from "./mvc.jpg";
 
 export interface Skill {
   name: string;
@@ -80,3 +84,37 @@ export const allSkills: Skill[] = [
 ];
 
 export const defaultSkill = goGopher;
+
+export {
+  goGopher,
+  cLogo,
+  dbeaverLogo,
+  fastApiLogo,
+  ginLogo,
+  awsLogo,
+  dockerLogo,
+  expressLogo,
+  figmaLogo,
+  githubLogo,
+  javaLogo,
+  jsLogo,
+  jiraLogo,
+  mongoLogo,
+  nodeJSLogo,
+  postgresLogo,
+  pythonLogo,
+  reactLogo,
+  redisLogo,
+  jupyterLogo,
+  npmLogo,
+  postmanLogo,
+  rabbitmqLogo,
+  seleniumLogo,
+  viteLogo,
+  yarnLogo,
+  typescriptLogo,
+  tailwindLogo,
+  vercelLogo,
+  mernLogo,
+  mvcLogo,
+};

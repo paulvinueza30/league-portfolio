@@ -9,6 +9,10 @@ import BMSection from "@/components/bm-section";
 import QueueInfo from "@/components/queueInfo";
 import SocialPanel from "@/components/social-panel";
 
+function Seperator() {
+  return <div className="w-14 h-0.5 my-5 bg-[#524A42]" />;
+}
+
 export default function ChampSelect() {
   return (
     <div
@@ -33,12 +37,12 @@ export default function ChampSelect() {
       <div className="grid grid-cols-[auto_auto_auto] gap-x-5 mb-6 items-end h-50 mx-6">
         <Chatbox />
         <div className="flex flex-row gap-x-5 items-end">
-          <div className="w-14 h-0.5 my-5 bg-[#524A42]" />
+          <Seperator />
           <RuneSelection />
           <SummonerSpells />
           <div className="h-8 w-0.5 bg-[#525861] my-2.5" />
           <BMSection />
-          <div className="w-14 h-0.5 my-5 bg-[#524A42]" />
+          <Seperator />
         </div>
         <div className="flex flex-row items-end my-1 gap-4 flex-1 ">
           <QueueInfo />
