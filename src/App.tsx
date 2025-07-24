@@ -1,9 +1,9 @@
 import "./App.css";
 
-import ChampSelect from "./components/champ-select";
+import ChampSelectScreen from "./components/champ-select-screen";
 
 function App() {
-  return <ChampSelect />;
+  return <ChampSelectScreen />;
 }
 
 export default App;
