@@ -8,7 +8,7 @@ import SummonerSpells from "@/components/summoner-spells";
 import BMSection from "@/components/bm-section";
 import QueueInfo from "@/components/queueInfo";
 import SocialPanel from "@/components/social-panel";
-import ChampSelector from "@/champ-select";
+import ChampSelector from "@/components/champ-selector";
 
 function Seperator() {
   return <div className="w-14 h-0.5 my-5 bg-[#524A42]" />;
