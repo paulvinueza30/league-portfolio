@@ -17,7 +17,7 @@ function Seperator() {
 export default function ChampSelectScreen() {
   return (
     <div
-      className="border-2 min-h-screen w-full bg-cover bg-center bg-no-repeat select-none flex flex-col justify-between"
+      className="min-h-screen w-full bg-cover bg-center bg-no-repeat select-none flex flex-col justify-between"
       style={{
         backgroundImage: `url(${champSelectBgImg})`,
         backgroundSize: "cover",
@@ -31,7 +31,7 @@ export default function ChampSelectScreen() {
         <div className="w-4xl justify-items-center self-center mt-10">
           <MatchIntro />
         </div>
-        <div className="flex flex-row flex-1 justify-between border-2">
+        <div className="flex flex-row flex-1 justify-between">
           <div className="w-1/4">
             <PlayerSection />
           </div>

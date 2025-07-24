@@ -1,6 +1,10 @@
 import { Separator } from "@/components/ui/separator";
 import { Circle } from "lucide-react";
 import { devRole } from "@/assets/role";
+import { champPortrait } from "@/assets/self-pics";
+
+import { useAtom } from "jotai";
+import { selectedChampAtom } from "@/atoms/champAtom";
 
 function PlayerSeperator() {
   return (
@@ -12,11 +16,13 @@ function PlayerSeperator() {
 }
 
 function PlayerCard() {
+  const [champ] = useAtom(selectedChampAtom);
+
   return (
     <div className="flex flex-row gap-4 w-full items-center">
       <img
         className="w-24 h-24 rounded-[10vw] border-2 border-[#87714D]"
-        src={devRole}
+        src={champ ? champPortrait : devRole}
         alt="Software engineer dev role"
       />
       <div className="flex flex-col text-left text-[#CAB15A] text-md tracking-widest">
