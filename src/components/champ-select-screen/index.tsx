@@ -11,9 +11,12 @@ import SocialPanel from "@/components/social-panel";
 import ChampSelector from "@/components/champ-selector";
 import SkinCarousel from "../skin-carousel";
 
-import { useAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import { lockInAtom, skinAtom } from "@/atoms/champAtom";
+import { initGradientMapAtom, gradientMapAtom } from "@/atoms/gradientAtom";
 
+import { type Gradient, defaultGradient } from "../../utils/colors";
+import { useEffect, useState } from "react";
 function Seperator() {
   return <div className="w-14 h-0.5 my-5 bg-[#524A42]" />;
 }
@@ -69,22 +72,38 @@ function HextechCircle() {
 export default function ChampSelectScreen() {
   const [isLockedIn] = useAtom(lockInAtom);
   const [selectedSkin] = useAtom(skinAtom);
+  const [gradientMap] = useAtom(gradientMapAtom);
 
+  const initGradientMap = useSetAtom(initGradientMapAtom);
+
+  const [gradientColors, setGradientColors] =
+    useState<Gradient>(defaultGradient);
+
+  useEffect(() => {
+    initGradientMap();
+  }, []);
+
+  useEffect(() => {
+    if (!selectedSkin?.skinImg) return;
+    const gradient = gradientMap.get(selectedSkin.skinImg);
+    setGradientColors(gradient ?? defaultGradient);
+  }, [selectedSkin, gradientMap]);
   const getBackgroundStyle = () => {
     if (selectedSkin) {
       return {
         backgroundImage: `
- linear-gradient(to bottom, 
-  transparent 0%, 
-  transparent 43.5%,                  
-  rgba(20, 20, 60, 0.6) 20%,       
-  rgba(15, 15, 45, 0.9) 35%          
-),
-    radial-gradient(ellipse at center 40%, 
-      transparent 50%, 
-      rgba(30, 25, 60, 0.4) 70%,
-      rgba(20, 15, 40, 0.8) 100%
-    ),
+        linear-gradient(to bottom, transparent 40%, rgba(0, 0, 0, 1) 60%),
+    linear-gradient(to bottom, 
+            transparent 40%, 
+               
+            ${gradientColors.light} 43.5%,       
+            ${gradientColors.dark} 15%          
+          ),
+          radial-gradient(ellipse at 50% 30%, 
+            transparent 70%, 
+            ${gradientColors.light} 45%,
+            ${gradientColors.dark} 100%
+          ),
     url(${selectedSkin.skinImg})
   `,
         backgroundSize: "80% 130%",
