@@ -1,6 +1,4 @@
 // TODO: Add sounds
-
-import { Button } from "@/components/ui/button";
 import { githubIcon, linkedInIcon } from "@/assets/summoner-spells";
 
 import {
