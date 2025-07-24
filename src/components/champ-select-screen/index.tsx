@@ -9,23 +9,103 @@ import BMSection from "@/components/bm-section";
 import QueueInfo from "@/components/queueInfo";
 import SocialPanel from "@/components/social-panel";
 import ChampSelector from "@/components/champ-selector";
+import SkinCarousel from "../skin-carousel";
+
+import { useAtom } from "jotai";
+import { lockInAtom, skinAtom } from "@/atoms/champAtom";
 
 function Seperator() {
   return <div className="w-14 h-0.5 my-5 bg-[#524A42]" />;
 }
 
+function HextechCircle() {
+  return (
+    <>
+      <div
+        className="absolute w-[45em] h-[36em] border-[3px] border-[#534631] rounded-full pointer-events-none z-0 shadow-lg"
+        style={{
+          clipPath: "inset(5% 0% 10% 0%)",
+          filter: "drop-shadow(0 0 8px rgba(83, 70, 49, 0.4))",
+          background:
+            "radial-gradient(circle at center, rgba(83, 70, 49, 0.1), transparent 70%)",
+        }}
+      />
+
+      <div
+        className="absolute w-[46em] h-[34em] border-[2px] border-[#6b5a42] rounded-full pointer-events-none z-0 opacity-90"
+        style={{
+          clipPath: "inset(5% 1% 10% 0%)",
+          filter: "drop-shadow(0 0 6px rgba(107, 90, 66, 0.4))",
+        }}
+      />
+
+      <div
+        className="absolute w-[50em] h-[37em] pointer-events-none z-0"
+        style={{
+          clipPath: "polygon(0% 5%, 20% 3%, 3% 5%, 100% 15%, 100% 90%, 0% 90%)",
+        }}
+      >
+        {Array.from({ length: 200 }, (_, i) => {
+          const angle = (360 / 200) * i;
+
+          return (
+            <div
+              key={i}
+              className="absolute w-0.5 h-4 bg-[#534631]"
+              style={{
+                left: "50%",
+                top: "41%",
+                transform: `rotate(${angle}deg) translateY(-23em)`,
+                transformOrigin: "center bottom",
+              }}
+            />
+          );
+        })}
+      </div>
+    </>
+  );
+}
+
 export default function ChampSelectScreen() {
+  const [isLockedIn] = useAtom(lockInAtom);
+  const [selectedSkin] = useAtom(skinAtom);
+
+  const getBackgroundStyle = () => {
+    if (selectedSkin) {
+      return {
+        backgroundImage: `
+ linear-gradient(to bottom, 
+  transparent 0%, 
+  transparent 43.5%,                  
+  rgba(20, 20, 60, 0.6) 20%,       
+  rgba(15, 15, 45, 0.9) 35%          
+),
+    radial-gradient(ellipse at center 40%, 
+      transparent 50%, 
+      rgba(30, 25, 60, 0.4) 70%,
+      rgba(20, 15, 40, 0.8) 100%
+    ),
+    url(${selectedSkin.skinImg})
+  `,
+        backgroundSize: "80% 130%",
+        backgroundPosition: "calc(50% + 120px) calc(11.5vh)",
+        backgroundRepeat: "repeat",
+      };
+    }
+
+    return {
+      backgroundImage: `url(${champSelectBgImg})`,
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+      backgroundRepeat: "no-repeat",
+      minHeight: "100vh",
+      width: "100%",
+    };
+  };
   return (
     <div
-      className="min-h-screen w-full bg-cover bg-center bg-no-repeat select-none flex flex-col justify-between"
-      style={{
-        backgroundImage: `url(${champSelectBgImg})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        minHeight: "100vh",
-        width: "100%",
-      }}
+      className="min-h-screen max-h-screen w-full bg-cover bg-center bg-no-repeat select-none flex flex-col justify-between overflow-hidden"
+      style={getBackgroundStyle()}
     >
       <div className="flex flex-col gap-6 flex-1 ">
         <div className="w-4xl justify-items-center self-center mt-10">
@@ -36,54 +116,9 @@ export default function ChampSelectScreen() {
             <PlayerSection />
           </div>
           <div className="inline-flex justify-center relative">
-            {/* Inner circle (your existing one) */}
-            <div
-              className="absolute w-[45em] h-[36em] border-[3px] border-[#534631] rounded-full pointer-events-none z-0 shadow-lg"
-              style={{
-                clipPath: "inset(5% 0% 10% 0%)",
-                filter: "drop-shadow(0 0 8px rgba(83, 70, 49, 0.4))",
-                background:
-                  "radial-gradient(circle at center, rgba(83, 70, 49, 0.1), transparent 70%)",
-              }}
-            />
-
-            {/* Outer circle for double effect */}
-            <div
-              className="absolute w-[46em] h-[34em] border-[2px] border-[#6b5a42] rounded-full pointer-events-none z-0 opacity-90"
-              style={{
-                clipPath: "inset(5% 1% 10% 0%)",
-                filter: "drop-shadow(0 0 6px rgba(107, 90, 66, 0.4))",
-              }}
-            />
-
-            {/* Spines container */}
-            <div
-              className="absolute w-[50em] h-[37em] pointer-events-none z-0"
-              style={{
-                clipPath:
-                  "polygon(0% 5%, 20% 3%, 3% 5%, 100% 15%, 100% 90%, 0% 90%)",
-              }}
-            >
-              {Array.from({ length: 200 }, (_, i) => {
-                const angle = (360 / 200) * i;
-
-                return (
-                  <div
-                    key={i}
-                    className="absolute w-0.5 h-4 bg-[#534631]"
-                    style={{
-                      left: "50%",
-                      top: "41%",
-                      transform: `rotate(${angle}deg) translateY(-23em)`,
-                      transformOrigin: "center bottom",
-                    }}
-                  />
-                );
-              })}
-            </div>
-
+            <HextechCircle />
             <div className="z-10">
-              <ChampSelector />
+              {isLockedIn ? <SkinCarousel /> : <ChampSelector />}
             </div>
           </div>
 
