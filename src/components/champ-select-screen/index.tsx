@@ -76,8 +76,7 @@ export default function ChampSelectScreen() {
 
   const initGradientMap = useSetAtom(initGradientMapAtom);
 
-  const [gradientColors, setGradientColors] =
-    useState<Gradient>(defaultGradient);
+  const [_, setGradientColors] = useState<Gradient>(defaultGradient);
 
   useEffect(() => {
     initGradientMap();
@@ -92,22 +91,15 @@ export default function ChampSelectScreen() {
     if (selectedSkin) {
       return {
         backgroundImage: `
-        linear-gradient(to bottom, transparent 40%, rgba(0, 0, 0, 1) 60%),
-    linear-gradient(to bottom, 
-            transparent 40%, 
-               
-            ${gradientColors.light} 43.5%,       
-            ${gradientColors.dark} 15%          
-          ),
-          radial-gradient(ellipse at 50% 30%, 
-            transparent 70%, 
-            ${gradientColors.light} 45%,
-            ${gradientColors.dark} 100%
-          ),
-    url(${selectedSkin.skinImg})
-  `,
-        backgroundSize: "80% 130%",
-        backgroundPosition: "calc(50% + 120px) calc(11.5vh)",
+        radial-gradient(ellipse 50% 50% at center, 
+          transparent 30%, 
+          rgba(0,0,0,0.4) 60%,
+          rgba(0,0,0,0.9) 100%
+        ),
+        url(${selectedSkin.skinImg})
+      `,
+        backgroundSize: "100% 100%",
+        backgroundPosition: "calc(50% + 120px)",
         backgroundRepeat: "repeat",
       };
     }

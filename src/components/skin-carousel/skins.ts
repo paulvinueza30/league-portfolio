@@ -1,12 +1,5 @@
 import { champPortrait } from "@/assets/self-pics";
-import {
-  goGopher,
-  seleniumLogo,
-  typescriptLogo,
-  javaLogo,
-  jsLogo,
-  figmaLogo,
-} from "@/assets/skills";
+import { beachDay, rengar, vexed, elo, goNext } from "@/assets/art";
 
 export interface Skin {
   skinName: string;
@@ -16,11 +9,10 @@ export interface Skin {
 export const defaultSkin: Skin = { skinName: "Paul", skinImg: champPortrait };
 
 export const skins: Skin[] = [
-  { skinName: "goGopher", skinImg: goGopher },
-  { skinName: "Sel", skinImg: seleniumLogo },
-  { skinName: "ts", skinImg: typescriptLogo },
+  { skinName: "goGopher", skinImg: goNext },
+  { skinName: "Sel", skinImg: rengar },
+  { skinName: "ts", skinImg: vexed },
   { skinName: "Paul", skinImg: champPortrait },
-  { skinName: "java", skinImg: javaLogo },
-  { skinName: "JavaScript", skinImg: jsLogo },
-  { skinName: "Figma", skinImg: figmaLogo },
+  { skinName: "java", skinImg: elo },
+  { skinName: "JavaScript", skinImg: beachDay },
 ];

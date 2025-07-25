@@ -17,6 +17,10 @@ body,
   animation: animation 5s ease infinite;
 }
 
+body {
+  cursor: url("/cursors/old.cur"), auto;
+}
+
 @keyframes animation {
   0%,
   100% {
