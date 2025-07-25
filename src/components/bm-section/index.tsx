@@ -61,7 +61,7 @@ function WardButton() {
 
   return (
     <Popover>
-      <PopoverTrigger>
+      <PopoverTrigger className="joy-skills-showcase">
         <img
           className="w-12 h-12 select-none"
           src={defaultSkill}
@@ -104,7 +104,11 @@ export default function BMSection() {
   return (
     <div className="flex items-center gap-4">
       <WardButton />
-      <Button variant="ghost" className="h-full w-12" size="icon">
+      <Button
+        variant="ghost"
+        className="h-full w-12 joy-resume-button"
+        size="icon"
+      >
         <img src={portfolioButton} alt="Portfolio button" draggable={false} />
       </Button>
     </div>

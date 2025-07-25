@@ -28,18 +28,20 @@ export default function SummonerSpells() {
   ];
 
   return (
-    <div className="w-fit h-fit flex gap-4 items-center select-none">
-      {summonerSpells.map((s) => (
-        <HoverCard>
-          <HoverCardTrigger
-            key={s.name}
-            className="w-12 h-12 p-0 rounded-none"
-            onClick={() => window.open(s.link, "_blank", "noopener,noreferrer")}
-          >
-            <img src={s.img} alt={s.name + "icon"} draggable={false} />
-          </HoverCardTrigger>
-          <HoverCardContent
-            className="
+    <div className="w-fit h-fit flex gap-4 items-center select-none joy-summ-spells">
+      {summonerSpells.map((s, idx) => (
+        <div key={idx} className="w-12 h-12">
+          <HoverCard>
+            <HoverCardTrigger
+              className="w-12 h-12 p-0 rounded-none"
+              onClick={() =>
+                window.open(s.link, "_blank", "noopener,noreferrer")
+              }
+            >
+              <img src={s.img} alt={s.name + "icon"} draggable={false} />
+            </HoverCardTrigger>
+            <HoverCardContent
+              className="
   bg-[#010A13] 
   border-2 border-[#463714] 
   text-[#F0E6D2] 
@@ -51,10 +53,11 @@ export default function SummonerSpells() {
   font-medium
   text-sm
 "
-          >
-            {"Link to my " + s.name + "!"}
-          </HoverCardContent>
-        </HoverCard>
+            >
+              {"Link to my " + s.name + "!"}
+            </HoverCardContent>
+          </HoverCard>
+        </div>
       ))}
     </div>
   );

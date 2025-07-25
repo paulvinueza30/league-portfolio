@@ -205,7 +205,7 @@ export default function SocialPanel() {
         const PanelComponent = e.component;
         return (
           <Popover key={e.name}>
-            <PopoverTrigger>
+            <PopoverTrigger className="joy-message-button">
               <img
                 src={e.img}
                 alt={e.name}

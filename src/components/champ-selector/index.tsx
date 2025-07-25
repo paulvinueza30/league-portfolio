@@ -16,7 +16,7 @@ export default function ChampSelector() {
         <img src={greyRole} alt="software engineer role" className="w-6 h-6" />
         <div className="bg-[#363825] w-full h-0.5" />
 
-        <div className="w-1/5 h-1/5 flex flex-col justify-items-center gap-2 mt-4">
+        <div className="w-1/5 h-1/5 flex flex-col justify-items-center gap-2 mt-4 joy-champ-portrait">
           <button
             className={`
     border-2 border-[#463714] 
@@ -44,7 +44,7 @@ export default function ChampSelector() {
       </div>
       <div className="flex justify-center">
         <div
-          className={`relative w-xs h-12 transition-transform duration-150 ${
+          className={`joy-lock-in-button relative w-xs h-12 transition-transform duration-150 ${
             champ && "hover:scale-105 active:scale-85"
           }`}
           style={{

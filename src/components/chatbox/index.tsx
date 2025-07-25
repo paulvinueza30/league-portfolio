@@ -8,11 +8,13 @@ import {
 } from "@/atoms/chatAtom";
 import { chatSound } from "@/assets/sounds";
 import { useRef, useEffect } from "react";
+import { joyrideAtom } from "@/atoms/joyrideAtom";
 
 function Chat() {
   const [chat] = useAtom(chatAtom);
   const chatFx = new Audio(chatSound);
   const bottomRef = useRef<HTMLDivElement | null>(null);
+  const [_, setRunTour] = useAtom(joyrideAtom);
 
   useEffect(() => {
     const latestMessage = chat[chat.length - 1];
@@ -20,7 +22,7 @@ function Chat() {
     if (latestMessage && latestMessage.type === "user") {
       try {
         chatFx.currentTime = 0;
-        chatFx.play().catch();
+        // chatFx.play().catch();
       } catch (error) {}
     }
 
@@ -45,7 +47,9 @@ function Chat() {
             {"\u00A0" + message.content}
           </span>
           {message.type === "guide" && (
-            <a className="text-blue-400">{"\u00A0" + message.highlight}</a>
+            <a onClick={() => setRunTour(true)} className="text-blue-400">
+              {"\u00A0" + message.highlight}
+            </a>
           )}
         </div>
       );

@@ -81,7 +81,9 @@ export default function SkinCarousel() {
           {skins.map((skin: Skin, idx) => (
             <CarouselItem
               key={skin.skinName}
-              className="cursor-pointer basis-1/5 flex justify-center"
+              className={`cursor-pointer basis-1/5 flex justify-center ${
+                skin.skinImg === defaultSkin.skinName && "joy-skin-showcase"
+              }`}
               onClick={() => {
                 api?.scrollTo(idx);
               }}

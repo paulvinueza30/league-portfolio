@@ -37,7 +37,10 @@ export default function RuneSelection() {
   return (
     <div className="flex justify-between items-center gap-3 ">
       <Dialog>
-        <DialogTrigger onClick={() => setActiveModal(runePages[runeLabel])}>
+        <DialogTrigger
+          className="joy-rune-page-opener"
+          onClick={() => setActiveModal(runePages[runeLabel])}
+        >
           <img
             src={runeButton}
             alt="rune button"
@@ -66,7 +69,7 @@ export default function RuneSelection() {
       </Dialog>
 
       <DropdownMenu>
-        <DropdownMenuTrigger className="border-3 border-[#98A0A9] bg-[#2e373f] h-12 w-2xs flex justify-between items-center px-3">
+        <DropdownMenuTrigger className="border-3 border-[#98A0A9] bg-[#2e373f] h-12 w-2xs flex justify-between items-center px-3 joy-rune-dropdown">
           <span className="text-lg text-[#BCAC88]">{runeLabel}</span>
           <div className="flex flex-col text-[#797B6F]">
             <ChevronUp className="w-2.5 h-2.5" />
