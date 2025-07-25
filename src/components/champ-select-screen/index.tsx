@@ -11,12 +11,9 @@ import SocialPanel from "@/components/social-panel";
 import ChampSelector from "@/components/champ-selector";
 import SkinCarousel from "../skin-carousel";
 
-import { useAtom, useSetAtom } from "jotai";
+import { useAtom } from "jotai";
 import { lockInAtom, skinAtom } from "@/atoms/champAtom";
-import { initGradientMapAtom, gradientMapAtom } from "@/atoms/gradientAtom";
 
-import { type Gradient, defaultGradient } from "../../utils/colors";
-import { useEffect, useState } from "react";
 function Seperator() {
   return <div className="w-14 h-0.5 my-5 bg-[#524A42]" />;
 }
@@ -72,21 +69,7 @@ function HextechCircle() {
 export default function ChampSelectScreen() {
   const [isLockedIn] = useAtom(lockInAtom);
   const [selectedSkin] = useAtom(skinAtom);
-  const [gradientMap] = useAtom(gradientMapAtom);
 
-  const initGradientMap = useSetAtom(initGradientMapAtom);
-
-  const [_, setGradientColors] = useState<Gradient>(defaultGradient);
-
-  useEffect(() => {
-    initGradientMap();
-  }, []);
-
-  useEffect(() => {
-    if (!selectedSkin?.skinImg) return;
-    const gradient = gradientMap.get(selectedSkin.skinImg);
-    setGradientColors(gradient ?? defaultGradient);
-  }, [selectedSkin, gradientMap]);
   const getBackgroundStyle = () => {
     if (selectedSkin) {
       return {
