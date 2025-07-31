@@ -1,4 +1,7 @@
 {
+  "resolutions": {
+  "three": "^0.178.0"
+},
   "name": "lol-portfolio",
   "private": true,
   "version": "0.0.0",
@@ -20,6 +23,9 @@
     "@radix-ui/react-separator": "^1.1.7",
     "@radix-ui/react-slot": "^1.2.3",
     "@radix-ui/react-tabs": "^1.1.12",
+    "@react-three/drei": "^10.6.1",
+    "@react-three/fiber": "^9.2.0",
+    "@react-three/rapier": "^2.1.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "embla-carousel-react": "^8.6.0",
@@ -33,6 +39,7 @@
     "react-resizable-panels": "^3.0.3",
     "shadcn": "^2.9.2",
     "tailwind-merge": "^3.3.1",
+    "three": "^0.178.0",
     "zod": "^4.0.5"
   },
   "devDependencies": {

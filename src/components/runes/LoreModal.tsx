@@ -4,6 +4,8 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 
+import Scene from "@/components/rift-section";
+
 import { difficulty, noBgDevRole } from "@/assets/role/";
 import { meh } from "@/assets/role/";
 
@@ -61,10 +63,8 @@ export function LoreModal() {
       <ResizableHandle disabled={true} />
       <ResizablePanel defaultSize={50}>
         <ResizablePanelGroup direction="vertical">
-          <ResizablePanel defaultSize={80}>
-            <div className="flex h-full items-center justify-center p-6">
-              <span className="font-semibold">Two</span>
-            </div>
+          <ResizablePanel defaultSize={50}>
+            <Scene />
           </ResizablePanel>
           <ResizableHandle />
           <ResizablePanel defaultSize={20}>
