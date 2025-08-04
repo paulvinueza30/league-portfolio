@@ -6,9 +6,11 @@ import { queueBackground } from "@/assets/client";
 import { acceptedAtom } from "@/atoms/queueAtom";
 import { useAtom } from "jotai";
 
-import { matchFoundSound } from "@/assets/sounds";
+import { matchFoundSound, acceptSound, hoverSound } from "@/assets/sounds";
 
 const matchAudio = new Audio(matchFoundSound);
+const acceptedSound = new Audio(acceptSound);
+const hoveredSound = new Audio(hoverSound);
 
 // TODO: Figure out what to do for decline
 export default function QueuePop() {
@@ -21,12 +23,9 @@ export default function QueuePop() {
       matchAudio.currentTime = 0;
       matchAudio.play().catch((e) => console.warn("Playback error:", e));
     } else {
-      const timeout = setTimeout(() => {
-        matchAudio.pause();
-        matchAudio.currentTime = 0;
-      }, 5000);
-
-      return () => clearTimeout(timeout);
+      matchAudio.pause();
+      acceptedSound.currentTime = 0.2;
+      acceptedSound.play();
     }
   }, [accepted]);
 
@@ -193,10 +192,23 @@ export default function QueuePop() {
     </div>
   );
 }
+const hoverCooldown = 300; // ms between plays
 
 function AcceptButton() {
   const [accepted, setAccepted] = useAtom(acceptedAtom);
 
+  const lastHoverTimeRef = useRef(0);
+
+  function handleHover() {
+    if (accepted) return;
+
+    const now = Date.now();
+    if (now - lastHoverTimeRef.current < hoverCooldown) return;
+
+    lastHoverTimeRef.current = now;
+    hoveredSound.currentTime = 0;
+    hoveredSound.play();
+  }
   return (
     <div className="flex justify-center select-none">
       <svg
@@ -211,6 +223,7 @@ function AcceptButton() {
         onClick={() => {
           setAccepted(true);
         }}
+        onMouseEnter={handleHover}
       >
         <path
           d="M 0 0 L 2 0 L 2.5 1 Q 0.9 2 -1.5 1 L -1 0 Z"
@@ -237,11 +250,22 @@ function AcceptButton() {
 }
 
 function DeclineButton() {
+  const lastHoverTimeRef = useRef(0);
+
+  function handleHover() {
+    const now = Date.now();
+    if (now - lastHoverTimeRef.current < hoverCooldown) return;
+
+    lastHoverTimeRef.current = now;
+    hoveredSound.currentTime = 0;
+    hoveredSound.play();
+  }
   return (
     <button
       className="relative text-[#B9AC89] uppercase w-[7.5em] h-[2.1em] font-bold border-2 border-[#C0A76F] bg-[#192128] transition duration-150
     before:absolute before:inset-0 before:border-[1.5px] before:border-[#F1E2B8] before:opacity-0 before:scale-105 before:rounded-sm before:transition
     hover:before:opacity-100 hover:before:shadow-[0_0_15px_#F1E2B8] hover:text-[#fefae0] hover:border-[#F1E2B8] hover:bg-[#2B3139]"
+      onMouseEnter={handleHover}
     >
       Decline
     </button>
