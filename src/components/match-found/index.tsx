@@ -62,10 +62,8 @@ export default function QueuePop() {
         });
       }
 
-      // Create timeline
       const tl = gsap.timeline();
 
-      // Initial setup
       gsap.set(circle, { strokeDasharray: length, strokeDashoffset: 0 });
       gsap.set(tracer, {
         strokeDasharray: `10 ${length}`,
@@ -73,14 +71,13 @@ export default function QueuePop() {
         strokeOpacity: 0,
       });
 
-      // Timeline sequence
       tl.to({}, { duration: 2 })
         .to(tracer, { strokeOpacity: 0.85, duration: 0.5 })
         .to(
           [tracer, circle],
           {
             strokeDashoffset: -length,
-            duration: 15,
+            duration: 13,
             ease: "none",
           },
           "<"
