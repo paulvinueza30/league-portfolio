@@ -13,7 +13,12 @@ import SkinCarousel from "../skin-carousel";
 
 import { useAtom } from "jotai";
 import { lockInAtom, skinAtom } from "@/atoms/champAtom";
+
 import MyJoyRide from "./MyJoyRide";
+
+import { useGSAP } from "@gsap/react";
+import { gsap } from "gsap/gsap-core";
+gsap.registerPlugin(useGSAP);
 
 function Seperator() {
   return <div className="w-14 h-0.5 my-5 bg-[#524A42]" />;
@@ -97,6 +102,15 @@ export default function ChampSelectScreen() {
       width: "100%",
     };
   };
+
+  useGSAP(() => {
+    const tl = gsap.timeline({
+      yoyo: true,
+      repeat: -1,
+    });
+    console.log(tl);
+  }, []);
+
   return (
     <div
       className="min-h-screen max-h-screen w-full bg-cover bg-center bg-no-repeat select-none flex flex-col justify-between overflow-hidden"
@@ -104,7 +118,7 @@ export default function ChampSelectScreen() {
     >
       <MyJoyRide />
       <div className="flex flex-col gap-6 flex-1 ">
-        <div className="w-4xl justify-items-center self-center mt-10">
+        <div className="w-4xl justify-items-center self-center mt-10 match-intro">
           <MatchIntro />
         </div>
         <div className="flex flex-row flex-1 justify-between">

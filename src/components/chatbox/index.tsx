@@ -10,19 +10,22 @@ import { chatSound } from "@/assets/sounds";
 import { useRef, useEffect } from "react";
 import { joyrideAtom } from "@/atoms/joyrideAtom";
 
+import { useAudio } from "@/context/AudioContext";
+
 function Chat() {
   const [chat] = useAtom(chatAtom);
   const chatFx = new Audio(chatSound);
   const bottomRef = useRef<HTMLDivElement | null>(null);
   const [_, setRunTour] = useAtom(joyrideAtom);
-
+  const { volume } = useAudio();
   useEffect(() => {
     const latestMessage = chat[chat.length - 1];
 
     if (latestMessage && latestMessage.type === "user") {
       try {
         chatFx.currentTime = 0;
-        // chatFx.play().catch();
+        chatFx.volume = volume;
+        chatFx.play().catch();
       } catch (error) {}
     }
 

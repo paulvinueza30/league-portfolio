@@ -1,15 +1,19 @@
 import "./App.css";
 
 import ChampSelectScreen from "./components/champ-select-screen";
-import MatchFound from "@/components/match-found";
+import InQueue from "./components/in-queue";
+import { AudioProvider } from "@/context/AudioContext";
 
-function App() {
+import { acceptedAtom } from "./atoms/queueAtom";
+import { useAtom } from "jotai";
+
+export default function App() {
+  const [accepted] = useAtom(acceptedAtom);
   return (
-    <div className="bg-gray-200 w-screen h-screen">
-      <MatchFound />
-    </div>
+    <>
+      <AudioProvider>
+        {accepted ? <ChampSelectScreen /> : <InQueue />}
+      </AudioProvider>
+    </>
   );
-  // return <ChampSelectScreen />;
 }
-
-export default App;

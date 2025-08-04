@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 
 import { queueBackground } from "@/assets/client";
@@ -7,6 +7,7 @@ import { acceptedAtom } from "@/atoms/queueAtom";
 import { useAtom } from "jotai";
 
 import { matchFoundSound, acceptSound, hoverSound } from "@/assets/sounds";
+import { useAudio } from "@/context/AudioContext";
 
 const matchAudio = new Audio(matchFoundSound);
 const acceptedSound = new Audio(acceptSound);
@@ -18,14 +19,13 @@ export default function QueuePop() {
   const tracerRef = useRef<SVGCircleElement>(null);
 
   const [accepted] = useAtom(acceptedAtom);
+  const [locallyAccepted, setLocalAccepted] = useState<boolean>(false);
+  const { volume } = useAudio();
   useEffect(() => {
     if (!accepted) {
       matchAudio.currentTime = 0;
+      matchAudio.volume = volume;
       matchAudio.play().catch((e) => console.warn("Playback error:", e));
-    } else {
-      matchAudio.pause();
-      acceptedSound.currentTime = 0.2;
-      acceptedSound.play();
     }
   }, [accepted]);
 
@@ -83,12 +83,12 @@ export default function QueuePop() {
         )
         .to(tracer, { strokeOpacity: 0, duration: 0.5 });
 
-      if (accepted) tl.kill();
+      if (locallyAccepted) tl.kill();
       return () => {
         tl.kill();
       };
     }
-  }, [accepted]);
+  }, [accepted, locallyAccepted]);
   return (
     <div className="select-none fixed inset-0 flex items-center justify-center bg-none#9E916B bg-opacity-100 z-50 backdrop-blur-2xl bg-white/5">
       <div className="border-3 border-[#dec375] rounded-full p-6 flex justify-center justify-items-center relative">
@@ -175,61 +175,88 @@ export default function QueuePop() {
                 className="w-1/4 h-1/4 mb-2"
               />
               <h2 className="text-3xl uppercase font-bold">
-                {accepted ? "Summoning Portfolio" : "Portfolio Found"}
+                {locallyAccepted ? "Summoning Portfolio" : "Portfolio Found"}
               </h2>
               <p className="text-sm">Paul's Rift - Portfolio Review - 1v1</p>
             </div>
           </div>
           <div className="absolute bottom-2">
-            <AcceptButton />
+            <AcceptButton
+              locallyAccepted={locallyAccepted}
+              setLocalAccepted={setLocalAccepted}
+            />
           </div>
         </div>
         <div className="absolute bottom-4 translate-y-full flex justify-center w-full  ">
           {" "}
-          {!accepted && <DeclineButton />}
+          {!locallyAccepted && <DeclineButton />}
         </div>
       </div>
     </div>
   );
 }
-const hoverCooldown = 300; // ms between plays
+const hoverCooldown = 300;
+interface AcceptButtonProps {
+  locallyAccepted: boolean;
+  setLocalAccepted: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-function AcceptButton() {
+function AcceptButton({
+  locallyAccepted,
+  setLocalAccepted,
+}: AcceptButtonProps) {
   const [accepted, setAccepted] = useAtom(acceptedAtom);
-
   const lastHoverTimeRef = useRef(0);
+  const { volume } = useAudio();
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   function handleHover() {
     if (accepted) return;
-
     const now = Date.now();
     if (now - lastHoverTimeRef.current < hoverCooldown) return;
-
     lastHoverTimeRef.current = now;
     hoveredSound.currentTime = 0;
+    hoveredSound.volume = volume;
     hoveredSound.play();
   }
+
+  function handleClick() {
+    if (accepted) return;
+    matchAudio.pause();
+    acceptedSound.currentTime = 0.2;
+    acceptedSound.volume = volume;
+    acceptedSound.play();
+    setLocalAccepted(true);
+    timeoutRef.current = setTimeout(() => {
+      setAccepted(true);
+    }, 1800);
+  }
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
+
   return (
     <div className="flex justify-center select-none">
       <svg
         viewBox="-2 0 5.5 1.5"
         className={`transition-transform duration-150 w-[20em] h-[3.5em] ${
-          !accepted && "hover:scale-105 active:scale-95"
+          !locallyAccepted && "hover:scale-105 active:scale-95"
         }`}
         style={{
-          cursor: !accepted ? "pointer" : "not-allowed",
+          cursor: !locallyAccepted ? "pointer" : "not-allowed",
           background: "transparent",
         }}
-        onClick={() => {
-          setAccepted(true);
-        }}
+        onClick={handleClick}
         onMouseEnter={handleHover}
       >
         <path
           d="M 0 0 L 2 0 L 2.5 1 Q 0.9 2 -1.5 1 L -1 0 Z"
-          transform="scale(1.4, .95)" // Better proportions
-          fill={!accepted ? "#1F252C" : "#666666"}
-          stroke={!accepted ? "#43BFBC" : "none"}
+          transform="scale(1.4, .95)"
+          fill={!locallyAccepted ? "#1F252C" : "#666666"}
+          stroke={!locallyAccepted ? "#43BFBC" : "none"}
           strokeWidth="0.1"
         />
         <text
@@ -237,7 +264,7 @@ function AcceptButton() {
           y="0.75"
           textAnchor="middle"
           dominantBaseline="middle"
-          fill={!accepted ? "#ffffff" : "#999999"}
+          fill={!locallyAccepted ? "#ffffff" : "#999999"}
           fontWeight="bold"
           fontSize="0.45"
           className="text-center uppercase"
