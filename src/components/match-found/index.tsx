@@ -1,23 +1,196 @@
-export default function MatchFound() {
+import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+
+import { queueBackground } from "@/assets/client";
+
+import { acceptedAtom } from "@/atoms/queueAtom";
+import { useAtom } from "jotai";
+
+import { matchFoundSound } from "@/assets/sounds";
+
+const matchAudio = new Audio(matchFoundSound);
+
+// TODO: Figure out what to do for decline
+export default function QueuePop() {
+  const ringRef = useRef<SVGCircleElement>(null);
+  const tracerRef = useRef<SVGCircleElement>(null);
+
+  const [accepted] = useAtom(acceptedAtom);
+  useEffect(() => {
+    if (!accepted) {
+      matchAudio.currentTime = 0;
+      matchAudio.play().catch((e) => console.warn("Playback error:", e));
+    } else {
+      const timeout = setTimeout(() => {
+        matchAudio.pause();
+        matchAudio.currentTime = 0;
+      }, 5000);
+
+      return () => clearTimeout(timeout);
+    }
+  }, [accepted]);
+
+  useEffect(() => {
+    const circle = ringRef.current;
+    const tracer = tracerRef.current;
+
+    if (circle && tracer) {
+      const length = circle.getTotalLength();
+
+      gsap.to(circle, {
+        "--glow": 0.5,
+        duration: 1.5,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.in",
+        onUpdate: () => {
+          const val = gsap.getProperty(circle, "--glow");
+          circle.style.filter = `drop-shadow(0 0 40px rgba(77, 246, 249, ${val}))`;
+        },
+      });
+
+      const stop1 = document.getElementById("stop1");
+      const stop2 = document.getElementById("stop2");
+      const stop3 = document.getElementById("stop3");
+      if (stop1 && stop2 && stop3) {
+        gsap.to([stop1, stop2, stop3], {
+          stopColor: "#2ACAD4",
+          duration: 2.5,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut",
+        });
+      }
+
+      // Create timeline
+      const tl = gsap.timeline();
+
+      // Initial setup
+      gsap.set(circle, { strokeDasharray: length, strokeDashoffset: 0 });
+      gsap.set(tracer, {
+        strokeDasharray: `10 ${length}`,
+        strokeDashoffset: 0,
+        strokeOpacity: 0,
+      });
+
+      // Timeline sequence
+      tl.to({}, { duration: 2 })
+        .to(tracer, { strokeOpacity: 0.85, duration: 0.5 })
+        .to(
+          [tracer, circle],
+          {
+            strokeDashoffset: -length,
+            duration: 15,
+            ease: "none",
+          },
+          "<"
+        )
+        .to(tracer, { strokeOpacity: 0, duration: 0.5 });
+
+      if (accepted) tl.kill();
+      return () => {
+        tl.kill();
+      };
+    }
+  }, [accepted]);
   return (
-    <div className="fixed inset-0 flex items-center justify-center  bg-white bg-opacity-50">
-      <div className="w-160 h-160 bg-transparent border-2 border-red-300 rounded-full justify-center flex items-center">
-        <div className="bg-blue-300 w-140 h-140 rounded-full justify-center flex flex-col items-center">
-          <div className="bg-green-300 w-130 h-130 rounded-full flex flex-col  justify-around">
-            <div className="flex flex-col justify-center items-center flex-1">
+    <div className="select-none fixed inset-0 flex items-center justify-center bg-none#9E916B bg-opacity-100 z-50 backdrop-blur-2xl bg-white/5">
+      <div className="border-3 border-[#dec375] rounded-full p-6 flex justify-center justify-items-center relative">
+        <div className="relative w-[30rem] h-[30rem] flex items-center justify-center ">
+          <div className="absolute inset-[2em] rounded-full border-5 border-[#C7B27F] pointer-events-none " />
+          <div className="absolute inset-[0.7em] rounded-full border-5 border-[#C7B27F] pointer-events-none bg-transparent" />
+          <svg className="absolute w-full h-full rotate-[-245deg] pointer-events-none">
+            <defs>
+              <linearGradient
+                id="customGradientRing"
+                x1="0%"
+                y1="0%"
+                x2="100%"
+                y2="0%"
+              >
+                <stop id="stop1" offset="0%" stopColor="#1D7A8F" />
+                <stop id="stop2" offset="50%" stopColor="#2ACAD4" />
+                <stop id="stop3" offset="100%" stopColor="#1D7A8F" />
+              </linearGradient>
+              <linearGradient
+                id="tracerGradient"
+                x1="0%"
+                y1="0%"
+                x2="100%"
+                y2="0%"
+              >
+                <stop offset="100%" stopColor="#4DF6F9" />
+              </linearGradient>
+            </defs>
+
+            {/* Blue gradient ring*/}
+            <circle
+              ref={ringRef}
+              cx="50%"
+              cy="50%"
+              r="45%"
+              fill="none"
+              stroke="url(#customGradientRing)"
+              strokeWidth="20"
+              strokeLinecap="butt"
+              className="drop-shadow-[0_0_40px_#4DF6F9]"
+              style={{
+                filter:
+                  "blur(0.5px) drop-shadow(0 0 15px white) drop-shadow(0 0 30px rgba(77,246,249,0.7)) drop-shadow(0 0 50px rgba(77,246,249,0.3))",
+              }}
+            />
+
+            {/* White tracer beam */}
+
+            <circle
+              ref={tracerRef}
+              cx="50%"
+              cy="50%"
+              r="45%"
+              fill="none"
+              stroke="url(#tracerGradient)"
+              strokeWidth="20"
+              strokeLinecap="butt"
+              strokeOpacity="0.85"
+              style={{
+                filter: `
+      drop-shadow(0 0 2px #ffffff)
+      drop-shadow(0 0 8px #ffffff)
+      drop-shadow(0 0 24px #4DF6F9)
+      drop-shadow(0 0 36px #2ACAD4)
+      blur(0.5px)
+    `,
+                mixBlendMode: "screen",
+              }}
+            />
+          </svg>
+
+          <div className="relative w-[26rem] h-[26rem] rounded-full overflow-hidden border-5 border-[#C7B27F]">
+            <div
+              className="w-full h-full flex flex-col justify-center items-center text-center text-white"
+              style={{
+                backgroundImage: `url(${queueBackground})`,
+                backgroundSize: "120% 120%",
+              }}
+            >
               <img
-                className="w-1/4 h-[25%]"
                 src="/league-p.png"
-                alt="custom league inspired logo"
+                alt="logo"
+                className="w-1/4 h-1/4 mb-2"
               />
-              <h2 className="text-2xl uppercase">Portfolio Found</h2>
-              <p className="text-xs">Paul's Rift - Portfolio Review - 1v1 </p>
+              <h2 className="text-3xl uppercase font-bold">
+                {accepted ? "Summoning Portfolio" : "Portfolio Found"}
+              </h2>
+              <p className="text-sm">Paul's Rift - Portfolio Review - 1v1</p>
             </div>
+          </div>
+          <div className="absolute bottom-2">
             <AcceptButton />
           </div>
         </div>
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 border-2 border-[#4D4C42] w-[8em] text-center">
-          <button className="">Decline</button>
+        <div className="absolute bottom-4 translate-y-full flex justify-center w-full  ">
+          {" "}
+          {!accepted && <DeclineButton />}
         </div>
       </div>
     </div>
@@ -25,47 +198,55 @@ export default function MatchFound() {
 }
 
 function AcceptButton() {
-  const enabled = true;
+  const [accepted, setAccepted] = useAtom(acceptedAtom);
+
   return (
-    <div className="flex justify-center">
-      <div
-        className={`joy-lock-in-button relative w-xs h-12 transition-transform duration-150 ${
-          enabled && "hover:scale-105 active:scale-85"
+    <div className="flex justify-center select-none">
+      <svg
+        viewBox="-2 0 5.5 1.5"
+        className={`transition-transform duration-150 w-[20em] h-[3.5em] ${
+          !accepted && "hover:scale-105 active:scale-95"
         }`}
         style={{
-          clipPath: "polygon(25% 0%, 75% 0%, 95% 100%, 5% 100%)",
-          borderBottomLeftRadius: "60% 100%",
-          borderBottomRightRadius: "60% 100%",
-          backgroundColor: enabled ? "#5bc0de" : "#666666",
-          padding: "10px",
+          cursor: !accepted ? "pointer" : "not-allowed",
+          background: "transparent",
+        }}
+        onClick={() => {
+          setAccepted(true);
         }}
       >
-        <button
-          className={`w-full h-full text-white font-bold uppercase tracking-wider flex items-center justify-center relative group ${
-            !enabled && "cursor-not-allowed"
-          }`}
-          style={{
-            clipPath: "polygon(30% 0%, 70% 0%, 90% 100%, 10% 100%)",
-            borderBottomLeftRadius: "60% 90%",
-            borderBottomRightRadius: "60% 100%",
-            backgroundColor: "#0c0d0e",
-          }}
-          onClick={() => {}}
-          disabled={!enabled}
+        <path
+          d="M 0 0 L 2 0 L 2.5 1 Q 0.9 2 -1.5 1 L -1 0 Z"
+          transform="scale(1.4, .95)" // Better proportions
+          fill={!accepted ? "#1F252C" : "#666666"}
+          stroke={!accepted ? "#43BFBC" : "none"}
+          strokeWidth="0.1"
+        />
+        <text
+          x="0.75"
+          y="0.75"
+          textAnchor="middle"
+          dominantBaseline="middle"
+          fill={!accepted ? "#ffffff" : "#999999"}
+          fontWeight="bold"
+          fontSize="0.45"
+          className="text-center uppercase"
         >
-          <span
-            className={`relative z-10 text-lg transition-colors drop-shadow-sm uppercase ${
-              enabled ? "group-hover:text-[#5bc0de]" : "text-gray-500"
-            }`}
-          >
-            Accept
-          </span>
-
-          {enabled && (
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#5bc0de] to-transparent opacity-5 group-hover:opacity-20 transition-opacity blur-lg pointer-events-none" />
-          )}
-        </button>
-      </div>
+          Accept!
+        </text>
+      </svg>
     </div>
+  );
+}
+
+function DeclineButton() {
+  return (
+    <button
+      className="relative text-[#B9AC89] uppercase w-[7.5em] h-[2.1em] font-bold border-2 border-[#C0A76F] bg-[#192128] transition duration-150
+    before:absolute before:inset-0 before:border-[1.5px] before:border-[#F1E2B8] before:opacity-0 before:scale-105 before:rounded-sm before:transition
+    hover:before:opacity-100 hover:before:shadow-[0_0_15px_#F1E2B8] hover:text-[#fefae0] hover:border-[#F1E2B8] hover:bg-[#2B3139]"
+    >
+      Decline
+    </button>
   );
 }
