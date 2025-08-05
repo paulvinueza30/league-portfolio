@@ -7,7 +7,7 @@ import {
   utilitySkills,
 } from "@/assets/skills";
 
-import { portfolioButton } from "@/assets/";
+import { cvButton } from "@/assets/";
 
 import {
   Popover,
@@ -19,6 +19,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { type Skill } from "@/assets/skills";
 import { Button } from "../ui/button";
+
+import { default as resumePDF } from "/Paul_Vinueza_Resume.pdf";
 
 interface SkillShowCaseProps {
   skills: Skill[];
@@ -101,15 +103,23 @@ function WardButton() {
 }
 
 export default function BMSection() {
+  function handleOnClick() {
+    const link = document.createElement("a");
+
+    link.href = resumePDF;
+    link.download = "Paul_Vinueza_Resume.pdf";
+    link.click();
+  }
   return (
     <div className="flex items-center gap-4">
       <WardButton />
       <Button
         variant="ghost"
-        className="h-full w-12 joy-resume-button"
+        className="h-full w-12 joy-resume-button hover:bg-transparent "
         size="icon"
+        onClick={handleOnClick}
       >
-        <img src={portfolioButton} alt="Portfolio button" draggable={false} />
+        <img src={cvButton} alt="Portfolio button" draggable={false} />
       </Button>
     </div>
   );

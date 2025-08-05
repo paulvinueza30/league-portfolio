@@ -111,7 +111,6 @@ export default function ChampSelectScreen() {
         setAnimationComplete(true);
       },
     });
-
     tl.from(".bg-picture", {
       opacity: 0.9,
       scale: 1.1,
