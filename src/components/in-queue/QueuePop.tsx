@@ -229,7 +229,7 @@ function AcceptButton({
     setLocalAccepted(true);
     timeoutRef.current = setTimeout(() => {
       setAccepted(true);
-    }, 1800);
+    }, 1600);
   }
 
   useEffect(() => {

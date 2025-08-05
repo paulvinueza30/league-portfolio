@@ -18,6 +18,7 @@ import MyJoyRide from "./MyJoyRide";
 
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap/gsap-core";
+import { gsapAtom } from "@/atoms/gsapAtom";
 gsap.registerPlugin(useGSAP);
 
 function Seperator() {
@@ -28,7 +29,7 @@ function HextechCircle() {
   return (
     <>
       <div
-        className="absolute w-[45em] h-[36em] border-[3px] border-[#534631] rounded-full pointer-events-none z-0 shadow-lg"
+        className="absolute w-[45em] h-[36em] border-[3px] border-[#534631] rounded-full pointer-events-none z-0 shadow-lg hextech-circle"
         style={{
           clipPath: "inset(5% 0% 10% 0%)",
           filter: "drop-shadow(0 0 8px rgba(83, 70, 49, 0.4))",
@@ -38,7 +39,7 @@ function HextechCircle() {
       />
 
       <div
-        className="absolute w-[46em] h-[34em] border-[2px] border-[#6b5a42] rounded-full pointer-events-none z-0 opacity-90"
+        className="absolute w-[46em] h-[34em] border-[2px] border-[#6b5a42] rounded-full pointer-events-none z-0 opacity-90 hextech-circle"
         style={{
           clipPath: "inset(5% 1% 10% 0%)",
           filter: "drop-shadow(0 0 6px rgba(107, 90, 66, 0.4))",
@@ -46,7 +47,7 @@ function HextechCircle() {
       />
 
       <div
-        className="absolute w-[50em] h-[37em] pointer-events-none z-0"
+        className="absolute w-[50em] h-[37em] pointer-events-none z-0 hextech-circlez"
         style={{
           clipPath: "polygon(0% 5%, 20% 3%, 3% 5%, 100% 15%, 100% 90%, 0% 90%)",
         }}
@@ -75,7 +76,7 @@ function HextechCircle() {
 export default function ChampSelectScreen() {
   const [isLockedIn] = useAtom(lockInAtom);
   const [selectedSkin] = useAtom(skinAtom);
-
+  const [, setAnimationComplete] = useAtom(gsapAtom);
   const getBackgroundStyle = () => {
     if (selectedSkin) {
       return {
@@ -105,15 +106,77 @@ export default function ChampSelectScreen() {
 
   useGSAP(() => {
     const tl = gsap.timeline({
-      yoyo: true,
-      repeat: -1,
+      duration: 0.8,
+      onComplete: () => {
+        setAnimationComplete(true);
+      },
     });
-    console.log(tl);
+
+    tl.from(".bg-picture", {
+      opacity: 0.9,
+      scale: 1.1,
+      y: -50,
+      filter: "blur(8px)",
+      duration: 0.8,
+      ease: "sine.inOut",
+    })
+      .from(
+        ".match-intro-item",
+        {
+          y: 100,
+          opacity: 0,
+          stagger: 0.05,
+          duration: 1,
+          ease: "power1.inOut",
+        },
+        ">"
+      )
+      .from(
+        ".player-section",
+        {
+          x: "-25vw",
+          opacity: 0.5,
+          duration: 0.8,
+          ease: "power2.inOut",
+        },
+        "<"
+      )
+      .from(
+        ".bottom-row-item",
+        {
+          y: "-2vh",
+          opacity: 0,
+          duration: 0.8,
+          ease: "power1.inOut",
+          stagger: 0.4,
+        },
+        "<"
+      )
+      .from(
+        ".hero-section",
+        {
+          opacity: 0,
+          duration: 0.8,
+          ease: "power3.in",
+        },
+        ">"
+      )
+      .from(
+        ".hextech-circle",
+        {
+          rotation: 480,
+          opacity: 0,
+          duration: 0.8,
+          transformOrigin: "center 50%",
+          ease: "expo.in",
+        },
+        "<"
+      );
   }, []);
 
   return (
     <div
-      className="min-h-screen max-h-screen w-full bg-cover bg-center bg-no-repeat select-none flex flex-col justify-between overflow-hidden"
+      className="min-h-screen max-h-screen w-full bg-cover bg-center bg-no-repeat select-none flex flex-col justify-between overflow-hidden bg-picture"
       style={getBackgroundStyle()}
     >
       <MyJoyRide />
@@ -122,12 +185,12 @@ export default function ChampSelectScreen() {
           <MatchIntro />
         </div>
         <div className="flex flex-row flex-1 justify-between">
-          <div className="w-1/4">
+          <div className="w-1/4 player-section">
             <PlayerSection />
           </div>
           <div className="inline-flex justify-center relative">
             <HextechCircle />
-            <div className="z-10">
+            <div className="z-10 hero-section">
               {isLockedIn ? <SkinCarousel /> : <ChampSelector />}
             </div>
           </div>
@@ -136,16 +199,18 @@ export default function ChampSelectScreen() {
         </div>
       </div>
       <div className="grid grid-cols-[auto_auto_auto] gap-x-5 mb-6 items-end h-50 mx-6">
-        <Chatbox />
-        <div className="flex flex-row gap-x-5 items-end">
+        <div className="bottom-row-item">
+          <Chatbox />
+        </div>
+        <div className="flex flex-row gap-x-5 items-end bottom-row-item">
           <Seperator />
           <RuneSelection />
           <SummonerSpells />
-          <div className="h-8 w-0.5 bg-[#525861] my-2.5" />
+          <div className="h-8 w-0.5 bg-[#525861] my-2.5 bottom-row-item" />
           <BMSection />
           <Seperator />
         </div>
-        <div className="flex flex-row items-end my-1 gap-4 flex-1 ">
+        <div className="flex flex-row items-end my-1 gap-4 flex-1 bottom-row-item">
           <QueueInfo />
           <SocialPanel />
         </div>

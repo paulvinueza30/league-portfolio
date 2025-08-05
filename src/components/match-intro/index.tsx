@@ -1,11 +1,15 @@
 import { chevLeft, chevRight } from "@/assets/intro-banner";
+import { gsapAtom } from "@/atoms/gsapAtom";
+import { useAtom } from "jotai";
 
 import { useState, useEffect } from "react";
 
 function Countdown() {
   const [timer, setTimer] = useState<number>(30);
+  const [isAnimationComplete] = useAtom(gsapAtom);
 
   useEffect(() => {
+    if (!isAnimationComplete) return;
     const intervalId = setInterval(() => {
       setTimer((prevTimer) => {
         if (prevTimer > 0) {
@@ -17,9 +21,13 @@ function Countdown() {
     }, 1000);
 
     return () => clearInterval(intervalId);
-  }, []);
+  }, [isAnimationComplete]);
   return (
-    timer > 0 && <h1 className="font-bold text-6xl -my-6 mx-2">{timer}</h1>
+    timer > 0 && (
+      <h1 className="match-intro-item font-bold text-6xl -my-6 mx-2">
+        {timer}
+      </h1>
+    )
   );
 }
 function BlueGlowy() {
@@ -31,11 +39,11 @@ function BlueGlowy() {
 export default function MatchIntro() {
   return (
     <div className="flex flex-col justify-center text-[#ECE4D0] w-full">
-      <h1 className="uppercase font-bold text-4xl text-center absolute top-5 left-1/2 -translate-x-1/2 z-10">
+      <h1 className="uppercase font-bold text-4xl text-center absolute top-5 left-1/2 -translate-x-1/2 z-10 match-intro-item">
         Ready to code and carry!
       </h1>
 
-      <div className="flex justify-between items-end">
+      <div className="flex justify-between items-end match-intro-item">
         <img className="w-70 h-15" src={chevLeft} />
         <BlueGlowy />
         <Countdown />

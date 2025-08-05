@@ -9,6 +9,7 @@ import {
 import { chatSound } from "@/assets/sounds";
 import { useRef, useEffect } from "react";
 import { joyrideAtom } from "@/atoms/joyrideAtom";
+import { gsapAtom } from "@/atoms/gsapAtom";
 
 import { useAudio } from "@/context/AudioContext";
 
@@ -19,6 +20,7 @@ function Chat() {
   const [_, setRunTour] = useAtom(joyrideAtom);
   const { volume } = useAudio();
   useEffect(() => {
+    if (chat.length === 0) return; // ⛔ No message to react to
     const latestMessage = chat[chat.length - 1];
 
     if (latestMessage && latestMessage.type === "user") {
@@ -95,9 +97,11 @@ function ChatInput() {
 export default function Chatbox() {
   const addChatMessage = useSetAtom(addChatMessageAtom);
   const hasRun = useRef(false);
+  const [isAnimationComplete] = useAtom(gsapAtom);
 
   useEffect(() => {
-    if (hasRun.current) return;
+    if (hasRun.current || !isAnimationComplete) return;
+
     hasRun.current = true;
 
     initialChatScript.forEach(({ delay = 0, ...msg }) => {
@@ -105,7 +109,7 @@ export default function Chatbox() {
         addChatMessage(msg);
       }, delay);
     });
-  }, [addChatMessage]);
+  }, [addChatMessage, isAnimationComplete]);
   return (
     <div className="w-lg max-w-lg h-[12em] grid grid-rows-[3.5fr_1fr]">
       <Chat />
