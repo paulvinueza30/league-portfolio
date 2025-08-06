@@ -21,6 +21,8 @@ import { type ReactNode, useState } from "react";
 
 import { ProjectsModal } from "./ProjectsModal";
 import { LoreModal } from "./LoreModal";
+// @ts-ignore
+import OldPortfolio from "./OldPortfolio.jsx";
 
 export default function RuneSelection() {
   const [runeLabel, setRuneLabel] = useState<string>("Projects");
@@ -29,7 +31,7 @@ export default function RuneSelection() {
   const runePages: Record<string, ReactNode> = {
     Projects: ProjectsModal(),
 
-    Experience: <h1>Experience</h1>,
+    "Old Portfolio": OldPortfolio(),
 
     Lore: LoreModal(),
   };
@@ -58,7 +60,9 @@ export default function RuneSelection() {
   backdrop-blur-sm
 "
         >
-          <div className="relative h-full">{activeModal}</div>
+          <div className="flex-1 max-h-[70vh] overflow-y-auto">
+            {activeModal}
+          </div>
           <DialogClose
             className="absolute top-1 right-0.5 rounded-4xl bg-[#1E272C] text-[#BBAE86] border-4 border-[#614B23] p-0.5"
             asChild

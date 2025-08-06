@@ -1,0 +1,11 @@
+Model Information:
+* title:	Tamagotchi - Rakuraku Dinokun
+* source:	https://sketchfab.com/3d-models/tamagotchi-rakuraku-dinokun-1fd3370af0db4879b791b5ddeebe5630
+* author:	willsilvaart (https://sketchfab.com/willsilvaart)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Tamagotchi - Rakuraku Dinokun" (https://sketchfab.com/3d-models/tamagotchi-rakuraku-dinokun-1fd3370af0db4879b791b5ddeebe5630) by willsilvaart (https://sketchfab.com/willsilvaart) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
