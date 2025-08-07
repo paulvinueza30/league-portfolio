@@ -1,6 +1,7 @@
 import "dotenv/config";
 import { type ApiReqDetails } from ".";
 import { MINUTE } from "../time";
+import { formatDistanceToNow } from "date-fns";
 
 export const riotApiDetails: ApiReqDetails<RiotApiResponse> = {
   redisKey: "riot-progress",
@@ -10,6 +11,7 @@ export const riotApiDetails: ApiReqDetails<RiotApiResponse> = {
 export interface RiotApiResponse {
   summonerName: string;
   profileIcon: string;
+  relativeTime: string;
   position: string;
   champName: string;
   champImg: string;
@@ -75,9 +77,16 @@ async function extractPlayerData(
     const latestVersion = await getLatestVersion();
     const profileIcon = `https://ddragon.leagueoflegends.com/cdn/${latestVersion}/img/profileicon/${player.profileIcon}.png`;
     const champImg = `https://ddragon.leagueoflegends.com/cdn/${latestVersion}/img/champion/${player.championName}.png`;
+    const relativeTime = formatDistanceToNow(
+      new Date(matchInfo.info.gameCreation),
+      {
+        addSuffix: true,
+      }
+    );
     return {
       summonerName: player.riotIdGameName + "#" + player.riotIdTagline,
       profileIcon: profileIcon,
+      relativeTime: relativeTime,
       position: player.individualPosition,
       champName: player.championName,
       champImg: champImg,
