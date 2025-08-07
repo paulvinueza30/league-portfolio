@@ -23,8 +23,8 @@ export interface RiotApiResponse {
 const puuid =
   "nhFsuZBKVP5go-OZQleZE_2r-k2NTQacmxNsndkA1TxoGJyI8y00TEqHvax3PYbcEzW4s62hQK9hZQ";
 
-const apiKey = process.env.VITE_APP_RIOT_API_KEY;
-if (!apiKey) {
+const API_KEY = process.env.VITE_APP_RIOT_API_KEY;
+if (!API_KEY) {
   throw new Error("Missing Riot API key in env");
 }
 async function getRecentMatch(): Promise<RiotApiResponse | null> {
@@ -34,7 +34,7 @@ async function getRecentMatch(): Promise<RiotApiResponse | null> {
       {
         method: "GET",
         headers: {
-          "X-Riot-Token": apiKey as string,
+          "X-Riot-Token": API_KEY as string,
         },
       }
     );
@@ -50,7 +50,7 @@ async function getRecentMatch(): Promise<RiotApiResponse | null> {
       {
         method: "GET",
         headers: {
-          "X-Riot-Token": apiKey as string,
+          "X-Riot-Token": API_KEY as string,
         },
       }
     );

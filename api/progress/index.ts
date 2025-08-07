@@ -3,12 +3,17 @@ import "dotenv/config";
 import { Redis } from "@upstash/redis";
 import { riotApiDetails } from "./riot";
 import { ankiApiDetails } from "./anki";
+import { githubApiDetails } from "./github";
+
+const KV_URL = process.env.VITE_APP_KV_REST_API_URL;
+const KV_TOKEN = process.env.VITE_APP_KV_REST_API_TOKEN;
+
 const redis = new Redis({
-  url: "https://growing-glider-24113.upstash.io",
-  token: "AV4xAAIjcDEzOWNmNDQ2ODUxYTM0M2NmOWM2YmJiNzUwZGZiYjcyNHAxMA",
+  url: KV_URL,
+  token: KV_TOKEN,
 });
 
-type CachedResult<T> = { data: T; timestamp: number };
+export type CachedResult<T> = { data: T; timestamp: number };
 
 export interface ApiReqDetails<T> {
   redisKey: string;
@@ -19,6 +24,7 @@ export interface ApiReqDetails<T> {
 const apiRegistry = {
   riot: riotApiDetails,
   anki: ankiApiDetails,
+  github: githubApiDetails,
 } satisfies Record<string, ApiReqDetails<any>>;
 
 export default async function GET(key: keyof typeof apiRegistry) {
