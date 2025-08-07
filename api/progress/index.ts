@@ -4,6 +4,8 @@ import { Redis } from "@upstash/redis";
 import { riotApiDetails } from "./riot";
 import { ankiApiDetails } from "./anki";
 import { githubApiDetails } from "./github";
+import { wakaApiDetails } from "./waka";
+import { leetcodeApiDetails } from "./leetcode";
 
 const KV_URL = process.env.VITE_APP_KV_REST_API_URL;
 const KV_TOKEN = process.env.VITE_APP_KV_REST_API_TOKEN;
@@ -25,6 +27,8 @@ const apiRegistry = {
   riot: riotApiDetails,
   anki: ankiApiDetails,
   github: githubApiDetails,
+  waka: wakaApiDetails,
+  leetcode: leetcodeApiDetails,
 } satisfies Record<string, ApiReqDetails<any>>;
 
 export default async function GET(key: keyof typeof apiRegistry) {
@@ -39,11 +43,11 @@ export default async function GET(key: keyof typeof apiRegistry) {
   const isFresh = cached && now - cached.timestamp < api.staleAfter;
 
   if (isFresh) {
-    return {
-      ...cached,
-      timestamp: cached.timestamp,
-      source: "store",
-    };
+    // return {
+    //   ...cached,
+    //   timestamp: cached.timestamp,
+    //   source: "store",
+    // };
   }
 
   try {

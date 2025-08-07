@@ -1,7 +1,7 @@
 import { MINUTE } from "api/time";
 import { type ApiReqDetails } from ".";
 import { Octokit } from "octokit";
-import { startOfWeek, isAfter } from "date-fns";
+import { startOfWeek, isAfter, formatDistanceToNow } from "date-fns";
 
 const octokit = new Octokit();
 
@@ -59,7 +59,10 @@ async function getRecentCommit(): Promise<GithubApiResponse | null> {
 
     const mostRecentPush = pushEvents[0];
     const payload = mostRecentPush.payload as PushEventPayload;
-
+    const localeString = mostRecentPush.created_at as string;
+    const createdAt = formatDistanceToNow(new Date(localeString), {
+      addSuffix: true,
+    });
     const firstCommit = payload.commits?.[0];
     return {
       commitMessage: firstCommit?.message ?? "[no commit message]",
@@ -68,7 +71,7 @@ async function getRecentCommit(): Promise<GithubApiResponse | null> {
         name: mostRecentPush.repo.name,
         url: mostRecentPush.repo.url,
       },
-      created_at: mostRecentPush.created_at as string,
+      created_at: createdAt,
       weeklyCounter: weeklyCount,
     };
   } catch (e: any) {
