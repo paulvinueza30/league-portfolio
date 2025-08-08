@@ -1,6 +1,5 @@
-import "dotenv/config";
-import { type ApiReqDetails } from ".";
-import { MINUTE } from "../time";
+import { type ApiReqDetails } from "./index.ts";
+import { MINUTE } from "../time.ts";
 
 import { LeetCode } from "leetcode-query";
 import { formatDistanceToNow } from "date-fns";

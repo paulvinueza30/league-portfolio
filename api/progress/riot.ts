@@ -1,6 +1,6 @@
 import "dotenv/config";
-import { type ApiReqDetails } from ".";
-import { MINUTE } from "../time";
+import { type ApiReqDetails } from "./index.ts";
+import { MINUTE } from "../time.ts";
 import { formatDistanceToNow } from "date-fns";
 
 export const riotApiDetails: ApiReqDetails<RiotApiResponse> = {
@@ -25,7 +25,7 @@ export interface RiotApiResponse {
 const puuid =
   "nhFsuZBKVP5go-OZQleZE_2r-k2NTQacmxNsndkA1TxoGJyI8y00TEqHvax3PYbcEzW4s62hQK9hZQ";
 
-const API_KEY = process.env.VITE_APP_RIOT_API_KEY;
+const API_KEY = process.env.RIOT_API_KEY;
 if (!API_KEY) {
   throw new Error("Missing Riot API key in env");
 }

@@ -16,9 +16,10 @@ import { lockInAtom, skinAtom } from "@/atoms/champAtom";
 
 import MyJoyRide from "./MyJoyRide";
 
+import { useQueries } from "@tanstack/react-query";
 import { useGSAP } from "@gsap/react";
-import { gsap } from "gsap/gsap-core";
 import { gsapAtom } from "@/atoms/gsapAtom";
+import { gsap } from "gsap/gsap-core";
 gsap.registerPlugin(useGSAP);
 
 function Seperator() {
@@ -77,6 +78,7 @@ export default function ChampSelectScreen() {
   const [isLockedIn] = useAtom(lockInAtom);
   const [selectedSkin] = useAtom(skinAtom);
   const [, setAnimationComplete] = useAtom(gsapAtom);
+
   const getBackgroundStyle = () => {
     if (selectedSkin) {
       return {
@@ -172,6 +174,20 @@ export default function ChampSelectScreen() {
         "<"
       );
   }, []);
+
+  const apiKeys = ["riot"];
+  useQueries({
+    queries: apiKeys.map((api) => ({
+      queryKey: ["progress", api],
+      queryFn: async () => {
+        const res = await fetch(
+          `http://localhost:3001/api/progress?key=${api}`
+        );
+        if (!res.ok) throw new Error("Failed to fetch");
+        return res.json();
+      },
+    })),
+  });
 
   return (
     <div

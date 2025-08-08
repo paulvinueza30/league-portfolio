@@ -1,5 +1,5 @@
-import { type ApiReqDetails } from ".";
-import { MINUTE } from "api/time";
+import { type ApiReqDetails } from "./index.ts";
+import { MINUTE } from "../time.ts";
 
 export const ankiApiDetails: ApiReqDetails<AnkiApiResponse> = {
   redisKey: "anki-progress",

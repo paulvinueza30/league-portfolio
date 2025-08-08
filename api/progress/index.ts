@@ -1,14 +1,14 @@
 import "dotenv/config";
 
 import { Redis } from "@upstash/redis";
-import { riotApiDetails } from "./riot";
-import { ankiApiDetails } from "./anki";
-import { githubApiDetails } from "./github";
-import { wakaApiDetails } from "./waka";
-import { leetcodeApiDetails } from "./leetcode";
+import { riotApiDetails } from "./riot.ts";
+import { ankiApiDetails } from "./anki.ts";
+import { githubApiDetails } from "./github.ts";
+import { wakaApiDetails } from "./waka.ts";
+import { leetcodeApiDetails } from "./leetcode.ts";
 
-const KV_URL = process.env.VITE_APP_KV_REST_API_URL;
-const KV_TOKEN = process.env.VITE_APP_KV_REST_API_TOKEN;
+const KV_URL = process.env.KV_REST_API_URL;
+const KV_TOKEN = process.env.KV_REST_API_TOKEN;
 
 const redis = new Redis({
   url: KV_URL,
@@ -23,7 +23,7 @@ export interface ApiReqDetails<T> {
   fetchFn: () => Promise<T | null>;
 }
 
-const apiRegistry = {
+export const apiRegistry = {
   riot: riotApiDetails,
   anki: ankiApiDetails,
   github: githubApiDetails,
@@ -31,7 +31,10 @@ const apiRegistry = {
   leetcode: leetcodeApiDetails,
 } satisfies Record<string, ApiReqDetails<any>>;
 
-export default async function GET(key: keyof typeof apiRegistry) {
+export const apiKeys = Object.keys(apiRegistry);
+export type ApiKey = keyof typeof apiRegistry;
+
+export default async function GET(key: ApiKey) {
   const api = apiRegistry[key];
   if (!api) return { error: "Unknown API" };
 
@@ -43,11 +46,11 @@ export default async function GET(key: keyof typeof apiRegistry) {
   const isFresh = cached && now - cached.timestamp < api.staleAfter;
 
   if (isFresh) {
-    // return {
-    //   ...cached,
-    //   timestamp: cached.timestamp,
-    //   source: "store",
-    // };
+    return {
+      ...cached,
+      timestamp: cached.timestamp,
+      source: "store",
+    };
   }
 
   try {

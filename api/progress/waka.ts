@@ -1,7 +1,7 @@
-import "dotenv/config";
-import { type ApiReqDetails } from ".";
-import { MINUTE } from "../time";
+import { type ApiReqDetails } from "./index.ts";
+import { MINUTE } from "../time.ts";
 import { startOfWeek, format } from "date-fns";
+import "dotenv/config";
 
 export const wakaApiDetails: ApiReqDetails<WakaApiReponse> = {
   redisKey: "waka-progress",
@@ -25,7 +25,7 @@ export interface WakaApiReponse {
   end: string;
 }
 
-const API_KEY = process.env.VITE_APP_WAKA_API_KEY;
+const API_KEY = process.env.WAKA_API_KEY;
 
 async function getSummary(): Promise<WakaApiReponse | null> {
   const username = "paulvinueza30";
