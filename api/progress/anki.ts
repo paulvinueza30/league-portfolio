@@ -1,9 +1,8 @@
 import { type ApiReqDetails } from "./index.ts";
-import { MINUTE } from "../time.ts";
 
 export const ankiApiDetails: ApiReqDetails<AnkiApiResponse> = {
   redisKey: "anki-progress",
-  staleAfter: 30 * MINUTE,
+  staleAfter: Infinity,
   fetchFn: async () => null,
 };
 export interface AnkiApiResponse {
