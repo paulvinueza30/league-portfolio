@@ -16,12 +16,15 @@ import {
   GithubApiResponse,
   LeetCodeApiResponse,
   RiotApiResponse,
+  WakaApiReponse,
 } from "api/progress/types";
 import { Badge } from "../ui/badge";
 import {
+  format,
   formatDistanceToNow,
   formatDuration,
   intervalToDuration,
+  parse,
 } from "date-fns";
 import {
   goGopher,
@@ -33,7 +36,7 @@ import {
 
 export default function ProgressDialog() {
   return (
-    <Dialog open={true}>
+    <Dialog>
       <DialogTrigger>
         <img
           src={progressButton}
@@ -53,11 +56,12 @@ export default function ProgressDialog() {
         <DialogHeader>
           <DialogTitle className="text-[#CDBE91]">Progress</DialogTitle>
         </DialogHeader>
-        <div className="h-full overflow-y-auto text-black max-w-full max-h-full grid gap-4 justify-center">
-          <GitHubProgressCard />
+        <div className="w-full h-full overflow-y-auto text-black max-w-full max-h-full grid gap-4 justify-center">
           <RiotProgressCard />
-          <AnkiProgressCard />
+          <WakaProgressCard />
           <LeetCodeProgressCard />
+          <GitHubProgressCard />
+          <AnkiProgressCard />
         </div>
         <DialogClose
           className="absolute top-1 right-0.5 rounded-4xl bg-[#1E272C] text-[#BBAE86] border-4 border-[#614B23] p-0.5"
@@ -70,76 +74,105 @@ export default function ProgressDialog() {
   );
 }
 export const progressCardClass =
-  "w-3/4π min-w-1/2 max-h-fit bg-slate-950 border border-slate-800 shadow-sm text-white";
+  "w-full min-w-3/4 bg-slate-950 border border-slate-800 shadow-sm text-white";
 export function RiotProgressCard() {
   const queryClient = useQueryClient();
   const queryKey = ["progress", "riot"];
-  const cachedData = queryClient.getQueryData<{ data: RiotApiResponse }>(
-    queryKey
-  );
+  const cachedData = queryClient.getQueryData<{
+    data: RiotApiResponse;
+    timestamp: number;
+  }>(queryKey);
   const data = cachedData?.data;
 
   if (!data) return <h1>NO DATA</h1>;
+  const lastUpdated = formatDistanceToNow(new Date(cachedData.timestamp), {
+    addSuffix: true,
+  });
 
   const outcome = data.win ? "Victory" : "Defeat";
   const outcomeColor = data.win
     ? "text-blue-600 bg-blue-200"
     : "text-red-600 bg-red-200";
 
-  const cols = data.plus50 ? "2" : "1";
   return (
     <Card className={progressCardClass}>
-      <CardHeader>
-        <div className="flex items-center">
-          <h3 className="text-lg font-semibold">Recent Match</h3>
-        </div>
+      <CardHeader className="flex items-center text-lg font-semibold">
+        <h3>Leauge Summary</h3>
       </CardHeader>
 
       <CardContent>
-        <div className={`grid grid-cols-${cols} gap-4  `}>
-          <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <img
-                src={data.profileIcon || "/placeholder.svg"}
-                alt="Profile Icon"
-                className="w-12 h-12 rounded-full"
-              />
-              <div>
-                <p className="font-semibold text-[#CABC90]">
-                  {data.summonerName}
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between p-4 bg-slate-900 hover:bg-slate-900">
+        <div className={`grid grid-cols-2 gap-4 space-y-4`}>
+          <div className="bg-slate-900 p-4 text-white h-full flex items-center">
+            <div className="flex items-center justify-between  w-full">
               <div className="flex items-center gap-3">
                 <img
-                  src={data.champImg}
-                  alt={data.champName}
-                  className="w-8 h-8 rounded"
+                  src={data.profileIcon || "/placeholder.svg"}
+                  alt="Profile Icon"
+                  className="w-12 h-12 rounded-full"
                 />
                 <div>
-                  <p className="font-semibold text-sm">{data.champName}</p>
-                  <p className="text-xs text-gray-400">{data.position}</p>
+                  <div className="flex items-center gap-2">
+                    <p className="font-semibold text-white">
+                      {data.summonerName}
+                    </p>
+                    {data.rankInfo.hotStreak && (
+                      <span className="text-red-400 text-xs">🔥</span>
+                    )}
+                  </div>
+                  <p className="text-xs text-gray-400">
+                    {data.rankInfo.wins}W / {data.rankInfo.losses}L
+                  </p>
                 </div>
               </div>
-              <div className="text-center">
-                <p className="text-sm font-mono">
-                  {data.kills}/{data.deaths}/{data.assists}
-                </p>
-                <p className="text-xs text-gray-400">KDA</p>
-              </div>
-              <div className="text-right">
-                <Badge className={outcomeColor}>{outcome}</Badge>
-                <p className="text-xs text-gray-400 mt-1">
-                  {data.relativeTime}
+              <div className="flex flex-col justify-items-end items-end">
+                <div className="flex flex-row items-center">
+                  <img
+                    src={data.rankInfo.rankImg}
+                    alt="Rank"
+                    className="w-fit h-12 -m-6"
+                  />
+                  <p className="text-sm font-semibold text-white">
+                    {data.rankInfo.tier} {data.rankInfo.rank}
+                  </p>
+                </div>
+                <p className="text-xs text-gray-400">
+                  {data.rankInfo.leaguePoints} LP
                 </p>
               </div>
             </div>
           </div>
+
+          <div className="flex items-center justify-between p-4 bg-slate-900 hover:bg-slate-900">
+            {data.plus50 && (
+              <div className="w-12 h-12 text-black bg-amber-500 rounded-full flex items-center justify-center">
+                <p className="text-xs font-bold">+50</p>
+              </div>
+            )}
+            <div className="flex items-center gap-3">
+              <img
+                src={data.champImg}
+                alt={data.champName}
+                className="w-8 h-8 rounded"
+              />
+              <div>
+                <p className="font-semibold text-sm">{data.champName}</p>
+                <p className="text-xs text-gray-400">{data.position}</p>
+              </div>
+            </div>
+            <div className="text-center">
+              <p className="text-sm font-mono">
+                {data.kills}/{data.deaths}/{data.assists}
+              </p>
+              <p className="text-xs text-gray-400">KDA</p>
+            </div>
+            <div className="text-right">
+              <Badge className={outcomeColor}>{outcome}</Badge>
+              <p className="text-xs text-gray-400 mt-1">{data.relativeTime}</p>
+            </div>
+          </div>
         </div>
       </CardContent>
-      <CardFooter className="text-xs text-gray-400">{`Last played: ${data.relativeTime} `}</CardFooter>
+      <CardFooter className="text-xs text-gray-400">{`Last updated: ${lastUpdated} `}</CardFooter>
     </Card>
   );
 }
@@ -170,7 +203,7 @@ export function AnkiProgressCard() {
 
   return (
     <Card className={progressCardClass}>
-      <CardHeader>
+      <CardHeader className="flex items-center text-lg font-semibold">
         <h3 className="text-lg font-semibold">Recent Anki Session</h3>
       </CardHeader>
       <CardContent>
@@ -192,7 +225,7 @@ export function AnkiProgressCard() {
 
           <div className="space-y-4 p-3 max-w-sm bg-slate-900 overflow-auto">
             <div>
-              <p className="text-sm text-gray-400 mb-2">Recent Decks</p>
+              <p className="text-sm text-gray-400 mb-2">Decks</p>
               {data.recentDecks.map((d, idx) => {
                 return (
                   <p className="truncate text-md line-clamp-2" key={idx}>{`${
@@ -205,7 +238,7 @@ export function AnkiProgressCard() {
         </div>
       </CardContent>
 
-      <CardFooter className="text-xs text-gray-400">{`Last studied: ${relativeTime} `}</CardFooter>
+      <CardFooter className="text-xs text-gray-400">{`Last updated: ${relativeTime} `}</CardFooter>
     </Card>
   );
 }
@@ -231,12 +264,14 @@ export function LeetCodeProgressCard() {
   const submissions = data.submissions;
   return (
     <Card className={progressCardClass}>
-      <CardHeader>Recent LeetCode Submissions</CardHeader>
+      <CardHeader className="flex items-center text-lg font-semibold">
+        Recent LeetCode Submissions
+      </CardHeader>
       <CardContent className="space-y-2">
         {submissions.map((submission, index) => (
           <div
             key={index}
-            className="grid grid-cols-[1.5fr_1.5fr_1fr] justify-between py-2 px-3 bg-slate-900 rounded"
+            className="grid grid-cols-[1.5fr_1.5fr_1fr]  justify-between py-2 px-3 bg-slate-900 rounded"
           >
             <div className="flex items-center gap-2 flex-1 min-w-0">
               <span
@@ -315,6 +350,7 @@ export function GitHubProgressCard() {
   const queryKey = ["progress", "github"];
   const cachedData = queryClient.getQueryData<{
     data: GithubApiResponse;
+    timestamp: number;
   }>(queryKey);
 
   const data = cachedData?.data;
@@ -322,7 +358,7 @@ export function GitHubProgressCard() {
   const commits = data.commits;
   return (
     <Card className={progressCardClass}>
-      <CardHeader className="flex justify-between items-center">
+      <CardHeader className="flex items-center justify-between text-lg font-semibold">
         <span>Recent GitHub Activity</span>
         <span className="text-sm text-green-400">
           {data.weeklyCounter} commits this week
@@ -354,6 +390,101 @@ export function GitHubProgressCard() {
           </div>
         ))}
       </CardContent>
+      <CardFooter className="text-gray-400 text-xs">
+        {`Last updated: ${formatDistanceToNow(new Date(cachedData.timestamp), {
+          addSuffix: true,
+        })}`}
+      </CardFooter>{" "}
+    </Card>
+  );
+}
+
+function WakaProgressCard() {
+  const queryClient = useQueryClient();
+  const queryKey = ["progress", "waka"];
+  const cachedData = queryClient.getQueryData<{
+    data: WakaApiReponse;
+    timestamp: number;
+  }>(queryKey);
+
+  const data = cachedData?.data;
+  if (!data) return <h1>NO DATA</h1>;
+  const topLang = data.topLanguange;
+  const start = format(parse(data.start, "yyyy/MM/dd", new Date()), "MMMM d");
+  const end = format(parse(data.end, "yyyy/MM/dd", new Date()), "MMMM d");
+
+  return (
+    <Card className={progressCardClass}>
+      <CardHeader>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold">Weekly Code Summary</h3>
+          <span className="text-xs text-gray-400">
+            {start} - {end}
+          </span>
+        </div>
+        {/* Time Stats in Header */}
+        <div className="grid grid-cols-2 gap-4">
+          <div className="bg-slate-900 rounded p-3 text-center">
+            <p className="text-xs text-gray-400 mb-1">Total Time</p>
+            <p className="text-xl font-mono font-bold text-white">
+              {data.cumTotal}
+            </p>
+          </div>
+          <div className="bg-slate-900 rounded p-3 text-center">
+            <p className="text-xs text-gray-400 mb-1">Daily Average</p>
+            <p className="text-xl font-mono font-bold text-white">
+              {data.dailyAverage}
+            </p>
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <div className="grid grid-cols-2 gap-4">
+          {/* Left: Language */}
+          <div className="bg-slate-900 flex flex-col items-center justify-center">
+            <p className="text-xs text-gray-400 mb-3">Primary Language</p>
+            <div className="flex items-center gap-3 mb-3">
+              <img
+                className="w-4 h-4"
+                src={langToSrc[topLang.toLowerCase()]}
+                alt=""
+              />
+              <p className="font-semibold text-lg text-white">{topLang}</p>
+            </div>
+            <div className="text-center">
+              <p className="text-sm font-mono">{data.topLanguageTime}</p>
+            </div>
+          </div>
+
+          {/* Right: Project */}
+          <div className="bg-slate-900 flex flex-col items-center justify-center">
+            <p className="text-xs text-gray-400 mb-3">Top Project</p>
+            <p className="font-semibold text-lg text-white mb-3 truncate">
+              {data.topProject}
+            </p>
+            <div className="text-center">
+              <p className="text-sm font-mono">{data.topProjectTime}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Environment Footer */}
+        <div className="grid grid-cols-2 gap-4 mt-4">
+          <div className="text-center">
+            <p className="text-xs text-gray-400">Top Editor</p>
+            <p className="text-sm font-semibold text-white">
+              {data.editorUsed}
+            </p>
+          </div>
+          <div className="text-center">
+            <p className="text-xs text-gray-400">Top OS</p>
+            <p className="text-sm font-semibold text-white">{data.osUsed}</p>
+          </div>
+        </div>
+      </CardContent>
+      <CardFooter className="text-xs text-gray-400">
+        Last updated: 1 hour ago
+      </CardFooter>
     </Card>
   );
 }

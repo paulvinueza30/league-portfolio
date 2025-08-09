@@ -10,6 +10,15 @@ export interface RiotApiResponse {
   assists: number;
   win: boolean;
   plus50: boolean;
+  rankInfo: {
+    leaguePoints: number;
+    hotStreak: boolean;
+    tier: string;
+    rank: string;
+    rankImg: string;
+    wins: number;
+    losses: number;
+  };
 }
 export interface AnkiApiResponse {
   recentDecks: string[];
@@ -43,4 +52,20 @@ export interface GitHubCommit {
 export interface GithubApiResponse {
   commits: GitHubCommit[];
   weeklyCounter: number;
+}
+
+export interface WakaApiReponse {
+  cumTotal: string;
+  dailyAverage: string;
+  topLanguange: string;
+  topLanguageTime: string;
+  topLanguagePercent: number;
+
+  topProject: string;
+  topProjectTime: string;
+  topProjectPercent: number;
+  editorUsed: string;
+  osUsed: string;
+  start: string;
+  end: string;
 }

@@ -1,8 +1,9 @@
 import "dotenv/config";
-import { type ApiReqDetails } from "./index.ts";
+import type { ApiReqDetails } from "./index";
 import { MINUTE } from "../time.ts";
 import { formatDistanceToNow } from "date-fns";
-import { type RiotApiResponse } from "./types.ts";
+import type { RiotApiResponse } from "./types";
+import { RiotAPI, PlatformId, RiotAPITypes } from "@fightmegg/riot-api";
 
 export const riotApiDetails: ApiReqDetails<RiotApiResponse> = {
   redisKey: "riot-progress",
@@ -10,93 +11,91 @@ export const riotApiDetails: ApiReqDetails<RiotApiResponse> = {
   fetchFn: getRecentMatch,
 };
 
-const puuid =
+const PUUID =
   "nhFsuZBKVP5go-OZQleZE_2r-k2NTQacmxNsndkA1TxoGJyI8y00TEqHvax3PYbcEzW4s62hQK9hZQ";
 
-const API_KEY = process.env.RIOT_API_KEY;
-if (!API_KEY) {
-  throw new Error("Missing Riot API key in env");
-}
+const API_KEY = process.env.RIOT_API_KEY!;
+if (!API_KEY) throw new Error("Missing Riot API key in env");
+
+// init once
+const rAPI = new RiotAPI(API_KEY);
+
 async function getRecentMatch(): Promise<RiotApiResponse | null> {
   try {
-    let response = await fetch(
-      `https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?type=ranked&start=0&count=1`,
-      {
-        method: "GET",
-        headers: {
-          "X-Riot-Token": API_KEY as string,
-        },
-      }
-    );
-    if (!response.ok)
-      throw new Error(`Match list fetch failed: ${response.status}`);
+    const ids = await rAPI.matchV5.getIdsByPuuid({
+      puuid: PUUID,
+      cluster: PlatformId.AMERICAS,
+      params: {
+        type: RiotAPITypes.MatchV5.MatchType.Ranked,
+        count: 1,
+      },
+    });
+    if (!ids?.length) throw new Error("No ranked matches found");
+    const match = await rAPI.matchV5.getMatchById({
+      matchId: ids[0],
+      cluster: PlatformId.AMERICAS,
+    });
+    const player = await rAPI.league.getEntriesByPUUID({
+      region: PlatformId.NA1,
+      puuid: PUUID,
+    });
 
-    const matches = await response.json();
-    if (!matches || matches.length === 0)
-      throw new Error("No ranked matches found");
-    const mostRecentMatch = matches[0];
-    response = await fetch(
-      `https://americas.api.riotgames.com/lol/match/v5/matches/${mostRecentMatch}`,
-      {
-        method: "GET",
-        headers: {
-          "X-Riot-Token": API_KEY as string,
-        },
-      }
-    );
-    const matchInfo = await response.json();
-
-    const relevantData = await extractPlayerData(matchInfo);
-    return relevantData;
-  } catch (e) {
-    console.log(e);
-  }
-  return null;
-}
-
-async function extractPlayerData(
-  matchInfo: any
-): Promise<RiotApiResponse | null> {
-  try {
-    const player = matchInfo.info.participants.find(
-      (p: any) => p.puuid === puuid
-    );
-    if (!player) throw new Error("Player not found in match info");
-    const latestVersion = await getLatestVersion();
-    const profileIcon = `https://ddragon.leagueoflegends.com/cdn/${latestVersion}/img/profileicon/${player.profileIcon}.png`;
-    const champImg = `https://ddragon.leagueoflegends.com/cdn/${latestVersion}/img/champion/${player.championName}.png`;
-    const relativeTime = formatDistanceToNow(
-      new Date(matchInfo.info.gameCreation),
-      {
-        addSuffix: true,
-      }
-    );
-    return {
-      summonerName: player.riotIdGameName + "#" + player.riotIdTagline,
-      profileIcon: profileIcon,
-      relativeTime: relativeTime,
-      position: player.individualPosition,
-      champName: player.championName,
-      champImg: champImg,
-      kills: player.kills,
-      deaths: player.deaths,
-      assists: player.assists,
-      win: player.win,
-      plus50: player.nexusTakedowns > 0,
-    };
-  } catch (e: any) {
-    console.error("Failed to extract player data:", e);
+    return await extractPlayerData(match, player[0]);
+  } catch (err) {
+    console.error("[riot] getRecentMatch:", err);
     return null;
   }
 }
-async function getLatestVersion() {
-  const response = await fetch(
-    "https://ddragon.leagueoflegends.com/api/versions.json"
-  );
-  if (!response.ok)
-    throw new Error(`Failed to fetch DDragon versions: ${response.status}`);
-  const versions = await response.json();
-  if (!versions || !versions.length)
-    throw new Error("No versions returned from DDragon");
-  return versions[0];
+
+async function extractPlayerData(
+  match: any,
+  player: RiotAPITypes.League.LeagueEntryDTO
+): Promise<RiotApiResponse | null> {
+  try {
+    const info = match?.info;
+    if (!info?.participants) throw new Error("Bad match payload");
+
+    const p = info.participants.find((x: any) => x.puuid === PUUID);
+    if (!p) throw new Error("Player not found");
+    const latestV = await rAPI.ddragon.versions.latest();
+    const champs = await rAPI.ddragon.champion.all({ version: latestV });
+    const rankEmblemUrl = `https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-static-assets/global/default/images/ranked-emblem/emblem-${player.tier.toLowerCase()}.png`;
+
+    const profileIcon = `https://ddragon.leagueoflegends.com/cdn/${latestV}/img/profileicon/${p.profileIcon}.png`;
+    const champImageName =
+      champs?.data?.[p.championName]?.image?.full ?? `${p.championName}.png`;
+    const champImg = `https://ddragon.leagueoflegends.com/cdn/${latestV}/img/champion/${champImageName}`;
+
+    const relativeTime = formatDistanceToNow(new Date(info.gameCreation), {
+      addSuffix: true,
+    });
+
+    return {
+      summonerName: p.riotIdGameName + "#" + p.riotIdTagline,
+      profileIcon,
+      relativeTime,
+      position: p.individualPosition,
+      champName: p.championName,
+      champImg,
+      kills: p.kills,
+      deaths: p.deaths,
+      assists: p.assists,
+      win: p.win,
+      plus50: (p.nexusTakedowns ?? 0) > 0,
+      rankInfo: {
+        leaguePoints: player.leaguePoints,
+        hotStreak: player.hotStreak,
+        tier: player.tier,
+        rank: player.rank,
+        rankImg: rankEmblemUrl,
+        wins: player.wins,
+        losses: player.losses,
+      },
+    };
+  } catch (err) {
+    console.error("[riot] extractPlayerData:", err);
+    return null;
+  }
 }
+
+export { getRecentMatch };

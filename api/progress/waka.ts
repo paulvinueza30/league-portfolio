@@ -1,6 +1,7 @@
 import { type ApiReqDetails } from "./index.ts";
 import { MINUTE } from "../time.ts";
 import { startOfWeek, format } from "date-fns";
+import { type WakaApiReponse } from "./types.ts";
 import "dotenv/config";
 
 export const wakaApiDetails: ApiReqDetails<WakaApiReponse> = {
@@ -8,22 +9,6 @@ export const wakaApiDetails: ApiReqDetails<WakaApiReponse> = {
   staleAfter: 30 * MINUTE,
   fetchFn: getSummary,
 };
-
-export interface WakaApiReponse {
-  cumTotal: string;
-  dailyAverage: string;
-  topLanguange: string;
-  topLanguageTime: string;
-  topLanguagePercent: number;
-
-  topProject: string;
-  topProjectTime: string;
-  topProjectPercent: number;
-  editorUsed: string;
-  osUsed: string;
-  start: string;
-  end: string;
-}
 
 const API_KEY = process.env.WAKA_API_KEY;
 
