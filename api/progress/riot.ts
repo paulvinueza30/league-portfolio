@@ -2,25 +2,13 @@ import "dotenv/config";
 import { type ApiReqDetails } from "./index.ts";
 import { MINUTE } from "../time.ts";
 import { formatDistanceToNow } from "date-fns";
+import { type RiotApiResponse } from "./types.ts";
 
 export const riotApiDetails: ApiReqDetails<RiotApiResponse> = {
   redisKey: "riot-progress",
-  staleAfter: 30 * MINUTE,
+  staleAfter: 0 * MINUTE,
   fetchFn: getRecentMatch,
 };
-export interface RiotApiResponse {
-  summonerName: string;
-  profileIcon: string;
-  relativeTime: string;
-  position: string;
-  champName: string;
-  champImg: string;
-  kills: number;
-  deaths: number;
-  assists: number;
-  win: boolean;
-  plus50: boolean;
-}
 
 const puuid =
   "nhFsuZBKVP5go-OZQleZE_2r-k2NTQacmxNsndkA1TxoGJyI8y00TEqHvax3PYbcEzW4s62hQK9hZQ";

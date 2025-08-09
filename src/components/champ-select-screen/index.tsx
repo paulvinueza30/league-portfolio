@@ -175,7 +175,7 @@ export default function ChampSelectScreen() {
       );
   }, []);
 
-  const apiKeys = ["riot"];
+  const apiKeys = ["riot", "leetcode", "anki", "github"];
   useQueries({
     queries: apiKeys.map((api) => ({
       queryKey: ["progress", api],

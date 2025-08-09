@@ -1,50 +1,46 @@
 import { type ApiReqDetails } from "./index.ts";
 import { MINUTE } from "../time.ts";
 
-import { LeetCode } from "leetcode-query";
+import { LeetCode, Credential } from "leetcode-query";
 import { formatDistanceToNow } from "date-fns";
+import { type LeetCodeSubmission, type LeetCodeApiResponse } from "./types.ts";
+const credential = new Credential();
+await credential.init(process.env.LEETCODE_SESSION);
+const leetcode = new LeetCode(credential);
 
-const leetcode = new LeetCode();
-
-export const leetcodeApiDetails: ApiReqDetails<LeetcodeApiResponse> = {
+export const leetcodeApiDetails: ApiReqDetails<LeetCodeApiResponse> = {
   redisKey: "leetcode-progress",
-  staleAfter: 30 * MINUTE,
+  staleAfter: 5 * MINUTE,
   fetchFn: getRecentSubmission,
 };
 
-export interface LeetcodeApiResponse {
-  title: string;
-  link: string;
-  relativeTime: string;
-  lang: string;
-  status: string;
-}
-
-async function getRecentSubmission(): Promise<LeetcodeApiResponse | null> {
+async function getRecentSubmission(): Promise<LeetCodeApiResponse | null> {
   try {
-    const username = "paulvinueza30";
-    const user = await leetcode.user(username);
-    const mostRecentSubmission = user.recentSubmissionList?.[0];
-
-    const title = mostRecentSubmission?.title;
-    const slug = mostRecentSubmission?.titleSlug;
-    const problemLink = `https://leetcode.com/problems/${slug}/`;
-
-    const timestamp = mostRecentSubmission?.timestamp;
-    const relativeTime = timestamp
-      ? formatDistanceToNow(new Date(parseInt(timestamp) * 1000), {
-          addSuffix: true,
-        })
-      : "Unknown";
-    const lang = mostRecentSubmission?.lang;
-    const status = mostRecentSubmission?.statusDisplay;
-    return {
-      title: title ?? "N/A",
-      link: problemLink,
-      relativeTime: relativeTime,
-      lang: lang ?? "N/A",
-      status: status ?? "N/A",
-    };
+    const submissions = await leetcode.submissions({ limit: 10 });
+    const res: LeetCodeSubmission[] = [];
+    submissions.forEach((s) => {
+      const title = s?.title;
+      const slug = s?.titleSlug;
+      const problemLink = `https://leetcode.com/problems/${slug}/`;
+      const solutionLink = `http://leetcode.com${s.url}`;
+      const timestamp = s?.timestamp;
+      const relativeTime = timestamp
+        ? formatDistanceToNow(new Date(timestamp), {
+            addSuffix: true,
+          })
+        : "Unknown";
+      const lang = s?.lang;
+      const status = s?.statusDisplay;
+      res.push({
+        title: title ?? "N/A",
+        problemLink: problemLink,
+        solutionLink: solutionLink,
+        relativeTime: relativeTime,
+        lang: lang ?? "N/A",
+        status: status ?? "N/A",
+      });
+    });
+    return { submissions: res };
   } catch (e: any) {
     console.log(e);
   }
