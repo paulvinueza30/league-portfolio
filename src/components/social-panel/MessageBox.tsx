@@ -1,4 +1,3 @@
-// components/social/MessageBox.tsx
 import { Textarea } from "../ui/textarea";
 import emailjs from "@emailjs/browser";
 import { useForm } from "react-hook-form";

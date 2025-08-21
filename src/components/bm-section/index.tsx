@@ -28,11 +28,11 @@ interface SkillShowCaseProps {
 
 function SkillShowCase({ skills }: SkillShowCaseProps) {
   return (
-    <div className="w-full justify-items-center grid grid-cols-4 auto-rows-min h-70 overflow-y-scroll ">
+    <div className="w-full bg-[#080F21] justify-items-center grid grid-cols-4 auto-rows-min h-70 overflow-y-scroll ">
       {skills.map((skill) => (
         <div
           key={skill.name}
-          className="flex flex-col justify-start border-2 border-grey-200 hover:bg-gray-200 hover:text-black transform hover:scale-x-85 active:scale-y-90 transition-transform"
+          className="flex flex-col bg-[#080F21]  justify-start border-2 border-[#6d5d2b] hover:bg-gray-200 hover:text-black transform hover:scale-x-85 active:scale-y-90 transition-transform"
         >
           <Button
             variant="ghost"
@@ -73,10 +73,10 @@ function WardButton() {
       </PopoverTrigger>
       <PopoverContent
         side="top"
-        className="w-full bg-[#25282a] text-white select-none"
+        className="w-full bg-[#0A1428] text-white select-none"
       >
         <Tabs>
-          <TabsList className="bg-[#0f0f0f] border-b border-[#C6AD66]">
+          <TabsList className="bg-[#1c2f5a] border-b border-[#C6AD66]">
             {Object.keys(categories).map((name) => (
               <TabsTrigger
                 key={name}
@@ -89,7 +89,7 @@ function WardButton() {
           </TabsList>
           {Object.entries(categories).map(([name, skills]) => (
             <TabsContent
-              className="bg-[#1e1e1e] border border-[#333] mt-2 p-2 rounded-sm"
+              className="bg-transparent border border-[#333] mt-2 p-2 rounded-sm"
               key={name}
               value={name}
             >
