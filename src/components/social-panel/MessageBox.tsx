@@ -35,7 +35,7 @@ export default function MessagePopOver() {
         className="
               select-none 
               rounded-none
-              bg-[#010A13] 
+              bg-[#090f1b] 
               border-2 border-[#463714] 
               text-[#F0E6D2] 
               backdrop-blur-sm

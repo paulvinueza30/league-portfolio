@@ -3,12 +3,27 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Import fonts first (if not already in HTML) */
+@import url('https://fonts.googleapis.com/css2?family=Exo+2&family=Montserrat&display=swap');
+
+body,
+#root {
+  @apply h-screen w-screen m-0 p-0;
+  font-family: "Exo 2", "Montserrat", sans-serif;
+}
+
+.mi {
+  font-family: "Montserrat", sans-serif;
+}
 html,
 body,
 #root {
   @apply h-screen w-screen m-0 p-0;
+  font-family: "Exo 2", "Montserrat", sans-serif;
 }
-
+.mi{
+  font-family: "Montserrat", sans-serif;
+}
 .animated-background {
   background-size: 400%;
 

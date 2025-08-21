@@ -13,7 +13,7 @@ function IntroBanner() {
 export default function MatchIntro() {
   const [isLockedIn] = useAtom(lockInAtom);
   return (
-    <div className="flex flex-col justify-center text-[#ECE4D0] w-full">
+    <div className="flex flex-col mi justify-center text-[#ECE4D0] w-full">
       {!isLockedIn && <IntroBanner />}
 
       <CountdownFrame key={isLockedIn ? "locked" : "unlocked"} />

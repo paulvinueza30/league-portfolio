@@ -29,7 +29,6 @@ export default function RuneSelection() {
   const runePages: Record<string, ReactNode> = {
     Projects: ProjectsModal(),
 
-    Experience: <h1>Experience</h1>,
 
     Lore: LoreModal(),
   };
