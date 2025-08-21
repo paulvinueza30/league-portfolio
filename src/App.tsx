@@ -16,7 +16,7 @@ export default function App() {
     <>
       <QueryClientProvider client={queryClient}>
         <AudioProvider>
-          <ReactQueryDevtools />
+          {/* <ReactQueryDevtools  initialIsOpen={false} /> */}
           {accepted ? <ChampSelectScreen /> : <InQueue />}
         </AudioProvider>
       </QueryClientProvider>

@@ -28,6 +28,7 @@ import {
 } from "date-fns";
 import {
   goGopher,
+  goText,
   javaLogo,
   jsLogo,
   pythonLogo,
@@ -187,6 +188,7 @@ export function AnkiProgressCard() {
 
   if (!data) return <h1>NO DATA</h1>;
 
+  console.log(data)
   const relativeTime = formatDistanceToNow(
     new Date(Number(data.timeOfReview)),
     {
@@ -199,7 +201,7 @@ export function AnkiProgressCard() {
     start: 0,
     end: minutes * 60 * 1000,
   });
-  const deviceNameCleaned = data.device.replace(/^[^-]+-/, "");
+  const deviceNameCleaned = data.device
 
   return (
     <Card className={progressCardClass}>
@@ -245,7 +247,7 @@ export function AnkiProgressCard() {
 
 const langToSrc: Record<string, string> = {
   python: pythonLogo,
-  go: goGopher,
+  golang: goText,
   java: javaLogo,
   typescript: typescriptLogo,
   javascript: jsLogo,
@@ -409,7 +411,10 @@ function WakaProgressCard() {
 
   const data = cachedData?.data;
   if (!data) return <h1>NO DATA</h1>;
-  const topLang = data.topLanguange;
+  let topLang = data.topLanguange;
+  if (topLang.toLowerCase().includes("go")){
+    topLang = "golang"
+  }
   const start = format(parse(data.start, "yyyy/MM/dd", new Date()), "MMMM d");
   const end = format(parse(data.end, "yyyy/MM/dd", new Date()), "MMMM d");
 

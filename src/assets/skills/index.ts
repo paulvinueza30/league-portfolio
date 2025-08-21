@@ -30,7 +30,7 @@ import tailwindLogo from "./icons8-tailwindcss-50.png";
 import vercelLogo from "./vercel.png";
 import mernLogo from "./mern.png";
 import mvcLogo from "./mvc.jpg";
-
+import goText from "./go-text.svg"
 export interface Skill {
   name: string;
   img: string;
@@ -87,6 +87,7 @@ export const defaultSkill = goGopher;
 
 export {
   goGopher,
+  goText,
   cLogo,
   dbeaverLogo,
   fastApiLogo,
