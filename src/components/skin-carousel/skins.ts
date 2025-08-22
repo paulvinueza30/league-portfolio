@@ -8,10 +8,15 @@ export interface Skin {
 
 export const defaultSkin: Skin = { skinName: "Paul", skinImg: champPortrait };
 
-export const skins: Skin[] = [
+export const artSkins: Skin[] = [
   { skinName: "goGopher", skinImg: goNext },
   { skinName: "Sel", skinImg: rengar },
   { skinName: "ts", skinImg: vexed },
+  { skinName: "Paul", skinImg: champPortrait },
+  { skinName: "java", skinImg: elo },
+  { skinName: "JavaScript", skinImg: beachDay },
+];
+export const portraitSkins: Skin[] = [
   { skinName: "Paul", skinImg: champPortrait },
   { skinName: "java", skinImg: elo },
   { skinName: "JavaScript", skinImg: beachDay },
