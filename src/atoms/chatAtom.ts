@@ -53,6 +53,16 @@ export const initialChatScript: ScriptedChat[] = [
     },
     delay: 5000,
   },
+  {
+    type: "user",
+    username: "Paul Vinueza",
+    message: {
+      type: "guide",
+      content: "Try typing in the chat!",
+      highlight: "",
+    },
+    delay: 10000,
+  },
 ];
 
 export const chatAtom = atom<Chat[]>([]);

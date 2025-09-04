@@ -33,6 +33,7 @@ export default function SkinCarousel() {
             }`}
             onClick={() => {
               api?.scrollTo(idx);
+              setSkin(skinArr[idx]);
             }}>
             <img
               src={skin.skinImg}
@@ -49,19 +50,29 @@ export default function SkinCarousel() {
       </>
     );
   };
-  useEffect(() => setSkin(defaultSkin), []);
-
   useEffect(() => {
     if (!api) return;
     const skinArr = getSkinArr();
-    const middle = Math.ceil(skinArr.length / 2);
-    api.scrollTo(middle);
+    const middle = Math.floor(skinArr.length / 2);
+    api?.scrollTo(middle);
 
-    api.on("select", () => {
+    setSkin(skinArr[middle]);
+  }, [carouselView, api]);
+  useEffect(() => {
+    if (!api) return;
+
+    const handler = () => {
       const currentSlide = api.selectedScrollSnap();
-      setSkin(artSkins[currentSlide]);
-    });
-  }, [api]);
+      const skinArr = getSkinArr();
+      setSkin(skinArr[currentSlide]);
+    };
+
+    handler();
+    api.on("select", handler);
+    return () => {
+      api.off("select", handler);
+    };
+  }, [api, carouselView]);
   return (
     <div className="w-[39.5em] h-full flex flex-col gap-4 items-center justify-end text-white">
       <div className="flex items-center gap-2 mr-7 ">

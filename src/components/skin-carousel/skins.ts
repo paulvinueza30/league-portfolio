@@ -1,5 +1,6 @@
-import { champPortrait } from "@/assets/self-pics";
+import { champPortrait, thinker } from "@/assets/self-pics";
 import { beachDay, rengar, vexed, elo, goNext } from "@/assets/art";
+import { goGopher, javaLogo, pythonLogo } from "@/assets/skills";
 
 export interface Skin {
   skinName: string;
@@ -9,15 +10,16 @@ export interface Skin {
 export const defaultSkin: Skin = { skinName: "Paul", skinImg: champPortrait };
 
 export const artSkins: Skin[] = [
-  { skinName: "goGopher", skinImg: goNext },
-  { skinName: "Sel", skinImg: rengar },
-  { skinName: "ts", skinImg: vexed },
+  { skinName: "Go Next", skinImg: goNext },
+  { skinName: "Delete Yuumi", skinImg: rengar },
+  { skinName: "Vexed", skinImg: vexed },
   { skinName: "Paul", skinImg: champPortrait },
-  { skinName: "java", skinImg: elo },
-  { skinName: "JavaScript", skinImg: beachDay },
+  { skinName: "The Cycle of League", skinImg: elo },
+  { skinName: "Beach Party", skinImg: beachDay },
 ];
 export const portraitSkins: Skin[] = [
-  { skinName: "Paul", skinImg: champPortrait },
-  { skinName: "java", skinImg: elo },
-  { skinName: "JavaScript", skinImg: beachDay },
+  { skinName: "In a Japanese Cafe", skinImg: thinker },
+  { skinName: "In a cafe", skinImg: goGopher },
+  { skinName: "In a ca", skinImg: pythonLogo },
+  { skinName: "In a cae", skinImg: javaLogo },
 ];
