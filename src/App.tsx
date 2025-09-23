@@ -7,7 +7,6 @@ import { AudioProvider } from "@/context/AudioContext";
 import { acceptedAtom } from "./atoms/queueAtom";
 import { useAtom } from "jotai";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 export default function App() {
   const [accepted] = useAtom(acceptedAtom);

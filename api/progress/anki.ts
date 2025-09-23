@@ -1,4 +1,4 @@
-import { type ApiReqDetails } from "./index.ts";
+import { type ApiReqDetails } from "./registry.ts";
 import { type AnkiApiResponse } from "./types.ts";
 
 export const ankiApiDetails: ApiReqDetails<AnkiApiResponse> = {

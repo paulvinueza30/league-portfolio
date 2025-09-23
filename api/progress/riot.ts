@@ -1,5 +1,5 @@
 import "dotenv/config";
-import type { ApiReqDetails } from "./index";
+import type { ApiReqDetails } from "./registry.ts";
 import { MINUTE } from "../time.ts";
 import { formatDistanceToNow } from "date-fns";
 import type { RiotApiResponse } from "./types";

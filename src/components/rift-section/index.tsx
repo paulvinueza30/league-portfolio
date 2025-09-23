@@ -5,7 +5,6 @@ import * as THREE from "three";
 import { Physics, RigidBody } from "@react-three/rapier";
 import { CharacterController } from "./Character";
 import { type ThreeEvent } from "@react-three/fiber";
-import { Square } from "lucide-react";
 
 interface MapProps {
   onRightClick: (pos: THREE.Vector3) => void;

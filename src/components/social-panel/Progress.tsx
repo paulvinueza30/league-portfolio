@@ -27,7 +27,6 @@ import {
   parse,
 } from "date-fns";
 import {
-  goGopher,
   goText,
   javaLogo,
   jsLogo,
@@ -52,8 +51,7 @@ export default function ProgressDialog() {
     [&>button]:hidden rounded-none select-none
     bg-[#010A13] border border-[#463714]
     shadow-[0_0_50px_rgba(70,55,20,0.4)] backdrop-blur-sm
-  "
-      >
+  ">
         <DialogHeader>
           <DialogTitle className="text-[#CDBE91]">Progress</DialogTitle>
         </DialogHeader>
@@ -66,8 +64,7 @@ export default function ProgressDialog() {
         </div>
         <DialogClose
           className="absolute top-1 right-0.5 rounded-4xl bg-[#1E272C] text-[#BBAE86] border-4 border-[#614B23] p-0.5"
-          asChild
-        >
+          asChild>
           <X className="w-8 h-8 " />
         </DialogClose>
       </DialogContent>
@@ -188,7 +185,7 @@ export function AnkiProgressCard() {
 
   if (!data) return <h1>NO DATA</h1>;
 
-  console.log(data)
+  console.log(data);
   const relativeTime = formatDistanceToNow(
     new Date(Number(data.timeOfReview)),
     {
@@ -201,7 +198,7 @@ export function AnkiProgressCard() {
     start: 0,
     end: minutes * 60 * 1000,
   });
-  const deviceNameCleaned = data.device
+  const deviceNameCleaned = data.device;
 
   return (
     <Card className={progressCardClass}>
@@ -273,16 +270,14 @@ export function LeetCodeProgressCard() {
         {submissions.map((submission, index) => (
           <div
             key={index}
-            className="grid grid-cols-[1.5fr_1.5fr_1fr]  justify-between py-2 px-3 bg-slate-900 rounded"
-          >
+            className="grid grid-cols-[1.5fr_1.5fr_1fr]  justify-between py-2 px-3 bg-slate-900 rounded">
             <div className="flex items-center gap-2 flex-1 min-w-0">
               <span
                 className={`w-2 h-2 rounded-full ${
                   submission.status === "Accepted"
                     ? "bg-green-400"
                     : "bg-red-400"
-                }`}
-              ></span>
+                }`}></span>
               <img
                 className="w-4 h-4"
                 src={langToSrc[submission.lang]}
@@ -295,15 +290,13 @@ export function LeetCodeProgressCard() {
             <div className="flex justify-center items-center gap-2 text-xs flex-shrink-0">
               <a
                 onClick={() => window.open(submission.problemLink, "_blank")}
-                className="text-blue-400 underline hover:text-slate-50"
-              >
+                className="text-blue-400 underline hover:text-slate-50">
                 Problem
               </a>
               <span>|</span>
               <a
                 onClick={() => window.open(submission.solutionLink, "_blank")}
-                className="text-blue-400 underline hover:text-slate-50"
-              >
+                className="text-blue-400 underline hover:text-slate-50">
                 Submission
               </a>
             </div>
@@ -370,11 +363,11 @@ export function GitHubProgressCard() {
         {commits.map((commit, index) => (
           <div
             key={index}
-            className="flex items-center gap-3 py-2 px-3 bg-slate-900 rounded hover:bg-slate-800"
-          >
+            className="flex items-center gap-3 py-2 px-3 bg-slate-900 rounded hover:bg-slate-800">
             <Badge
-              className={`${getRepoColor(commit.repo.name)} text-white text-xs`}
-            >
+              className={`${getRepoColor(
+                commit.repo.name
+              )} text-white text-xs`}>
               {commit.repo.name}
             </Badge>
             <span className="text-sm flex-1 truncate">
@@ -383,8 +376,7 @@ export function GitHubProgressCard() {
             <div className="flex items-center gap-2 text-xs">
               <a
                 onClick={() => window.open(commit.commitUrl, "_blank")}
-                className="text-blue-400 hover:text-slate-50 cursor-pointer"
-              >
+                className="text-blue-400 hover:text-slate-50 cursor-pointer">
                 {getCommitHash(commit.commitUrl)}
               </a>
               <span className="text-gray-400">{commit.created_at}</span>
@@ -412,8 +404,8 @@ function WakaProgressCard() {
   const data = cachedData?.data;
   if (!data) return <h1>NO DATA</h1>;
   let topLang = data.topLanguange;
-  if (topLang.toLowerCase().includes("go")){
-    topLang = "golang"
+  if (topLang.toLowerCase().includes("go")) {
+    topLang = "golang";
   }
   const start = format(parse(data.start, "yyyy/MM/dd", new Date()), "MMMM d");
   const end = format(parse(data.end, "yyyy/MM/dd", new Date()), "MMMM d");

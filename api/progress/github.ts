@@ -1,5 +1,5 @@
 import { MINUTE } from "../time.ts";
-import { type ApiReqDetails } from "./index.ts";
+import { type ApiReqDetails } from "./registry.ts";
 import { Octokit } from "octokit";
 import { startOfWeek, isAfter, formatDistanceToNow } from "date-fns";
 import { type GitHubCommit, type GithubApiResponse } from "./types.ts";

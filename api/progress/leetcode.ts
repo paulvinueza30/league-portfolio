@@ -1,4 +1,4 @@
-import { type ApiReqDetails } from "./index.ts";
+import { type ApiReqDetails } from "./registry.ts";
 import { MINUTE } from "../time.ts";
 
 import { LeetCode, Credential } from "leetcode-query";
