@@ -1,5 +1,5 @@
-import { type ApiReqDetails } from "./registry.ts";
-import { type AnkiApiResponse } from "./types.ts";
+import { type ApiReqDetails } from "./registry.js";
+import { type AnkiApiResponse } from "./types.js";
 
 export const ankiApiDetails: ApiReqDetails<AnkiApiResponse> = {
   redisKey: "anki-progress",

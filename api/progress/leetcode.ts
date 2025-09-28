@@ -1,8 +1,8 @@
-import { type ApiReqDetails } from "./registry.ts";
-import { MINUTE } from "../time.ts";
+import { type ApiReqDetails } from "./registry.js";
+import { MINUTE } from "../time.js";
 
 import { formatDistanceToNow } from "date-fns";
-import { type LeetCodeSubmission, type LeetCodeApiResponse } from "./types.ts";
+import { type LeetCodeSubmission, type LeetCodeApiResponse } from "./types.js";
 const API_URL = "https://leetcode.com/graphql";
 
 export const leetcodeApiDetails: ApiReqDetails<LeetCodeApiResponse> = {

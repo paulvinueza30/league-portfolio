@@ -1,8 +1,8 @@
-import { MINUTE } from "../time.ts";
-import { type ApiReqDetails } from "./registry.ts";
+import { MINUTE } from "../time.js";
+import { type ApiReqDetails } from "./registry.js";
 import { Octokit } from "octokit";
 import { startOfWeek, isAfter, formatDistanceToNow } from "date-fns";
-import { type GitHubCommit, type GithubApiResponse } from "./types.ts";
+import { type GitHubCommit, type GithubApiResponse } from "./types.js";
 
 const octokit = new Octokit();
 

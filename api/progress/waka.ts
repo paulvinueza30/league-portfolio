@@ -1,7 +1,7 @@
-import { type ApiReqDetails } from "./registry.ts";
-import { MINUTE } from "../time.ts";
+import { type ApiReqDetails } from "./registry.js";
+import { MINUTE } from "../time.js";
 import { startOfWeek, format } from "date-fns";
-import { type WakaApiReponse } from "./types.ts";
+import { type WakaApiReponse } from "./types.js";
 import "dotenv/config";
 
 export const wakaApiDetails: ApiReqDetails<WakaApiReponse> = {
