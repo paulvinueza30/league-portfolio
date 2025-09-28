@@ -1,11 +1,11 @@
 import "dotenv/config";
 
 import { Redis } from "@upstash/redis";
-import { riotApiDetails } from "./riot.ts";
-import { ankiApiDetails } from "./anki.ts";
-import { githubApiDetails } from "./github.ts";
-import { wakaApiDetails } from "./waka.ts";
-import { leetcodeApiDetails } from "./leetcode.ts";
+import { riotApiDetails } from "./riot.js";
+import { ankiApiDetails } from "./anki.js";
+import { githubApiDetails } from "./github.js";
+import { wakaApiDetails } from "./waka.js";
+import { leetcodeApiDetails } from "./leetcode.js";
 
 const KV_URL = process.env.KV_REST_API_URL;
 const KV_TOKEN = process.env.KV_REST_API_TOKEN;
