@@ -1,5 +1,5 @@
 // api/progress/index.ts
-import getProgress, { apiKeys } from "./registry";
+import getProgress, { apiKeys } from "./registry.js";
 
 export async function GET(request: Request) {
   try {
