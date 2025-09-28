@@ -7,7 +7,7 @@ const API_URL = "https://leetcode.com/graphql";
 
 export const leetcodeApiDetails: ApiReqDetails<LeetCodeApiResponse> = {
   redisKey: "leetcode-progress",
-  staleAfter: 0 * MINUTE,
+  staleAfter: 5 * MINUTE,
   fetchFn: getRecentSubmission,
 };
 

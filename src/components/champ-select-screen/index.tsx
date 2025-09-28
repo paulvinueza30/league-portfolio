@@ -51,8 +51,7 @@ function HextechCircle() {
         className="absolute w-[50em] h-[37em] pointer-events-none z-0 hextech-circlez"
         style={{
           clipPath: "polygon(0% 5%, 20% 3%, 3% 5%, 100% 15%, 100% 90%, 0% 90%)",
-        }}
-      >
+        }}>
         {Array.from({ length: 200 }, (_, i) => {
           const angle = (360 / 200) * i;
 
@@ -180,9 +179,7 @@ export default function ChampSelectScreen() {
     queries: apiKeys.map((api) => ({
       queryKey: ["progress", api],
       queryFn: async () => {
-        const res = await fetch(
-          `http://localhost:3001/api/progress?key=${api}`
-        );
+        const res = await fetch(`api/progress?key=${api}`);
         if (!res.ok) throw new Error("Failed to fetch");
         return res.json();
       },
@@ -192,8 +189,7 @@ export default function ChampSelectScreen() {
   return (
     <div
       className="min-h-screen max-h-screen w-full bg-cover bg-center bg-no-repeat select-none flex flex-col justify-between overflow-hidden bg-picture"
-      style={getBackgroundStyle()}
-    >
+      style={getBackgroundStyle()}>
       <MyJoyRide />
       <div className="flex flex-col gap-6 flex-1 ">
         <div className="w-4xl justify-items-center self-center mt-10 match-intro">
