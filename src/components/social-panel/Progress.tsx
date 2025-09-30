@@ -42,7 +42,7 @@ export default function ProgressDialog() {
           src={progressButton}
           alt="progress icon"
           draggable={false}
-          className="w-14 h-12"
+          className="w-14 h-12 joy-my-progress"
         />
       </DialogTrigger>
       <DialogContent

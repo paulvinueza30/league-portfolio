@@ -28,16 +28,17 @@ const steps = [
     content: "Get in touch with me.",
   },
   {
+    target: ".joy-my-progress",
+    content:
+      "Check out my progress on some things such as Github, Anki, Leetcodes, or even League.",
+  },
+  {
     target: ".joy-champ-portrait",
-    content: "Click my portrait for more info.",
+    content: "Click my portrait to lock in.",
   },
   {
     target: ".joy-lock-in-button",
     content: "Confirm your selection.",
-  },
-  {
-    target: ".joy-skin-showcase",
-    content: "Photos and artwork gallery.",
   },
 ];
 
