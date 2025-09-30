@@ -82,16 +82,20 @@ export default function ChampSelectScreen() {
     if (selectedSkin) {
       return {
         backgroundImage: `
-        radial-gradient(ellipse 50% 50% at center, 
-          transparent 30%, 
-          rgba(0,0,0,0.4) 60%,
-          rgba(0,0,0,0.9) 100%
+        radial-gradient(ellipse 45em 36em at center, 
+          transparent 0%, 
+          transparent 25%,
+          rgba(0,0,0,0.1) 45%,
+          rgba(0,0,0,0.3) 65%,
+          rgba(0,0,0,0.7) 85%,
+          rgba(0,0,0,0.95) 100%
         ),
         url(${selectedSkin.skinImg})
       `,
-        backgroundSize: "100% 100%",
-        backgroundPosition: "calc(50% + 120px)",
-        backgroundRepeat: "repeat",
+        backgroundSize: "45em 36em",
+        backgroundPosition: "center calc(50% - 2rem)",
+        backgroundRepeat: "no-repeat",
+        backgroundColor: "#1a1a1a",
       };
     }
 
