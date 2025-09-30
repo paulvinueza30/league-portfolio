@@ -4,3 +4,4 @@ export { default as leon } from "./leon.jpg";
 export { default as punch } from "./punch.jpg";
 export { default as withBro } from "./brother-me.jpg";
 export { default as headshot } from "./headshot.png";
+export { default as alpaca } from "./alpaca-paul.jpg";

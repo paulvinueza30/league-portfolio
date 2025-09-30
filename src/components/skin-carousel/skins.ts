@@ -5,6 +5,7 @@ import {
   leon,
   headshot,
   withBro,
+  alpaca,
 } from "@/assets/self-pics";
 import { beachDay, rengar, vexed, elo, goNext } from "@/assets/art";
 
@@ -28,6 +29,7 @@ export const artSkins: Skin[] = [
 ];
 export const portraitSkins: Skin[] = [
   { skinName: "In a Japanese Cafe", skinImg: thinker },
+  { skinName: "Holding an alpaca", skinImg: alpaca },
   { skinName: "High Score", skinImg: punch },
   { skinName: "Met my GOAT", skinImg: leon },
   { skinName: "Headshot", skinImg: headshot },
