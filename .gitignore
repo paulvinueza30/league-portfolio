@@ -24,3 +24,19 @@ dist-ssr
 *.sln
 *.sw?
 .vercel
+
+# Ignore codebase switcher script
+
+codebase_switcher.py
+
+# Ignore .cursorignore files
+
+.cursorignore
+
+# Ignore cursor indexing ignore script
+
+.cursorindexingignore
+
+# Ignore specstory folders.
+
+.specstory/
