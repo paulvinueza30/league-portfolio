@@ -244,6 +244,7 @@ export function AnkiProgressCard() {
 
 const langToSrc: Record<string, string> = {
   python: pythonLogo,
+  python3: pythonLogo,
   golang: goText,
   java: javaLogo,
   typescript: typescriptLogo,
