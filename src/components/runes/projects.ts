@@ -7,6 +7,8 @@ import {
   tinyVid,
   babelVid,
   broVid,
+  hyprtask,
+  hyprtaskVid,
 } from "@/assets/projects";
 
 import {
@@ -52,6 +54,17 @@ export const projects: Project[] = [
     video: tinyVid,
 
     source_code_link: "https://github.com/tinyautomator/tinyautomator-core",
+  },
+{
+    name: "HyprTask",
+    description:
+      "Developed a terminal-based task manager for the Hyprland window manager. Built with Go and the Bubble Tea framework to create a responsive TUI with real-time workspace monitoring, dynamic window padding, and keyboard-driven navigation.",
+    tags: [
+      { name: "Golang", img: goGopher },
+    ],
+    image: hyprtask,
+    video: hyprtaskVid,
+    source_code_link: "https://github.com/paulvinueza30/hyprtask",
   },
   {
     name: "Babel",
