@@ -1,70 +1,31 @@
-# React + TypeScript + Vite
+# League of Legends Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A personal portfolio website inspired by the League of Legends client, designed to provide an immersive and interactive user experience. This project mimics the game's UI/UX while showcasing professional skills, projects, and real-time development statistics.
 
-Currently, two official plugins are available:
+![Project Preview](public/league-p.png)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## About
 
-## Expanding the ESLint configuration
+This project is a technical playground that combines modern web technologies with game design principles. It features a fully interactive 3D "Summoner's Rift" section, a "Champ Select" interface for viewing projects, and a serverless backend that caches real-time data from various platforms (GitHub, LeetCode) to display personal progress.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Features
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- **Immersive UI/UX**: Custom-built interface mimicking the League of Legends client using **React** and **Tailwind CSS**.
+- **3D Playground**: An interactive 3D scene of the Summoner's Rift built with **React Three Fiber (R3F)** and **Rapier** physics, allowing users to navigate using point-and-click mechanics.
+- **Real-Time Stats**: A cached progress API built with **Upstash Redis** and **Vercel Functions** to display live GitHub commits, LeetCode solutions, and other metrics.
+- **Smooth Animations**: High-performance animations and transitions powered by **GSAP**.
+- **State Management**: efficient global state handling using **Jotai** and server state management with **TanStack Query**.
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+## Tech Stack
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### Frontend
+- **Framework**: React 19, TypeScript, Vite
+- **Styling**: Tailwind CSS, Radix UI, Class Variance Authority (CVA)
+- **3D & Physics**: React Three Fiber, Drei, Rapier
+- **Animation**: GSAP, Framer Motion
+- **State**: Jotai (Client), TanStack Query (Server)
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-# league-portfolio
+### Backend & Infrastructure
+- **Serverless**: Vercel Functions
+- **Database/Caching**: Upstash Redis
+- **APIs**: GitHub API, LeetCode Query, Riot API 
