@@ -3,13 +3,13 @@
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
     "target": "ES2023",
     "lib": ["ES2023"],
-    "module": "ESNext",
+    "module": "Node16",
     "skipLibCheck": true,
 
     /* Bundler mode */
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "verbatimModuleSyntax": true,
+    "moduleResolution": "node16",
+    "allowImportingTsExtensions": false,
+    "verbatimModuleSyntax": false,
     "moduleDetection": "force",
     "noEmit": true,
 
@@ -21,5 +21,5 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["vite.config.ts"]
+  "include": ["vite.config.ts", "dev-server.ts", "api"]
 }

@@ -1,13 +1,24 @@
-import express from "express";
+import express, { type Request, type Response } from "express";
 import cors from "cors";
-import handler from "./api/progress/index.ts";
+import getProgress, { apiKeys } from "./api/progress/registry.js";
 
 const app = express();
 app.use(cors());
 
-app.get("/api/progress", async (req, res) => {
+app.get("/api/progress", async (req: Request, res: Response) => {
   try {
-    await handler(req as any, res as any);
+    const key = req.query.key as string;
+    
+    if (key) {
+      if (!apiKeys.includes(key)) {
+        return res.status(400).json({ error: "Invalid key", keys: apiKeys });
+      }
+      const data = await getProgress(key as any);
+      return res.json(data);
+    }
+    
+    const routes = apiKeys.map((k) => `/api/progress?key=${k}`);
+    return res.json({ routes, keys: apiKeys });
   } catch (error) {
     console.error("❌ Error:", error);
     res.status(500).json({ error: (error as Error).message });
