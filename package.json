@@ -12,7 +12,7 @@
     "server": "cd server && yarn dev",
     "lint": "eslint .",
     "preview": "vite preview",
-    "vite": "vite"
+    "vite": "vite --host"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",

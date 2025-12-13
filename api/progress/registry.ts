@@ -34,7 +34,7 @@ export const apiRegistry = {
 export const apiKeys = Object.keys(apiRegistry);
 export type ApiKey = keyof typeof apiRegistry;
 
-export default async function GET(key: ApiKey) {
+export async function getProgress(key: ApiKey) {
   const api = apiRegistry[key];
   if (!api) return { error: "Unknown API" };
 
@@ -63,5 +63,7 @@ export default async function GET(key: ApiKey) {
     return { error: "Failed to fetch and no cache available" };
   }
 }
+
+export default getProgress;
 
 
