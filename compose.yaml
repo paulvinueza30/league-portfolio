@@ -20,6 +20,8 @@ services:
         image: league-frontend:latest
         ports:
             - 5173:5173
+        volumes:
+            - .:/app
         environment:
             - API_TARGET=http://dev-server:3001
         env_file:
