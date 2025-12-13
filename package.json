@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "concurrently \"yarn run server\" \"yarn run vite\"",
     "build": "tsc -b && vite build",
-    "server": "tsx dev-server.ts",
+    "server": "cd server && yarn dev",
     "lint": "eslint .",
     "preview": "vite preview",
     "vite": "vite"

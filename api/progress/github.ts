@@ -1,6 +1,6 @@
 import { MINUTE } from "../time.js";
 import { type ApiReqDetails } from "./registry.js";
-import { Octokit } from "octokit";
+import { Octokit } from "@octokit/rest";
 import { startOfWeek, isAfter, formatDistanceToNow } from "date-fns";
 import { type GitHubCommit, type GithubApiResponse } from "./types.js";
 
