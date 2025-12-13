@@ -63,7 +63,7 @@ function Chat() {
   }
 
   return (
-    <div className="h-full overflow-y-auto px-3 py-2 bg-[#00070F] text-sm leading-relaxed break-words">
+    <div className="h-full overflow-y-auto px-2 py-1 sm:px-2.5 sm:py-1.5 md:px-3 md:py-2 bg-[#00070F] text-[10px] sm:text-xs md:text-sm leading-relaxed break-words">
       {chat.map((c, idx) => renderChat(c, idx))}
       <div ref={bottomRef} />
     </div>
@@ -111,7 +111,7 @@ export default function Chatbox() {
     });
   }, [addChatMessage, isAnimationComplete]);
   return (
-    <div className="w-lg max-w-lg h-[12em] grid grid-rows-[3.5fr_1fr]">
+    <div className="w-full max-w-[85vw] sm:w-52 sm:max-w-52 md:w-full md:max-w-[90vw] lg:w-64 lg:max-w-64 xl:w-lg xl:max-w-lg h-[8em] sm:h-[6.5em] md:h-[12em] lg:h-[9em] xl:h-[12em] grid grid-rows-[3.5fr_1fr]">
       <Chat />
       <ChatInput />
     </div>

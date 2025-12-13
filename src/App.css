@@ -1,5 +1,5 @@
 /* Import all external resources first */
-@import url('https://fonts.googleapis.com/css2?family=Exo+2&family=Montserrat&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Exo+2&family=Montserrat&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -20,7 +20,7 @@ body,
   @apply h-screen w-screen m-0 p-0;
   font-family: "Exo 2", "Montserrat", sans-serif;
 }
-.mi{
+.mi {
   font-family: "Montserrat", sans-serif;
 }
 .animated-background {

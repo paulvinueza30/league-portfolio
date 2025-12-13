@@ -28,7 +28,7 @@ interface SkillShowCaseProps {
 
 function SkillShowCase({ skills }: SkillShowCaseProps) {
   return (
-    <div className="w-full bg-[#080F21] justify-items-center grid grid-cols-4 auto-rows-min h-70 overflow-y-scroll ">
+    <div className="w-full bg-[#080F21] justify-items-center grid grid-cols-3 sm:grid-cols-4 auto-rows-min h-70 overflow-y-scroll ">
       {skills.map((skill) => (
         <div
           key={skill.name}
@@ -39,13 +39,15 @@ function SkillShowCase({ skills }: SkillShowCaseProps) {
             className="border-0 bg-transparent hover:bg-transparent outline-none shadow-none "
           >
             <img
-              className="w-7 h-7"
+              className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7"
               src={skill.img}
               alt={skill.name + "skill"}
               draggable={false}
             />
           </Button>
-          <span className="text-center text-xs">{skill.name}</span>
+          <span className="text-center text-[10px] sm:text-xs">
+            {skill.name}
+          </span>
         </div>
       ))}
     </div>
@@ -65,7 +67,7 @@ function WardButton() {
     <Popover>
       <PopoverTrigger className="joy-skills-showcase">
         <img
-          className="w-12 h-12 select-none"
+          className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 select-none flex-shrink-0"
           src={defaultSkill}
           alt="THE GO GOPHER!!!"
           draggable={false}
@@ -111,11 +113,11 @@ export default function BMSection() {
     link.click();
   }
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex items-center gap-1 sm:gap-1.5 md:gap-2 lg:gap-3 xl:gap-4 flex-shrink-0">
       <WardButton />
       <Button
         variant="ghost"
-        className="h-full w-12 joy-resume-button hover:bg-transparent "
+        className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 joy-resume-button hover:bg-transparent flex-shrink-0"
         size="icon"
         onClick={handleOnClick}
       >

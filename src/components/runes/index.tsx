@@ -29,12 +29,11 @@ export default function RuneSelection() {
   const runePages: Record<string, ReactNode> = {
     Projects: ProjectsModal(),
 
-
     Lore: LoreModal(),
   };
   const runes = Object.keys(runePages);
   return (
-    <div className="flex justify-between items-center gap-3 ">
+    <div className="flex justify-between items-end gap-2 sm:gap-1.5 md:gap-2 lg:gap-2.5 xl:gap-3 flex-shrink-0">
       <Dialog>
         <DialogTrigger
           className="joy-rune-page-opener"
@@ -43,7 +42,7 @@ export default function RuneSelection() {
           <img
             src={runeButton}
             alt="rune button"
-            className="w-8 h-8"
+            className="w-8 h-8 sm:w-8 sm:h-8 md:w-9 md:h-9 lg:w-10 lg:h-10 xl:w-12 xl:h-12 2xl:w-14 2xl:h-14"
             draggable={false}
           />
         </DialogTrigger>
@@ -68,11 +67,13 @@ export default function RuneSelection() {
       </Dialog>
 
       <DropdownMenu>
-        <DropdownMenuTrigger className="border-3 border-[#98A0A9] bg-[#2e373f] h-12 w-2xs flex justify-between items-center px-3 joy-rune-dropdown">
-          <span className="text-lg text-[#BCAC88]">{runeLabel}</span>
+        <DropdownMenuTrigger className="border-3 border-[#98A0A9] bg-[#2e373f] h-8 w-16 sm:h-8 sm:w-20 md:h-12 md:w-24 lg:h-12 lg:w-28 xl:h-12 xl:w-32 2xl:h-12 2xl:w-2xs flex justify-between items-center px-1.5 sm:px-2 md:px-2.5 lg:px-3 joy-rune-dropdown">
+          <span className="text-xs sm:text-xs md:text-sm lg:text-base xl:text-lg 2xl:text-lg text-[#BCAC88]">
+            {runeLabel}
+          </span>
           <div className="flex flex-col text-[#797B6F]">
-            <ChevronUp className="w-2.5 h-2.5" />
-            <ChevronDown className="w-2.5 h-2.5 -mt-0.5" />
+            <ChevronUp className="w-2.5 h-2.5 sm:w-2.5 sm:h-2.5" />
+            <ChevronDown className="w-2.5 h-2.5 sm:w-2.5 sm:h-2.5 -mt-0.5" />
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent

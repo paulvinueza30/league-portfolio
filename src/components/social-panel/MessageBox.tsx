@@ -27,7 +27,7 @@ export default function MessagePopOver() {
           src={messageButton}
           alt="message icon"
           draggable={false}
-          className="w-14 h-12"
+          className="w-10 h-8 sm:w-12 sm:h-10 md:w-14 md:h-12"
         />
       </PopoverTrigger>
       <PopoverContent

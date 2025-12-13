@@ -28,12 +28,15 @@ export default function SummonerSpells() {
   ];
 
   return (
-    <div className="w-fit h-fit flex gap-4 items-center select-none joy-summ-spells">
+    <div className="w-fit h-fit flex gap-1 sm:gap-1.5 md:gap-2 lg:gap-3 xl:gap-4 items-center select-none joy-summ-spells flex-shrink-0">
       {summonerSpells.map((s, idx) => (
-        <div key={idx} className="w-12 h-12">
+        <div
+          key={idx}
+          className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 flex-shrink-0"
+        >
           <HoverCard>
             <HoverCardTrigger
-              className="w-12 h-12 p-0 rounded-none"
+              className="w-full h-full p-0 rounded-none"
               onClick={() =>
                 window.open(s.link, "_blank", "noopener,noreferrer")
               }
