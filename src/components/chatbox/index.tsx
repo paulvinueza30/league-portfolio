@@ -13,6 +13,9 @@ import { gsapAtom } from "@/atoms/gsapAtom";
 
 import { useAudio } from "@/context/AudioContext";
 
+// Shared ref across all Chatbox instances to prevent duplicate initialization
+const chatInitialized = { current: false };
+
 function Chat() {
   const [chat] = useAtom(chatAtom);
   const chatFx = new Audio(chatSound);
@@ -96,20 +99,20 @@ function ChatInput() {
 
 export default function Chatbox() {
   const addChatMessage = useSetAtom(addChatMessageAtom);
-  const hasRun = useRef(false);
   const [isAnimationComplete] = useAtom(gsapAtom);
+  const [chat] = useAtom(chatAtom);
 
   useEffect(() => {
-    if (hasRun.current || !isAnimationComplete) return;
+    if (chatInitialized.current || !isAnimationComplete || chat.length > 0) return;
 
-    hasRun.current = true;
+    chatInitialized.current = true;
 
     initialChatScript.forEach(({ delay = 0, ...msg }) => {
       setTimeout(() => {
         addChatMessage(msg);
       }, delay);
     });
-  }, [addChatMessage, isAnimationComplete]);
+  }, [addChatMessage, isAnimationComplete, chat.length]);
   return (
     <div className="w-full max-w-[85vw] sm:w-52 sm:max-w-52 md:w-full md:max-w-[90vw] lg:w-64 lg:max-w-64 xl:w-lg xl:max-w-lg h-[8em] sm:h-[6.5em] md:h-[12em] lg:h-[9em] xl:h-[12em] grid grid-rows-[3.5fr_1fr]">
       <Chat />
