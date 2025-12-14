@@ -11,16 +11,16 @@ export default function ChampSelector() {
     setChamp(champName);
   };
   return (
-    <div className="w-full max-w-[10rem] sm:max-w-[12rem] md:max-w-[14rem] lg:max-w-[18rem] xl:max-w-[22rem] 2xl:max-w-[39.5em] h-full flex flex-col gap-1 sm:gap-2 md:gap-3 justify-between shadow-none">
-      <div className="flex-1 flex flex-col items-center justify-center">
+    <div className="w-full max-w-[6rem] sm:max-w-[12rem] md:max-w-[14rem] lg:max-w-[18rem] xl:max-w-[22rem] 2xl:max-w-[39.5em] h-auto sm:h-full flex flex-col gap-0.5 sm:gap-1 md:gap-2 lg:gap-3 justify-center shadow-none">
+      <div className="flex flex-col items-center justify-center">
         <img
           src={greyRole}
           alt="software engineer role"
-          className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8"
+          className="w-3 h-3 sm:w-5 sm:h-5 md:w-6 md:h-6 lg:w-7 lg:h-7 xl:w-8 xl:h-8"
         />
-        <div className="bg-[#363825] w-full h-0.5 my-1 sm:my-2 md:my-3" />
+        <div className="bg-[#363825] w-full h-0.5 my-0.5 sm:my-1 md:my-2 lg:my-3" />
 
-        <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 xl:w-36 xl:h-36 2xl:w-40 2xl:h-40 flex flex-col items-center justify-center gap-1 sm:gap-1.5 md:gap-2 joy-champ-portrait">
+        <div className="w-12 h-12 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 xl:w-32 xl:h-32 2xl:w-36 2xl:h-36 flex flex-col items-center justify-center gap-0.5 sm:gap-1.5 md:gap-2 lg:gap-2.5 xl:gap-3 joy-champ-portrait">
           <button
             className={`
     border-2 border-[#463714] 
@@ -42,14 +42,14 @@ export default function ChampSelector() {
               className="w-full h-full object-cover"
             />
           </button>
-          <span className="text-center text-xs sm:text-sm md:text-base lg:text-lg text-[#939088] font-medium">
+          <span className="text-center text-[9px] sm:text-xs md:text-sm lg:text-base xl:text-lg text-[#939088] font-medium mt-0.5 sm:mt-1">
             ポール
           </span>
         </div>
       </div>
-      <div className="flex justify-center pb-1 sm:pb-2 md:pb-3">
+      <div className="flex justify-center pt-0.5 sm:pt-1.5 md:pt-2 lg:pt-2.5 xl:pt-3 pb-0 sm:pb-1 md:pb-2 lg:pb-3">
         <div
-          className={`joy-lock-in-button relative w-20 h-8 sm:w-24 sm:h-9 md:w-28 md:h-10 lg:w-xs lg:h-12 transition-transform duration-150 ${
+          className={`joy-lock-in-button relative w-14 h-5 sm:w-20 sm:h-8 md:w-24 md:h-9 lg:w-28 lg:h-10 xl:w-xs xl:h-12 transition-transform duration-150 ${
             champ && "hover:scale-105 active:scale-85"
           }`}
           style={{
@@ -74,7 +74,7 @@ export default function ChampSelector() {
             disabled={!champ}
           >
             <span
-              className={`relative z-10 text-xs sm:text-sm md:text-base transition-colors drop-shadow-sm ${
+              className={`relative z-10 text-[9px] sm:text-xs md:text-sm lg:text-base transition-colors drop-shadow-sm ${
                 champ ? "group-hover:text-[#5bc0de]" : "text-gray-500"
               }`}
             >

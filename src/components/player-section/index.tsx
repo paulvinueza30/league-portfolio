@@ -6,16 +6,16 @@ import { champPortrait } from "@/assets/self-pics";
 import { useAtom } from "jotai";
 import { selectedChampAtom } from "@/atoms/champAtom";
 
-function PlayerSeperator() {
+function PlayerSeperator({ className = "" }: { className?: string }) {
   return (
-    <div className="flex flex-row items-center text-[#929189] w-full ">
+    <div className={`flex flex-row items-center text-[#929189] w-full ${className}`}>
       <Circle className="w-2 h-2 fill-[#929189]" />
       <Separator decorative={true} className="flex-1 bg-[#929189] " />
     </div>
   );
 }
 
-function PlayerCard() {
+function PlayerCard({ isLockedIn }: { isLockedIn: boolean }) {
   const [champ] = useAtom(selectedChampAtom);
 
   return (
@@ -25,7 +25,7 @@ function PlayerCard() {
         src={champ ? champPortrait : devRole}
         alt="Software engineer dev role"
       />
-      <div className="flex flex-col text-left text-[#CAB15A] text-[10px] sm:text-xs md:text-sm lg:text-md tracking-widest">
+      <div className={`flex flex-col text-left text-[#CAB15A] text-[10px] sm:text-xs md:text-sm lg:text-md tracking-widest ${isLockedIn ? 'hidden sm:flex' : ''}`}>
         <h4 className="text-[10px] sm:text-xs md:text-sm lg:text-base">
           Declaring Intent
         </h4>
@@ -40,7 +40,7 @@ function PlayerCard() {
   );
 }
 
-export default function PlayerSection() {
+export default function PlayerSection({ isLockedIn }: { isLockedIn: boolean }) {
   return (
     <div className="flex-col justify-items-start w-full">
       <h1 className="uppercase font-bold text-[10px] sm:text-xs md:text-sm lg:text-base xl:text-lg text-[#929189] tracking-widest ml-1 sm:ml-2 md:ml-3 lg:ml-5 mb-1 sm:mb-2 md:mb-2.5 lg:mb-3">
@@ -50,7 +50,7 @@ export default function PlayerSection() {
         <div className="bg-[#FABE0B] w-1.5 sm:w-2" />
         <div className="w-full flex flex-col gap-1.5 sm:gap-2 md:gap-3 lg:gap-4">
           <PlayerSeperator />
-          <PlayerCard />
+          <PlayerCard isLockedIn={isLockedIn} />
           <PlayerSeperator />
         </div>
       </div>

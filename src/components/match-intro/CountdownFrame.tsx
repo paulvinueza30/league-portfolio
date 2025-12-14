@@ -44,7 +44,7 @@ function Countdown() {
   }, [isAnimationComplete]);
   return (
     timer > 0 && (
-      <h1 className="match-intro-item font-bold text-6xl -my-6 mx-2">
+      <h1 className="match-intro-item font-bold text-3xl sm:text-5xl md:text-6xl -my-0.5 sm:-my-4 md:-my-6 mx-1 sm:mx-2">
         {timer}
       </h1>
     )
@@ -191,7 +191,7 @@ function BlueGlowy({ direction }: BlueGlowyProps) {
 
 export default function CountdownFrame() {
   return (
-    <div className="flex justify-between items-end match-intro-item relative">
+    <div className="flex justify-center sm:justify-between items-end match-intro-item relative">
       <img className="w-70 h-15" src={chevLeft} />
       <BlueGlowy direction="left" />
       <Countdown />

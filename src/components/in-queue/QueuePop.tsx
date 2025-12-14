@@ -91,10 +91,10 @@ export default function QueuePop() {
   }, [accepted, locallyAccepted]);
   return (
     <div className="select-none fixed inset-0 flex items-center justify-center bg-none#9E916B bg-opacity-100 z-50 backdrop-blur-2xl bg-white/5">
-      <div className="border-3 border-[#dec375] rounded-full p-6 flex justify-center justify-items-center relative">
-        <div className="relative w-[30rem] h-[30rem] flex items-center justify-center ">
-          <div className="absolute inset-[2em] rounded-full border-5 border-[#C7B27F] pointer-events-none " />
-          <div className="absolute inset-[0.7em] rounded-full border-5 border-[#C7B27F] pointer-events-none bg-transparent" />
+      <div className="border-3 border-[#dec375] rounded-full p-3 sm:p-4 md:p-6 flex justify-center justify-items-center relative">
+        <div className="relative w-[18rem] h-[18rem] sm:w-[22rem] sm:h-[22rem] md:w-[26rem] md:h-[26rem] lg:w-[30rem] lg:h-[30rem] flex items-center justify-center ">
+          <div className="absolute inset-[1.2em] sm:inset-[1.5em] md:inset-[2em] rounded-full border-3 sm:border-4 md:border-5 border-[#C7B27F] pointer-events-none " />
+          <div className="absolute inset-[0.4em] sm:inset-[0.5em] md:inset-[0.7em] rounded-full border-3 sm:border-4 md:border-5 border-[#C7B27F] pointer-events-none bg-transparent" />
           <svg className="absolute w-full h-full rotate-[-245deg] pointer-events-none">
             <defs>
               <linearGradient
@@ -161,7 +161,7 @@ export default function QueuePop() {
             />
           </svg>
 
-          <div className="relative w-[26rem] h-[26rem] rounded-full overflow-hidden border-5 border-[#C7B27F]">
+          <div className="relative w-[15rem] h-[15rem] sm:w-[18rem] sm:h-[18rem] md:w-[22rem] md:h-[22rem] lg:w-[26rem] lg:h-[26rem] rounded-full overflow-hidden border-3 sm:border-4 md:border-5 border-[#C7B27F]">
             <div
               className="w-full h-full flex flex-col justify-center items-center text-center text-white"
               style={{
@@ -172,23 +172,22 @@ export default function QueuePop() {
               <img
                 src="/league-p.png"
                 alt="logo"
-                className="w-1/4 h-1/4 mb-2"
+                className="w-1/4 h-1/4 mb-1 sm:mb-2"
               />
-              <h2 className="text-3xl uppercase font-bold">
+              <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl uppercase font-bold px-2">
                 {locallyAccepted ? "Summoning Portfolio" : "Portfolio Found"}
               </h2>
-              <p className="text-sm">Paul's Rift - Portfolio Review - 1v1</p>
+              <p className="text-[10px] sm:text-xs md:text-sm px-2">Paul's Rift - Portfolio Review - 1v1</p>
             </div>
           </div>
-          <div className="absolute bottom-2">
+          <div className="absolute bottom-1 sm:bottom-2">
             <AcceptButton
               locallyAccepted={locallyAccepted}
               setLocalAccepted={setLocalAccepted}
             />
           </div>
         </div>
-        <div className="absolute bottom-4 translate-y-full flex justify-center w-full  ">
-          {" "}
+        <div className="absolute bottom-2 sm:bottom-4 translate-y-full flex justify-center w-full">
           {!locallyAccepted && <DeclineButton />}
         </div>
       </div>
@@ -242,7 +241,7 @@ function AcceptButton({
     <div className="flex justify-center select-none">
       <svg
         viewBox="-2 0 5.5 1.5"
-        className={`transition-transform duration-150 w-[20em] h-[3.5em] ${
+        className={`transition-transform duration-150 w-[12em] h-[2.2em] sm:w-[16em] sm:h-[3em] md:w-[18em] md:h-[3.2em] lg:w-[20em] lg:h-[3.5em] ${
           !locallyAccepted && "hover:scale-105 active:scale-95"
         }`}
         style={{

@@ -103,7 +103,11 @@ export default function Chatbox() {
   const [chat] = useAtom(chatAtom);
 
   useEffect(() => {
-    if (chatInitialized.current || !isAnimationComplete || chat.length > 0) return;
+    if (chatInitialized.current || !isAnimationComplete) return;
+    if (chat.length > 0) {
+      chatInitialized.current = true;
+      return;
+    }
 
     chatInitialized.current = true;
 
@@ -114,7 +118,7 @@ export default function Chatbox() {
     });
   }, [addChatMessage, isAnimationComplete, chat.length]);
   return (
-    <div className="w-full max-w-[85vw] sm:w-52 sm:max-w-52 md:w-full md:max-w-[90vw] lg:w-64 lg:max-w-64 xl:w-lg xl:max-w-lg h-[8em] sm:h-[6.5em] md:h-[12em] lg:h-[9em] xl:h-[12em] grid grid-rows-[3.5fr_1fr]">
+    <div className="w-full max-w-[85vw] sm:w-52 sm:max-w-52 md:w-full md:max-w-[90vw] lg:w-64 lg:max-w-64 xl:w-lg xl:max-w-lg h-[6em] sm:h-[6.5em] md:h-[12em] lg:h-[9em] xl:h-[12em] grid grid-rows-[3.5fr_1fr]">
       <Chat />
       <ChatInput />
     </div>
