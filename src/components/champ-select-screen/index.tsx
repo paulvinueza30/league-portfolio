@@ -105,6 +105,15 @@ export default function ChampSelectScreen() {
   };
 
   useGSAP(() => {
+    // Skip animations on small screens (mobile)
+    const isMobile = window.innerWidth < 768; // md breakpoint
+
+    if (isMobile) {
+      // Skip animations, just set complete immediately
+      setAnimationComplete(true);
+      return;
+    }
+
     const tl = gsap.timeline({
       duration: 0.8,
       onComplete: () => {
@@ -187,12 +196,12 @@ export default function ChampSelectScreen() {
 
   return (
     <div
-      className="min-h-screen max-h-screen w-full bg-cover bg-center bg-no-repeat select-none flex flex-col justify-start overflow-hidden bg-picture"
+      className="min-h-screen max-h-screen w-full bg-cover bg-center bg-no-repeat select-none flex flex-col justify-between md:justify-start overflow-hidden bg-picture"
       style={getBackgroundStyle()}
     >
       <MyJoyRide />
-      <div className="flex flex-col gap-1 md:gap-2 lg:gap-3 xl:gap-4 2xl:gap-6 flex-shrink md:flex-1 min-h-0 justify-start">
-        <div className="w-full max-w-full sm:max-w-sm md:max-w-lg lg:max-w-xl xl:max-w-2xl 2xl:max-w-4xl flex flex-col items-center self-center mt-0.5 md:mt-3 lg:mt-4 xl:mt-6 2xl:mt-10 match-intro px-1 sm:px-4">
+      <div className="flex flex-col gap-2 md:gap-2 lg:gap-3 xl:gap-4 2xl:gap-6 flex-shrink md:flex-1 min-h-0 justify-start">
+        <div className="w-full max-w-full sm:max-w-sm md:max-w-lg lg:max-w-xl xl:max-w-2xl 2xl:max-w-4xl flex flex-col items-center self-center mt-2 md:mt-3 lg:mt-4 xl:mt-6 2xl:mt-10 match-intro px-1 sm:px-4">
           <MatchIntro />
         </div>
         <div className="flex flex-row flex-shrink md:flex-1 min-h-0 max-h-[30vh] md:max-h-none justify-between items-center">
@@ -211,7 +220,7 @@ export default function ChampSelectScreen() {
         </div>
       </div>
       {/* Small screen layout: Chat and Rune in separate rows */}
-      <div className="flex flex-col md:hidden gap-1 mb-0.5 items-center w-full px-1 sm:px-4">
+      <div className="flex flex-col md:hidden gap-2 mb-2 items-center w-full px-1 sm:px-4">
         {/* Chat row - centered on small screens */}
         <div className="flex justify-center items-end bottom-row-item w-full">
           <Chatbox />
@@ -229,7 +238,7 @@ export default function ChampSelectScreen() {
         </div>
       </div>
       {/* Bottom row */}
-      <div className="flex flex-row md:flex lg:grid lg:grid-cols-[1fr_auto_1fr] gap-x-0.5 sm:gap-x-1 md:gap-x-2.5 lg:gap-x-3 xl:gap-x-5 mb-0 md:mb-2.5 lg:mb-3 xl:mb-4 items-end mx-0.5 sm:mx-1.5 md:mx-2 lg:mx-3 xl:mx-6 overflow-visible">
+      <div className="flex flex-row md:flex lg:grid lg:grid-cols-[1fr_auto_1fr] gap-x-0.5 sm:gap-x-1 md:gap-x-2.5 lg:gap-x-3 xl:gap-x-5 mb-4 md:mb-2.5 lg:mb-3 xl:mb-4 items-end mx-0.5 sm:mx-1.5 md:mx-2 lg:mx-3 xl:mx-6 overflow-visible">
         {/* Chat - visible on lg+ screens only */}
         <div className="bottom-row-item hidden lg:flex lg:justify-start lg:items-end">
           <Chatbox />
