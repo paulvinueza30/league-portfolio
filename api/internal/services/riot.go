@@ -32,7 +32,7 @@ func newRiotService(cfg *config.ProgressConfig) *riotService {
 
 func (s *riotService) getDetails() *models.ApiDetails {
 	return &models.ApiDetails{
-		RedisKey:   "riot-progress",
+		RedisKey:   "riot_cache",
 		StaleAfter: time.Minute * 30,
 		FetchFn:    s.fetch,
 	}

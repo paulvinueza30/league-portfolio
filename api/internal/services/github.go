@@ -7,19 +7,16 @@ import (
 
 	"github.com/dustin/go-humanize"
 	"github.com/google/go-github/v80/github"
-	"github.com/paulvinueza30/league-portfolio/api/internal/config"
 	"github.com/paulvinueza30/league-portfolio/api/internal/models"
 )
 
 type githubService struct {
 	client *github.Client
-	cfg    *config.ProgressConfig
 }
 
-func newGithubService(cfg *config.ProgressConfig) *githubService {
+func newGithubService() *githubService {
 	return &githubService{
 		client: github.NewClient(nil),
-		cfg:    cfg,
 	}
 }
 

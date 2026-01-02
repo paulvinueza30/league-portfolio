@@ -10,24 +10,30 @@ import (
 )
 
 type Registry struct {
-	github *githubService
-	riot   *riotService
-	waka   *wakaService
+	github   *githubService
+	riot     *riotService
+	waka     *wakaService
+	leetcode *leetcodeService
+	anki     *ankiService
 }
 
 func NewRegistry(cfg *config.ProgressConfig) *Registry {
 	return &Registry{
-		github: newGithubService(cfg),
-		riot:   newRiotService(cfg),
-		waka:   newWakaService(cfg),
+		github:   newGithubService(),
+		riot:     newRiotService(cfg),
+		waka:     newWakaService(cfg),
+		leetcode: newLeetcodeService(cfg),
+		anki:     newAnkiService(),
 	}
 }
 
 func (r *Registry) getRegistry() map[string]*models.ApiDetails {
 	return map[string]*models.ApiDetails{
-		"github": r.github.getDetails(),
-		"riot":   r.riot.getDetails(),
-		"waka":   r.waka.getDetails(),
+		"github":   r.github.getDetails(),
+		"riot":     r.riot.getDetails(),
+		"waka":     r.waka.getDetails(),
+		"leetcode": r.leetcode.getDetails(),
+		"anki":     r.anki.getDetails(),
 	}
 }
 

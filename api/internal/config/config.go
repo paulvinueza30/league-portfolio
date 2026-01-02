@@ -13,8 +13,10 @@ type Config struct {
 }
 
 type ProgressConfig struct {
-	RiotAPIKey string
-	WakaAPIKey string
+	RiotAPIKey       string
+	WakaAPIKey       string
+	LeetcodeSession  string
+	LeetcodeUsername string
 }
 
 type PostgresConfig struct {
@@ -28,8 +30,10 @@ func LoadConfig() (*Config, error) {
 	cfg := &Config{
 		Port: os.Getenv("PORT"),
 		Progress: ProgressConfig{
-			RiotAPIKey: os.Getenv("RIOT_API_KEY"),
-			WakaAPIKey: os.Getenv("WAKA_API_KEY"),
+			RiotAPIKey:       os.Getenv("RIOT_API_KEY"),
+			WakaAPIKey:       os.Getenv("WAKA_API_KEY"),
+			LeetcodeSession:  os.Getenv("LEETCODE_SESSION"),
+			LeetcodeUsername: os.Getenv("LEETCODE_USERNAME"),
 		},
 		DB: PostgresConfig{
 			Username: os.Getenv("POSTGRES_USER"),
