@@ -1,0 +1,43 @@
+package config
+
+import (
+	"os"
+
+	_ "github.com/joho/godotenv/autoload"
+)
+
+type Config struct {
+	Progress ProgressConfig
+	DB       PostgresConfig
+	Port     string
+}
+
+type ProgressConfig struct {
+	RiotAPIKey string
+	WakaAPIKey string
+}
+
+type PostgresConfig struct {
+	Username string
+	Password string
+	URL      string
+	Port     string
+}
+
+func LoadConfig() (*Config, error) {
+	cfg := &Config{
+		Port: os.Getenv("PORT"),
+		Progress: ProgressConfig{
+			RiotAPIKey: os.Getenv("RIOT_API_KEY"),
+			WakaAPIKey: os.Getenv("WAKA_API_KEY"),
+		},
+		DB: PostgresConfig{
+			Username: os.Getenv("POSTGRES_USER"),
+			Password: os.Getenv("POSTGRES_PWD"),
+			URL:      os.Getenv("POSTGRES_URL"),
+			Port:     os.Getenv("POSTGRES_PORT"),
+		},
+	}
+
+	return cfg, nil
+}

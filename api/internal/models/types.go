@@ -1,6 +1,8 @@
 package models
 
-import "time"
+import (
+	"time"
+)
 
 type ApiResponse[T any] struct {
 	Data      T

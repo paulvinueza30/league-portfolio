@@ -7,20 +7,31 @@ import (
 
 	"github.com/dustin/go-humanize"
 	"github.com/google/go-github/v80/github"
+	"github.com/paulvinueza30/league-portfolio/api/internal/config"
 	"github.com/paulvinueza30/league-portfolio/api/internal/models"
 )
 
-var c *github.Client = github.NewClient(nil)
+type githubService struct {
+	client *github.Client
+	cfg    *config.ProgressConfig
+}
 
-func getGithubDetails() *models.ApiDetails {
-	return &models.ApiDetails{
-		RedisKey:   "github_cache",
-		StaleAfter: 15 * time.Minute,
-		FetchFn:    fetchGithub,
+func newGithubService(cfg *config.ProgressConfig) *githubService {
+	return &githubService{
+		client: github.NewClient(nil),
+		cfg:    cfg,
 	}
 }
 
-func fetchGithub() (any, error) {
+func (s *githubService) getDetails() *models.ApiDetails {
+	return &models.ApiDetails{
+		RedisKey:   "github_cache",
+		StaleAfter: 15 * time.Minute,
+		FetchFn:    s.fetch,
+	}
+}
+
+func (s *githubService) fetch() (any, error) {
 	ctx := context.Background()
 	username := "paulvinueza30"
 
@@ -33,7 +44,7 @@ func fetchGithub() (any, error) {
 		ListOptions: github.ListOptions{PerPage: 100},
 	}
 
-	result, _, err := c.Search.Commits(ctx, query, opts)
+	result, _, err := s.client.Search.Commits(ctx, query, opts)
 	if err != nil {
 		return nil, err
 	}
