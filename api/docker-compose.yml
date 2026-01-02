@@ -1,0 +1,10 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: portfolio-backend
+    volumes:
+      - .:/app
+    ports:
+      - "8080:8080"

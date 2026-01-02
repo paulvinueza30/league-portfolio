@@ -24,6 +24,7 @@ dist-ssr
 *.sln
 *.sw?
 .vercel
+./api-old/
 
 # Ignore codebase switcher script
 
