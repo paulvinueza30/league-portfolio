@@ -1,3 +1,4 @@
+// Package services is responsible for holding fetch logic for each api
 package services
 
 import (

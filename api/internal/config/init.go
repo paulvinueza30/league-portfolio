@@ -1,3 +1,4 @@
+// Package config is reponsible for inital setup of all services and env used throughout app
 package config
 
 import (

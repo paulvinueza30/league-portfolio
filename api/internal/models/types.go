@@ -1,3 +1,4 @@
+// Package models holds the view of data used through app
 package models
 
 import (
