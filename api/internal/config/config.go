@@ -8,7 +8,8 @@ import (
 
 type Config struct {
 	Progress ProgressConfig
-	DB       PostgresConfig
+	Redis    RedisConfig
+	PQ       PostgresConfig
 	Port     string
 }
 
@@ -18,7 +19,11 @@ type ProgressConfig struct {
 	LeetcodeSession  string
 	LeetcodeUsername string
 }
-
+type RedisConfig struct {
+	Addr     string
+	Password string
+	DB       int
+}
 type PostgresConfig struct {
 	Username string
 	Password string
@@ -26,7 +31,7 @@ type PostgresConfig struct {
 	Port     string
 }
 
-func LoadConfig() (*Config, error) {
+func loadConfig() (*Config, error) {
 	cfg := &Config{
 		Port: os.Getenv("PORT"),
 		Progress: ProgressConfig{
@@ -35,11 +40,16 @@ func LoadConfig() (*Config, error) {
 			LeetcodeSession:  os.Getenv("LEETCODE_SESSION"),
 			LeetcodeUsername: os.Getenv("LEETCODE_USERNAME"),
 		},
-		DB: PostgresConfig{
+		PQ: PostgresConfig{
 			Username: os.Getenv("POSTGRES_USER"),
 			Password: os.Getenv("POSTGRES_PWD"),
 			URL:      os.Getenv("POSTGRES_URL"),
 			Port:     os.Getenv("POSTGRES_PORT"),
+		},
+		Redis: RedisConfig{
+			Addr:     os.Getenv("REDIS_ADDR"),
+			Password: os.Getenv("REDIS_PWD"),
+			DB:       0,
 		},
 	}
 

@@ -14,7 +14,7 @@ func newAnkiService() *ankiService {
 
 func (s *ankiService) getDetails() *models.ApiDetails {
 	return &models.ApiDetails{
-		RedisKey:   "anki_cahce",
+		RedisKey:   "anki_cache",
 		StaleAfter: time.Hour * 24 * 365 * 10, // 10 Years :)
 		FetchFn:    s.fetch,
 	}

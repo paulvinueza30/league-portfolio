@@ -1,9 +1,12 @@
 package api
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/paulvinueza30/league-portfolio/api/internal/config"
+	"github.com/paulvinueza30/league-portfolio/api/internal/services"
 )
 
 func checkHealth(c *gin.Context) {
@@ -13,7 +16,18 @@ func checkHealth(c *gin.Context) {
 }
 
 func getProgress(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{
-		"message": "progress logic here...",
-	})
+	app := config.GetApp()
+	registry, ok := app.Registry.(*services.Registry)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "internal server error: invalid registry type"})
+		return
+	}
+
+	progress, err := registry.GetProgress()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("failed to get all progress: %v", err)})
+		return
+	}
+
+	c.JSON(http.StatusOK, progress)
 }

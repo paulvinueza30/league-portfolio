@@ -8,3 +8,21 @@ services:
       - .:/app
     ports:
       - "8080:8080"
+    env_file:
+      - .env
+    environment:
+      - REDIS_ADDR=${REDIS_ADDR}
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  redis:
+    image: redis:7-alpine
+    container_name: portfolio-redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5

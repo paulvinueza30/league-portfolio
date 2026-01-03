@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"os"
 
 	"github.com/paulvinueza30/league-portfolio/api/internal/config"
@@ -11,12 +10,9 @@ import (
 )
 
 func main() {
-	cfg, err := config.LoadConfig()
-	if err != nil {
-		log.Fatalf("failed to load config: %v", err)
-	}
-
-	registry := services.NewRegistry(&cfg.Progress)
+	// Get initialized app with config, Redis, and Registry
+	app := config.GetApp()
+	registry := app.Registry.(*services.Registry)
 
 	if len(os.Args) < 2 {
 		fmt.Println("Usage: go run cmd/test-progress/main.go <source>")
