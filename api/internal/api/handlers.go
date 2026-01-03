@@ -3,9 +3,11 @@ package api
 import (
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/paulvinueza30/league-portfolio/api/internal/config"
+	"github.com/paulvinueza30/league-portfolio/api/internal/models"
 	"github.com/paulvinueza30/league-portfolio/api/internal/services"
 )
 
@@ -29,5 +31,10 @@ func getProgress(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, progress)
+	apiResponse := &models.ApiResponse[map[string]any]{
+		Data:      progress,
+		Timestamp: time.Now(),
+	}
+
+	c.JSON(http.StatusOK, apiResponse)
 }

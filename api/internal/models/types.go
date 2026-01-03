@@ -1,4 +1,3 @@
-// Package models holds the view of data used through app
 package models
 
 import (
@@ -6,8 +5,8 @@ import (
 )
 
 type ApiResponse[T any] struct {
-	Data      T
-	Timestamp time.Time
+	Data      T         `json:"data"`
+	Timestamp time.Time `json:"timestamp"`
 }
 type ApiDetails struct {
 	RedisKey   string
