@@ -17,7 +17,7 @@ import {
   LeetCodeApiResponse,
   RiotApiResponse,
   WakaApiReponse,
-} from "api/progress/types";
+} from "../../../types/progress";
 import { Badge } from "../ui/badge";
 import {
   format,

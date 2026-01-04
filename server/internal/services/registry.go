@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"maps"
 	"slices"
+	"time"
 
 	"github.com/paulvinueza30/league-portfolio/api/internal/config"
 	"github.com/paulvinueza30/league-portfolio/api/internal/models"
@@ -53,55 +54,63 @@ func (r *Registry) getRegistry() map[string]*models.ApiDetails {
 	}
 }
 
-func (r *Registry) GetProgress() (map[string]any, error) {
-	registry := r.getRegistry()
-
-	res := make(map[string]any)
-	for source := range registry {
-		data, err := r.get(source)
-		if err != nil {
-			fmt.Printf("error: couldnt get data for %s: %v\n", source, err)
-			continue
-		}
-		res[source] = data
+func (r *Registry) GetProgress(key string) (*models.ProgressResponse, error) {
+	if key == "" {
+		return nil, fmt.Errorf("key is required")
 	}
-	return res, nil
+
+	details := r.getSource(key)
+	if details == nil {
+		return nil, fmt.Errorf("unknown API key: %s", key)
+	}
+
+	return r.get(key, details)
 }
 
-func (r *Registry) get(source string) (any, error) {
-	details := r.GetSource(source)
-	if details == nil {
-		return nil, fmt.Errorf("source '%s' not found", source)
-	}
+func (r *Registry) get(source string, details *models.ApiDetails) (*models.ProgressResponse, error) {
+	now := time.Now().UnixMilli()
+
+	var cached *models.ProgressResponse
 
 	cachedData, err := r.rdb.Get(r.ctx, details.RedisKey).Result()
-	if err == nil {
-		var result any
-		if err := json.Unmarshal([]byte(cachedData), &result); err == nil {
-			return result, nil
-		}
-	}
-
-	fmt.Printf("Cache miss or error for %s, fetching fresh data...\n", source)
-	data, err := details.FetchFn()
-	if err != nil {
-		if cachedData != "" {
-			var cachedResult any
-			if json.Unmarshal([]byte(cachedData), &cachedResult) == nil {
-				fmt.Printf("Fetch failed for %s, returning stale cached data as backup\n", source)
-				return cachedResult, nil
+	if err == nil && cachedData != "" {
+		if err := json.Unmarshal([]byte(cachedData), &cached); err == nil {
+			cached.Source = "store"
+			return cached, nil
+		} else {
+			var oldData any
+			if json.Unmarshal([]byte(cachedData), &oldData) == nil {
+				cached = &models.ProgressResponse{
+					Data:      oldData,
+					Timestamp: 0,
+				}
 			}
 		}
-		return nil, err
 	}
 
-	marshaled, _ := json.Marshal(data)
+	fmt.Printf("Cache miss for %s, fetching fresh data...\n", source)
+	data, err := details.FetchFn()
+	if err != nil {
+		if cached != nil {
+			fmt.Printf("Fetch failed for %s, returning stale cached data as backup\n", source)
+			cached.Source = "backup"
+			return cached, nil
+		}
+		return nil, fmt.Errorf("failed to fetch and no cache available")
+	}
+
+	response := &models.ProgressResponse{
+		Data:      data,
+		Timestamp: now,
+		Source:    "live",
+	}
+	marshaled, _ := json.Marshal(response)
 	err = r.rdb.Set(r.ctx, details.RedisKey, marshaled, details.StaleAfter).Err()
 	if err != nil {
 		fmt.Printf("Failed to cache data for %s: %v\n", source, err)
 	}
 
-	return data, nil
+	return response, nil
 }
 
 func (r *Registry) ListSources() []string {
@@ -110,15 +119,7 @@ func (r *Registry) ListSources() []string {
 	return slices.Collect(k)
 }
 
-func (r *Registry) GetSource(source string) *models.ApiDetails {
+func (r *Registry) getSource(source string) *models.ApiDetails {
 	registry := r.getRegistry()
 	return registry[source]
-}
-
-func (r *Registry) TestSource(source string) (any, error) {
-	details := r.GetSource(source)
-	if details == nil {
-		return nil, fmt.Errorf("source '%s' not found in registry", source)
-	}
-	return details.FetchFn()
 }

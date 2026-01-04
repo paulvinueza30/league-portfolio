@@ -1,3 +1,4 @@
+// API Response types for progress endpoints
 export interface RiotApiResponse {
   summonerName: string;
   profileIcon: string;
@@ -20,12 +21,14 @@ export interface RiotApiResponse {
     losses: number;
   };
 }
+
 export interface AnkiApiResponse {
   recentDecks: string[];
   reviewTime: number;
   device: string;
   timeOfReview: number;
 }
+
 export interface LeetCodeSubmission {
   title: string;
   problemLink: string;
@@ -34,6 +37,7 @@ export interface LeetCodeSubmission {
   lang: string;
   status: string;
 }
+
 export interface LeetCodeApiResponse {
   submissions: LeetCodeSubmission[];
 }
@@ -41,7 +45,6 @@ export interface LeetCodeApiResponse {
 export interface GitHubCommit {
   commitMessage: string;
   commitUrl: string;
-
   repo: {
     name: string;
     url: string;
@@ -60,7 +63,6 @@ export interface WakaApiReponse {
   topLanguange: string;
   topLanguageTime: string;
   topLanguagePercent: number;
-
   topProject: string;
   topProjectTime: string;
   topProjectPercent: number;
@@ -69,3 +71,22 @@ export interface WakaApiReponse {
   start: string;
   end: string;
 }
+
+// Progress API Response type matching Go server response
+export type ProgressResponse<T = any> = {
+  data?: T;
+  timestamp?: number;
+  source?: "store" | "live" | "backup";
+};
+
+// Union type for all API response types
+export type ApiResponseType =
+  | RiotApiResponse
+  | AnkiApiResponse
+  | LeetCodeApiResponse
+  | GithubApiResponse
+  | WakaApiReponse;
+
+// Available API keys
+export type ApiKey = "riot" | "anki" | "github" | "waka" | "leetcode";
+

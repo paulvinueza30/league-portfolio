@@ -15,19 +15,19 @@ func main() {
 	registry := app.Registry.(*services.Registry)
 
 	if len(os.Args) < 2 {
-		fmt.Println("Usage: go run cmd/test-progress/main.go <source>")
-		fmt.Println("\nAvailable sources:")
-		for _, source := range registry.ListSources() {
-			fmt.Printf("  - %s\n", source)
+		fmt.Println("Usage: go run cmd/test-progress/main.go <key>")
+		fmt.Println("\nAvailable keys:")
+		for _, key := range registry.ListSources() {
+			fmt.Printf("  - %s\n", key)
 		}
 		os.Exit(1)
 	}
 
-	source := os.Args[1]
-	fmt.Printf("Testing progress getter for: %s\n", source)
+	key := os.Args[1]
+	fmt.Printf("Testing progress getter for key: %s\n", key)
 	fmt.Println("---")
 
-	result, err := registry.TestSource(source)
+	result, err := registry.GetProgress(key)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		os.Exit(1)
