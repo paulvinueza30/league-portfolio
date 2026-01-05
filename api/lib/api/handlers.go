@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/paulvinueza30/league-portfolio/api/internal/config"
-	"github.com/paulvinueza30/league-portfolio/api/internal/services"
+	"github.com/paulvinueza30/league-portfolio/api/lib/config"
+	"github.com/paulvinueza30/league-portfolio/api/lib/services"
 )
 
 func checkHealth(c *gin.Context) {

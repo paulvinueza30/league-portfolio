@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/paulvinueza30/league-portfolio/api/internal/config"
-	"github.com/paulvinueza30/league-portfolio/api/internal/services"
+	"github.com/paulvinueza30/league-portfolio/api/lib/config"
+	"github.com/paulvinueza30/league-portfolio/api/lib/services"
 )
 
 func main() {

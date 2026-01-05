@@ -9,8 +9,8 @@ import (
 	"time"
 
 	"github.com/dustin/go-humanize"
-	"github.com/paulvinueza30/league-portfolio/api/internal/config"
-	"github.com/paulvinueza30/league-portfolio/api/internal/models"
+	"github.com/paulvinueza30/league-portfolio/api/lib/config"
+	"github.com/paulvinueza30/league-portfolio/api/lib/models"
 )
 
 type leetcodeService struct {

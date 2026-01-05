@@ -3,7 +3,7 @@ package services
 import (
 	"time"
 
-	"github.com/paulvinueza30/league-portfolio/api/internal/models"
+	"github.com/paulvinueza30/league-portfolio/api/lib/models"
 )
 
 type ankiService struct{}

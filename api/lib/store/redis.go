@@ -2,7 +2,7 @@
 package store
 
 import (
-	"github.com/paulvinueza30/league-portfolio/api/internal/config"
+	"github.com/paulvinueza30/league-portfolio/api/lib/config"
 	"github.com/redis/go-redis/v9"
 )
 

@@ -7,7 +7,7 @@ import (
 
 	"github.com/dustin/go-humanize"
 	"github.com/google/go-github/v80/github"
-	"github.com/paulvinueza30/league-portfolio/api/internal/models"
+	"github.com/paulvinueza30/league-portfolio/api/lib/models"
 )
 
 type githubService struct {
