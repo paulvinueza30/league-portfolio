@@ -2,6 +2,7 @@
 package config
 
 import (
+	"os"
 	"sync"
 
 	"github.com/redis/go-redis/v9"
@@ -25,11 +26,19 @@ func init() {
 		panic("failed to load config: " + err.Error())
 	}
 
-	rdb := redis.NewClient(&redis.Options{
-		Addr:     cfg.Redis.Addr,
-		Password: cfg.Redis.Password,
-		DB:       cfg.Redis.DB,
-	})
+	var rdb *redis.Client
+	// When on Vercel, use address only.
+	if os.Getenv("VERCEL") == "1" {
+		opt, _ := redis.ParseURL(cfg.Redis.Addr)
+		rdb = redis.NewClient(opt)
+	} else {
+		// Otherwise, use the standard local Redis config.
+		rdb = redis.NewClient(&redis.Options{
+			Addr:     cfg.Redis.Addr,
+			Password: cfg.Redis.Password,
+			DB:       cfg.Redis.DB,
+		})
+	}
 
 	app = &App{
 		Config: cfg,

@@ -7,10 +7,11 @@ import (
 )
 
 type Config struct {
-	Progress ProgressConfig
-	Redis    RedisConfig
-	PQ       PostgresConfig
-	Port     string
+	Progress             ProgressConfig
+	Redis                RedisConfig
+	PQ                   PostgresConfig
+	Port                 string
+	SelfHostedBackendURL string
 }
 
 type ProgressConfig struct {
@@ -33,7 +34,8 @@ type PostgresConfig struct {
 
 func loadConfig() (*Config, error) {
 	cfg := &Config{
-		Port: os.Getenv("PORT"),
+		Port:                 os.Getenv("PORT"),
+		SelfHostedBackendURL: os.Getenv("SELF_HOSTED_BACKEND_URL"),
 		Progress: ProgressConfig{
 			RiotAPIKey:       os.Getenv("RIOT_API_KEY"),
 			WakaAPIKey:       os.Getenv("WAKA_API_KEY"),

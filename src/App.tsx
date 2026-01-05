@@ -8,9 +8,9 @@ import { acceptedAtom } from "./atoms/queueAtom";
 import { useAtom } from "jotai";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
+const queryClient = new QueryClient();
 export default function App() {
   const [accepted] = useAtom(acceptedAtom);
-  const queryClient = new QueryClient();
   return (
     <>
       <QueryClientProvider client={queryClient}>
