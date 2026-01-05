@@ -1,6 +1,13 @@
 {
   "builds": [
     {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    },
+    {
       "src": "api/cmd/vercel/main.go",
       "use": "@vercel/go"
     }
