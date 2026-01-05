@@ -1,4 +1,9 @@
 {
+  "functions": {
+    "api/cmd/vercel/main.go": {
+      "memory": 1024
+    }
+  },
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/cmd/vercel/main.go" }
   ]

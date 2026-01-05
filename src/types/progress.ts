@@ -57,7 +57,7 @@ export interface GithubApiResponse {
   weeklyCounter: number;
 }
 
-export interface WakaApiReponse {
+export interface WakaApiResponse {
   cumTotal: string;
   dailyAverage: string;
   topLanguange: string;
@@ -85,7 +85,7 @@ export type ApiResponseType =
   | AnkiApiResponse
   | LeetCodeApiResponse
   | GithubApiResponse
-  | WakaApiReponse;
+  | WakaApiResponse;
 
 // Available API keys
 export type ApiKey = "riot" | "anki" | "github" | "waka" | "leetcode";
