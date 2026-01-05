@@ -4,9 +4,9 @@ export interface Project {
   id: number;
   title: string;
   description: string;
-  imageURL: string;
-  demoURL?: string;
-  sourceURL: string;
+  image_url: string;
+  demo_url?: string;
+  source_url: string;
 }
 
 export const fetchProjects = async (): Promise<Project[]> => {

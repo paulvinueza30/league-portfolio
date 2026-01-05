@@ -129,22 +129,22 @@ function ProjectCard({ project }: { project: Project }) {
         </CardHeader>
         <CardContent className="text-[#CDBE91] w-full">
           <div className="relative mb-4">
-            {project.demoURL ? (
+            {project.demo_url && project.demo_url.length > 0 ? (
               <video
                 ref={videoRef}
-                src={project.demoURL}
-                poster={project.imageURL}
+                src={project.demo_url}
+                poster={project.image_url}
                 muted
                 className={`object-cover rounded-none transition-opacity duration-500 ${
                   isVideoReady ? "opacity-100" : "opacity-0"
                 }`}
               />
             ) : (
-              <img src={project.imageURL} />
+              <img src={project.image_url} />
             )}
             <div className="absolute inset-0 flex self-end justify-end m-3 card-img_hover">
               <div
-                onClick={() => window.open(project.sourceURL, "_blank")}
+                onClick={() => window.open(project.source_url, "_blank")}
                 className="black-gradient w-11 h-11 flex justify-center items-center cursor-pointer"
               >
                 <img

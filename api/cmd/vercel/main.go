@@ -30,12 +30,13 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	proxy := httputil.NewSingleHostReverseProxy(remote)
-
 	proxy.Director = func(req *http.Request) {
 		req.URL.Host = remote.Host
 		req.URL.Scheme = remote.Scheme
 		req.Host = remote.Host
-		req.URL.Path = strings.TrimPrefix(req.URL.Path, "/api")
+		if !strings.HasPrefix(req.URL.Path, "/api") {
+			req.URL.Path = "/api" + req.URL.Path
+		}
 	}
 
 	proxy.ErrorHandler = func(rw http.ResponseWriter, req *http.Request, err error) {
