@@ -2,6 +2,7 @@ package config
 
 import (
 	"os"
+	"strconv"
 
 	_ "github.com/joho/godotenv/autoload"
 )
@@ -26,13 +27,22 @@ type RedisConfig struct {
 	DB       int
 }
 type PostgresConfig struct {
-	Username string
+	Host     string
+	Port     int
+	User     string
 	Password string
-	URL      string
-	Port     string
+	DBName   string
 }
 
 func loadConfig() (*Config, error) {
+	postgresPortStr := os.Getenv("POSTGRES_PORT")
+	if postgresPortStr == "" {
+		postgresPortStr = "5432"
+	}
+	postgresPort, err := strconv.Atoi(postgresPortStr)
+	if err != nil {
+		return nil, err
+	}
 	cfg := &Config{
 		Port:                 os.Getenv("PORT"),
 		SelfHostedBackendURL: os.Getenv("SELF_HOSTED_BACKEND_URL"),
@@ -43,10 +53,11 @@ func loadConfig() (*Config, error) {
 			LeetcodeUsername: os.Getenv("LEETCODE_USERNAME"),
 		},
 		PQ: PostgresConfig{
-			Username: os.Getenv("POSTGRES_USER"),
-			Password: os.Getenv("POSTGRES_PWD"),
-			URL:      os.Getenv("POSTGRES_URL"),
-			Port:     os.Getenv("POSTGRES_PORT"),
+			Host:     os.Getenv("POSTGRES_HOST"),
+			User:     os.Getenv("POSTGRES_USER"),
+			Password: os.Getenv("POSTGRES_PASSWORD"),
+			DBName:   os.Getenv("POSTGRES_DB"),
+			Port:     postgresPort,
 		},
 		Redis: RedisConfig{
 			Addr:     os.Getenv("REDIS_ADDR"),

@@ -2,15 +2,20 @@
 package config
 
 import (
+	"database/sql"
+	"fmt"
+	"log"
 	"os"
 	"sync"
 
+	"github.com/paulvinueza30/league-portfolio/api/lib/store"
 	"github.com/redis/go-redis/v9"
 )
 
 type App struct {
 	Config   *Config
 	Redis    *redis.Client
+	Postgres *sql.DB
 	Registry interface{}
 }
 
@@ -27,22 +32,26 @@ func init() {
 	}
 
 	var rdb *redis.Client
-	// When on Vercel, use address only.
+
 	if os.Getenv("VERCEL") == "1" {
 		opt, _ := redis.ParseURL(cfg.Redis.Addr)
 		rdb = redis.NewClient(opt)
 	} else {
-		// Otherwise, use the standard local Redis config.
-		rdb = redis.NewClient(&redis.Options{
-			Addr:     cfg.Redis.Addr,
-			Password: cfg.Redis.Password,
-			DB:       cfg.Redis.DB,
-		})
+		rdb = store.NewRedisClient(cfg.Redis.Addr, cfg.Redis.Password, cfg.Redis.DB)
+	}
+
+	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
+		"password=%s dbname=%s sslmode=disable",
+		cfg.PQ.Host, cfg.PQ.Port, cfg.PQ.User, cfg.PQ.Password, cfg.PQ.DBName)
+	pgdb, pgErr := store.NewPostgresClient(psqlInfo)
+	if pgErr != nil {
+		log.Printf("Failed to connect to PostgreSQL: %v. Proceeding without DB connection.", pgErr)
 	}
 
 	app = &App{
-		Config: cfg,
-		Redis:  rdb,
+		Config:   cfg,
+		Redis:    rdb,
+		Postgres: pgdb,
 	}
 }
 

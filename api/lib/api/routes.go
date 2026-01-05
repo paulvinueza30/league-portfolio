@@ -11,6 +11,7 @@ func GetRouter() *gin.Engine {
 
 func init() {
 	r = gin.Default()
-	r.GET("/health", checkHealth)
-	r.GET("/progress", getProgress)
+	r.GET("/api/health", checkHealth)
+	r.GET("/api/progress", getProgress)
+	r.GET("/api/projects", getProjects)
 }
