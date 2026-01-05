@@ -17,7 +17,7 @@ import {
   LeetCodeApiResponse,
   RiotApiResponse,
   WakaApiReponse,
-} from "../../../types/progress";
+} from "@/types/progress";
 import { Badge } from "../ui/badge";
 import {
   format,
@@ -227,9 +227,8 @@ export function AnkiProgressCard() {
               <p className="text-sm text-gray-400 mb-2">Decks</p>
               {data.recentDecks.map((d, idx) => {
                 return (
-                  <p className="truncate text-md line-clamp-2" key={idx}>{`${
-                    idx + 1
-                  }. ${d}`}</p>
+                  <p className="truncate text-md line-clamp-2" key={idx}>{`${idx + 1
+                    }. ${d}`}</p>
                 );
               })}
             </div>
@@ -274,11 +273,10 @@ export function LeetCodeProgressCard() {
             className="grid grid-cols-[1.5fr_1.5fr_1fr]  justify-between py-2 px-3 bg-slate-900 rounded">
             <div className="flex items-center gap-2 flex-1 min-w-0">
               <span
-                className={`w-2 h-2 rounded-full ${
-                  submission.status === "Accepted"
-                    ? "bg-green-400"
-                    : "bg-red-400"
-                }`}></span>
+                className={`w-2 h-2 rounded-full ${submission.status === "Accepted"
+                  ? "bg-green-400"
+                  : "bg-red-400"
+                  }`}></span>
               <img
                 className="w-4 h-4"
                 src={langToSrc[submission.lang]}
