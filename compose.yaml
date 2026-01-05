@@ -25,7 +25,7 @@ services:
         ports:
           - "8080:8080"
         env_file:
-          - ./api/.env
+          - .env
         environment:
           - REDIS_ADDR=${REDIS_ADDR}
         depends_on:

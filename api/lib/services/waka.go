@@ -24,7 +24,7 @@ func newWakaService(cfg *config.ProgressConfig) *wakaService {
 
 func (s *wakaService) getDetails() *models.ApiDetails {
 	return &models.ApiDetails{
-		RedisKey:   "waka-progress",
+		RedisKey:   "waka-cache",
 		StaleAfter: time.Minute * 30,
 		FetchFn:    s.fetch,
 	}
@@ -62,7 +62,6 @@ func (s *wakaService) request(url string, target any) error {
 }
 
 func (s *wakaService) extractData(summary map[string]any, start string, end string) (any, error) {
-	// Extract Totals with defaults
 	cumTotal := "0 secs"
 	if ct, ok := summary["cumulative_total"].(map[string]any); ok {
 		cumTotal, _ = ct["text"].(string)

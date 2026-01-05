@@ -6,19 +6,14 @@ import { AudioProvider } from "@/context/AudioContext";
 
 import { acceptedAtom } from "./atoms/queueAtom";
 import { useAtom } from "jotai";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-const queryClient = new QueryClient();
 export default function App() {
   const [accepted] = useAtom(acceptedAtom);
   return (
     <>
-      <QueryClientProvider client={queryClient}>
-        <AudioProvider>
-          {/* <ReactQueryDevtools  initialIsOpen={false} /> */}
-          {accepted ? <ChampSelectScreen /> : <InQueue />}
-        </AudioProvider>
-      </QueryClientProvider>
+      <AudioProvider>
+        {accepted ? <ChampSelectScreen /> : <InQueue />}
+      </AudioProvider>
     </>
   );
 }
