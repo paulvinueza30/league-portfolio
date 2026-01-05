@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "concurrently \"yarn run server\" \"yarn run vite\"",
     "build": "tsc -b && vite build",
-    "server": "cd server && yarn dev",
+    "server": "cd api && go run cmd/server/main.go",
     "lint": "eslint .",
     "preview": "vite preview",
     "vite": "vite --host"

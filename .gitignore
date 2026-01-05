@@ -24,6 +24,7 @@ dist-ssr
 *.sln
 *.sw?
 .vercel
+./api-old/
 
 # Ignore codebase switcher script
 
@@ -40,3 +41,4 @@ codebase_switcher.py
 # Ignore specstory folders.
 
 .specstory/
+.env*.local

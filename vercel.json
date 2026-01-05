@@ -1,10 +1,11 @@
 {
-  "functions": {
-    "api/**.ts": {
-      "memory": 128,
-      "maxDuration": 10
+  "builds": [
+    {
+      "src": "api/cmd/vercel/main.go",
+      "use": "@vercel/go"
     }
-  }
+  ],
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/cmd/vercel/main.go" }
+  ]
 }
-
-
