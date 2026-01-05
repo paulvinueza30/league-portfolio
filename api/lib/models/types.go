@@ -10,8 +10,23 @@ type ProgressResponse struct {
 	Source    string `json:"source,omitempty"` // "store", "live", or "backup"
 }
 
+type ProjectsResponse struct {
+	Data      []Project `json:"data,omitempty"`
+	Timestamp int64     `json:"timestamp,omitempty"`
+	Source    string    `json:"source,omitempty"` // "store", "live", or "backup"
+}
+
 type ApiDetails struct {
 	RedisKey   string
 	StaleAfter time.Duration
 	FetchFn    func() (any, error)
+}
+
+type Project struct {
+	ID          int    `json:"id"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	ImageURL    string `json:"image_url"`
+	DemoURL     string `json:"demo_url,omitempty"`
+	SourceURL   string `json:"source_url,omitempty"`
 }

@@ -2,14 +2,13 @@
 package store
 
 import (
-	"github.com/paulvinueza30/league-portfolio/api/lib/config"
 	"github.com/redis/go-redis/v9"
 )
 
-func NewRedisClient(cfg *config.RedisConfig) *redis.Client {
+func NewRedisClient(addr, password string, db int) *redis.Client {
 	return redis.NewClient(&redis.Options{
-		Addr:     cfg.Addr,
-		Password: cfg.Password,
-		DB:       cfg.DB,
+		Addr:     addr,
+		Password: password,
+		DB:       db,
 	})
 }
