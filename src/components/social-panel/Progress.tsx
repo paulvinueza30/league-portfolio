@@ -16,7 +16,7 @@ import {
   GithubApiResponse,
   LeetCodeApiResponse,
   RiotApiResponse,
-  WakaApiReponse,
+  WakaApiResponse,
 } from "../../types/progress";
 import { Badge } from "../ui/badge";
 import {
@@ -396,7 +396,7 @@ function WakaProgressCard() {
   const queryClient = useQueryClient();
   const queryKey = ["progress", "waka"];
   const cachedData = queryClient.getQueryData<{
-    data: WakaApiReponse;
+    data: WakaApiResponse;
     timestamp: number;
   }>(queryKey);
 
