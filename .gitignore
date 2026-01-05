@@ -41,3 +41,4 @@ codebase_switcher.py
 # Ignore specstory folders.
 
 .specstory/
+.env*.local
