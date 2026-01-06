@@ -19,7 +19,7 @@ export default function BlogList({ posts }: BlogListProps) {
     <div className="min-h-screen bg-[#0A1428] w-full overflow-x-hidden">
       <div className="mx-auto max-w-4xl px-6 py-6 flex flex-col items-center justify-items-center">
         <img className="w-16 h-16 mb-2" src="/league-p.png" alt="League Portfolio Logo" />
-        <h1 className="text-balance text-4xl font-bold mb-4 tracking-tight text-[#F0E6D2] md:text-5xl">Paul's Blog</h1>
+        <h1 className="text-balance text-4xl font-bold mb-2 tracking-tight text-[#F0E6D2] md:text-5xl">Paul's Blog</h1>
         <p className="text-lg text-[#CDBE91]">I like Go and Linux, everything else is cool too though...</p>
 
         <BlogNavigation />
