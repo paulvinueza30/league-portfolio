@@ -1,4 +1,3 @@
-// API Response types for progress endpoints
 export interface RiotApiResponse {
   summonerName: string;
   profileIcon: string;
