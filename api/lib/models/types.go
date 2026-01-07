@@ -30,3 +30,17 @@ type Project struct {
 	DemoURL     string `json:"demo_url,omitempty"`
 	SourceURL   string `json:"source_url,omitempty"`
 }
+
+type PostsResponse struct {
+	Data      []Post `json:"data,omitempty"`
+	Timestamp int64  `json:"timestamp,omitempty"`
+	Source    string `json:"source,omitempty"`
+}
+
+type Post struct {
+	ID        int       `json:"id"`
+	Title     string    `json:"title"`
+	Content   string    `json:"content"`
+	ImageURL  string    `json:"image_url"`
+	CreatedAt time.Time `json:"created_at,omitempty"`
+}
