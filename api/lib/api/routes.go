@@ -14,4 +14,6 @@ func init() {
 	r.GET("/api/health", checkHealth)
 	r.GET("/api/progress", getProgress)
 	r.GET("/api/projects", getProjects)
+	r.GET("/api/assets/:fileId", proxyImage)
+	r.GET("/api/posts", getPosts)
 }
