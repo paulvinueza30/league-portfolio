@@ -36,12 +36,12 @@ func getProgress(c *gin.Context) {
 
 func getProjects(c *gin.Context) {
 	app := config.GetApp()
-	if app.Postgres == nil {
-		c.JSON(http.StatusServiceUnavailable, gin.H{"error": "Database not connected"})
+	if app.Directus == nil {
+		c.JSON(http.StatusServiceUnavailable, gin.H{"error": "Directus client not initialized"})
 		return
 	}
 
-	projectService := services.NewProjectService(app.Postgres)
+	projectService := services.NewProjectService(app.Directus)
 	projects, err := projectService.FetchProjects()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -54,4 +54,47 @@ func getProjects(c *gin.Context) {
 		Source:    "live",
 	}
 	c.JSON(http.StatusOK, response)
+}
+
+func getPosts(c *gin.Context) {
+	app := config.GetApp()
+	if app.Directus == nil {
+		c.JSON(http.StatusServiceUnavailable, gin.H{"error": "Directus client not initialized"})
+		return
+	}
+
+	postService := services.NewPostService(app.Directus)
+	posts, err := postService.FetchPosts()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	response := models.PostsResponse{
+		Data:      posts,
+		Timestamp: time.Now().UnixMilli(),
+		Source:    "live",
+	}
+	c.JSON(http.StatusOK, response)
+}
+
+func proxyImage(c *gin.Context) {
+	app := config.GetApp()
+	if app.Directus == nil {
+		c.JSON(http.StatusServiceUnavailable, gin.H{"error": "Directus client not initialized"})
+		return
+	}
+
+	fileID := c.Param("fileId")
+	if fileID == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "file ID is required"})
+		return
+	}
+
+	if err := app.Directus.ProxyImage(c.Writer, c.Request, fileID); err != nil {
+		if !c.Writer.Written() {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		}
+		return
+	}
 }

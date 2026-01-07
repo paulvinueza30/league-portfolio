@@ -1,49 +1,85 @@
 package services
 
 import (
-	"context"
-	"database/sql"
+	"fmt"
 	"log"
-	"time"
+	"strconv"
+	"strings"
 
+	"github.com/paulvinueza30/league-portfolio/api/lib/directus"
 	"github.com/paulvinueza30/league-portfolio/api/lib/models"
 )
 
 type ProjectService struct {
-	db *sql.DB
+	client *directus.Client
 }
 
-func NewProjectService(db *sql.DB) *ProjectService {
+func NewProjectService(client *directus.Client) *ProjectService {
 	return &ProjectService{
-		db: db,
+		client: client,
 	}
 }
 
 func (s *ProjectService) FetchProjects() ([]models.Project, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-
-	rows, err := s.db.QueryContext(ctx, "SELECT id, title, description, image_url, demo_url, source_url FROM projects ORDER BY id ASC")
+	data, err := s.client.GetCollection("projects")
 	if err != nil {
-		log.Printf("Error querying projects: %v", err)
+		log.Printf("Error fetching projects from Directus: %v", err)
 		return nil, err
 	}
-	defer rows.Close()
 
 	var projects []models.Project
-	for rows.Next() {
-		var p models.Project
-		if err := rows.Scan(&p.ID, &p.Title, &p.Description, &p.ImageURL, &p.DemoURL, &p.SourceURL); err != nil {
-			log.Printf("Error scanning project row: %v", err)
-			return nil, err
+	for _, item := range data {
+		project, err := s.mapToProject(item)
+		if err != nil {
+			log.Printf("Error mapping project: %v", err)
+			continue
 		}
-		projects = append(projects, p)
-	}
-
-	if err = rows.Err(); err != nil {
-		log.Printf("Error during rows iteration: %v", err)
-		return nil, err
+		projects = append(projects, project)
 	}
 
 	return projects, nil
+}
+
+func (s *ProjectService) mapToProject(item map[string]interface{}) (models.Project, error) {
+	var p models.Project
+
+	if id, ok := item["id"].(float64); ok {
+		p.ID = int(id)
+	} else if idStr, ok := item["id"].(string); ok {
+		id, err := strconv.Atoi(idStr)
+		if err != nil {
+			return p, fmt.Errorf("invalid id: %v", item["id"])
+		}
+		p.ID = id
+	}
+
+	if title, ok := item["title"].(string); ok {
+		p.Title = title
+	}
+
+	if desc, ok := item["description"].(string); ok {
+		p.Description = desc
+	}
+
+	if imgURL, ok := item["img_url"].(string); ok && imgURL != "" {
+		if strings.HasPrefix(imgURL, "http") {
+			p.ImageURL = imgURL
+		} else {
+			p.ImageURL = s.client.AssetProxyPath(imgURL)
+		}
+	}
+
+	if demoURL, ok := item["demo_url"].(string); ok && demoURL != "" {
+		if strings.HasPrefix(demoURL, "http") {
+			p.DemoURL = demoURL
+		} else {
+			p.DemoURL = s.client.AssetProxyPath(demoURL)
+		}
+	}
+
+	if sourceURL, ok := item["source_url"].(string); ok {
+		p.SourceURL = sourceURL
+	}
+
+	return p, nil
 }
