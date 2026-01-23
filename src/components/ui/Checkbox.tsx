@@ -12,12 +12,12 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
         <input
           type="checkbox"
           ref={ref}
-          className="sr-only"
+          className="sr-only peer"
           {...props}
         />
         <div
           className={cn(
-            "w-5 h-5 rounded-sm border-2 border-[#C8AA6E] bg-[#0A0E13] transition-all duration-200",
+            "w-5 h-5 rounded-sm border-2 border-[#C8AA6E] bg-[#0A0E13] transition-all duration-200 flex items-center justify-center",
             "peer-checked:bg-[#C8AA6E] peer-checked:border-[#F0E6D2]",
             "group-hover:border-[#F0E6D2]",
             className
