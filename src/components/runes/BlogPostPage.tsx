@@ -65,7 +65,7 @@ export function BlogPostPage() {
             )}
           </header>
 
-          <ReactMarkdown className="prose prose-invert prose-lg max-w-none text-[#F0E6D2] whitespace-pre-wrap leading-relaxed">
+          <ReactMarkdown>
             {post.content}
           </ReactMarkdown>
         </article>
