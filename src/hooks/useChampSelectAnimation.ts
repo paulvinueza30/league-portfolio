@@ -5,10 +5,15 @@ import { gsapAtom } from "@/atoms/gsapAtom";
 
 gsap.registerPlugin(useGSAP);
 
-export function useChampSelectAnimation() {
+export function useChampSelectAnimation(skipAnimationsAndQueue: boolean) {
   const setAnimationComplete = useSetAtom(gsapAtom);
 
   useGSAP(() => {
+    if (skipAnimationsAndQueue) {
+      setAnimationComplete(true);
+      return;
+    }
+
     // Skip animations on small screens (mobile)
     const isMobile = window.innerWidth < 768; // md breakpoint
 
@@ -84,5 +89,5 @@ export function useChampSelectAnimation() {
         },
         "<"
       );
-  }, []);
+  }, [skipAnimationsAndQueue]);
 }
