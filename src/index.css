@@ -9,3 +9,8 @@
 .border-bottom-right-radius-60 {
   border-bottom-right-radius: 60% 100%;
 }
+
+:root {
+  --color-brand-separator: #929189;
+  --color-brand-accent: #FABE0B;
+}
