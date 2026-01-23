@@ -2,6 +2,7 @@ import { fetchBlogPosts, type BlogPost } from "@/lib/blog";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import Footer from "@/components/footer";
+import BlogNavigation from "@/components/blog/BlogNavigation";
 
 export function BlogListPage() {
   const { data: posts, isLoading, isError, error } = useQuery<BlogPost[], Error>({
@@ -39,6 +40,7 @@ export function BlogListPage() {
         <img className="w-16 h-16 mb-2" src="/league-p.png" alt="League Portfolio Logo" />
         <h1 className="text-balance text-4xl font-bold mb-2 tracking-tight text-[#F0E6D2] md:text-5xl">Paul's Blog</h1>
         <p className="text-lg text-[#CDBE91]">I like Go and Linux, everything else is cool too though...</p>
+        <BlogNavigation />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto px-6 pb-6">

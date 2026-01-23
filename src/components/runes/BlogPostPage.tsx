@@ -2,6 +2,8 @@ import { fetchBlogPost, type BlogPost } from "@/lib/blog";
 import { useQuery } from "@tanstack/react-query";
 import { useParams, Link } from "react-router-dom";
 import Footer from "@/components/footer";
+import ReactMarkdown from "react-markdown";
+import BlogNavigation from "@/components/blog/BlogNavigation";
 
 export function BlogPostPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -42,6 +44,7 @@ export function BlogPostPage() {
         <img className="w-16 h-16 mb-2" src="/league-p.png" alt="League Portfolio Logo" />
         <h1 className="text-balance text-4xl font-bold mb-2 tracking-tight text-[#F0E6D2] md:text-5xl">Paul's Blog</h1>
         <p className="text-lg text-[#CDBE91]">I like Go and Linux, everything else is cool too though...</p>
+        <BlogNavigation />
       </div>
 
       <div className="max-w-4xl mx-auto px-6 pb-6">
@@ -62,11 +65,9 @@ export function BlogPostPage() {
             )}
           </header>
 
-          <div className="prose prose-invert prose-lg max-w-none">
-            <div className="text-[#F0E6D2] whitespace-pre-wrap leading-relaxed">
-              {post.content}
-            </div>
-          </div>
+          <ReactMarkdown className="prose prose-invert prose-lg max-w-none text-[#F0E6D2] whitespace-pre-wrap leading-relaxed">
+            {post.content}
+          </ReactMarkdown>
         </article>
       </div>
 

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom"
 
 export default function BlogNavigation() {
   return (
-    <div className="mt-4 flex flex-wrap items-center gap-3">
+    <div className="mt-6 flex flex-wrap items-center gap-3">
       <Button
         asChild
         variant="ghost"
@@ -65,4 +65,3 @@ export default function BlogNavigation() {
     </div>
   )
 }
-
