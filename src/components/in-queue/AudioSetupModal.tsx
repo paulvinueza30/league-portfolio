@@ -100,7 +100,7 @@ export function AudioSetupModal() {
 
            <Button
              onClick={() => {
-                setConfigured(true)
+                setConfigured(true);
              }}
              className="w-full bg-gradient-to-b from-[#D7BA7D] to-[#5E4B2D] hover:from-[#F0E6D2] hover:to-[#C8AA6E] text-[#0A0E13] font-bold py-2.5 sm:py-3 px-4 sm:px-6 rounded border-2 transition-all duration-200 uppercase tracking-wider text-xs sm:text-sm shadow-lg hover:shadow-xl transform hover:scale-105"
            >

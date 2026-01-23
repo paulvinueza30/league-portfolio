@@ -10,6 +10,12 @@ export function useChampSelectAnimation(skipAnimationsAndQueue: boolean) {
 
   useGSAP(() => {
     if (skipAnimationsAndQueue) {
+      gsap.set(".bg-picture", { opacity: 1, scale: 1, y: 0, filter: "blur(0px)" });
+      gsap.set(".match-intro-item", { y: 0, opacity: 1 });
+      gsap.set(".player-section", { x: "0vw", opacity: 1 });
+      gsap.set(".bottom-row-item", { y: 0, opacity: 1 });
+      gsap.set(".hero-section", { opacity: 1 });
+      gsap.set(".hextech-circle", { rotation: 0, opacity: 1 });
       setAnimationComplete(true);
       return;
     }
