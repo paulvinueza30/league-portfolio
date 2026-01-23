@@ -2,7 +2,6 @@ package config
 
 import (
 	"os"
-	"strconv"
 
 	_ "github.com/joho/godotenv/autoload"
 )
@@ -10,7 +9,7 @@ import (
 type Config struct {
 	Progress             ProgressConfig
 	Redis                RedisConfig
-	PQ                   PostgresConfig
+	Directus             DirectusConfig
 	Port                 string
 	SelfHostedBackendURL string
 }
@@ -26,23 +25,16 @@ type RedisConfig struct {
 	Password string
 	DB       int
 }
-type PostgresConfig struct {
-	Host     string
-	Port     int
-	User     string
-	Password string
-	DBName   string
+type DirectusConfig struct {
+	BaseURL string
 }
 
 func loadConfig() (*Config, error) {
-	postgresPortStr := os.Getenv("POSTGRES_PORT")
-	if postgresPortStr == "" {
-		postgresPortStr = "5432"
+	directusURL := os.Getenv("DIRECTUS_URL")
+	if directusURL == "" {
+		directusURL = "http://localhost:8055"
 	}
-	postgresPort, err := strconv.Atoi(postgresPortStr)
-	if err != nil {
-		return nil, err
-	}
+
 	cfg := &Config{
 		Port:                 os.Getenv("PORT"),
 		SelfHostedBackendURL: os.Getenv("SELF_HOSTED_BACKEND_URL"),
@@ -52,12 +44,8 @@ func loadConfig() (*Config, error) {
 			LeetcodeSession:  os.Getenv("LEETCODE_SESSION"),
 			LeetcodeUsername: os.Getenv("LEETCODE_USERNAME"),
 		},
-		PQ: PostgresConfig{
-			Host:     os.Getenv("POSTGRES_HOST"),
-			User:     os.Getenv("POSTGRES_USER"),
-			Password: os.Getenv("POSTGRES_PASSWORD"),
-			DBName:   os.Getenv("POSTGRES_DB"),
-			Port:     postgresPort,
+		Directus: DirectusConfig{
+			BaseURL: directusURL,
 		},
 		Redis: RedisConfig{
 			Addr:     os.Getenv("REDIS_ADDR"),

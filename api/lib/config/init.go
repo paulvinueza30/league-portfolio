@@ -2,12 +2,11 @@
 package config
 
 import (
-	"database/sql"
-	"fmt"
 	"log"
 	"os"
 	"sync"
 
+	"github.com/paulvinueza30/league-portfolio/api/lib/directus"
 	"github.com/paulvinueza30/league-portfolio/api/lib/store"
 	"github.com/redis/go-redis/v9"
 )
@@ -15,7 +14,7 @@ import (
 type App struct {
 	Config   *Config
 	Redis    *redis.Client
-	Postgres *sql.DB
+	Directus *directus.Client
 	Registry interface{}
 }
 
@@ -40,18 +39,21 @@ func init() {
 		rdb = store.NewRedisClient(cfg.Redis.Addr, cfg.Redis.Password, cfg.Redis.DB)
 	}
 
-	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
-		"password=%s dbname=%s sslmode=disable",
-		cfg.PQ.Host, cfg.PQ.Port, cfg.PQ.User, cfg.PQ.Password, cfg.PQ.DBName)
-	pgdb, pgErr := store.NewPostgresClient(psqlInfo)
-	if pgErr != nil {
-		log.Printf("Failed to connect to PostgreSQL: %v. Proceeding without DB connection.", pgErr)
+	directusClient := directus.NewClient(cfg.Directus.BaseURL)
+	log.Printf("Initialized Directus client with base URL: %s", cfg.Directus.BaseURL)
+
+	// Test connection to Directus
+	if err := directusClient.TestConnection(); err != nil {
+		log.Printf("WARNING: Failed to connect to Directus at %s: %v", cfg.Directus.BaseURL, err)
+		log.Printf("If running in Docker, you may need to use 'host.docker.internal:8055' or the host's IP address instead of 'localhost'")
+	} else {
+		log.Printf("Successfully connected to Directus at %s", cfg.Directus.BaseURL)
 	}
 
 	app = &App{
 		Config:   cfg,
 		Redis:    rdb,
-		Postgres: pgdb,
+		Directus: directusClient,
 	}
 }
 
