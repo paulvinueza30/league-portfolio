@@ -7,6 +7,7 @@ export interface Project {
   image_url: string;
   demo_url?: string;
   source_url: string;
+  blog_url?: string;
 }
 
 export const fetchProjects = async (): Promise<Project[]> => {

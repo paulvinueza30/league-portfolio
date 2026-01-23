@@ -15,14 +15,21 @@ import { fetchProjects, type Project } from "./projects";
 import { useEffect, useRef, useState } from "react";
 
 import { useQuery } from "@tanstack/react-query";
+import { BlogPostsModal } from "./BlogPostsModal";
 
 const githubIconPath = "/assets/summoner-spells/vecteezy_github-logo-git-hub-icon-on-white-background_16833872.jpg";
 
 export function ProjectsModal() {
+  const [showBlog, setShowBlog] = useState(false);
+
   const { data: projects, isLoading, isError, error } = useQuery<Project[], Error>({
     queryKey: ["projects"],
     queryFn: fetchProjects,
   });
+
+  if (showBlog) {
+    return <BlogPostsModal onBack={() => setShowBlog(false)} />;
+  }
 
   if (isLoading) {
     return <div className="flex justify-center items-center h-full text-[#F0E6D2]">Loading Projects...</div>;
@@ -41,7 +48,7 @@ export function ProjectsModal() {
       <Carousel className="self-end w-full flex flex-1 rounded-none relative">
         <CarouselContent className="rounded-none h-full">
           {projects.map((project: Project, idx) => (
-            <ProjectCard key={idx} project={project} />
+            <ProjectCard key={idx} project={project} onShowBlog={() => setShowBlog(true)} />
           ))}
         </CarouselContent>
         <CarouselPrevious
@@ -76,7 +83,7 @@ export function ProjectsModal() {
   );
 }
 
-function ProjectCard({ project }: { project: Project }) {
+function ProjectCard({ project, onShowBlog }: { project: Project; onShowBlog: () => void }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isVideoReady, setVideoReady] = useState(false);
 
@@ -143,15 +150,32 @@ function ProjectCard({ project }: { project: Project }) {
               <img src={project.image_url} />
             )}
             <div className="absolute inset-0 flex self-end justify-end m-3 card-img_hover">
-              <div
-                onClick={() => window.open(project.source_url, "_blank")}
-                className="black-gradient w-11 h-11 flex justify-center items-center cursor-pointer"
-              >
-                <img
-                  src={githubIconPath}
-                  alt="source code"
-                  className="w-full h-full border-4 border-black rounded-full "
-                />
+              <div className="flex gap-2">
+                {project.blog_url && (
+                  <div
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onShowBlog();
+                    }}
+                    className="black-gradient w-11 h-11 flex justify-center items-center cursor-pointer"
+                    title="View Blog"
+                  >
+                    <span className="text-white font-bold text-lg">📝</span>
+                  </div>
+                )}
+                <div
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    window.open(project.source_url, "_blank");
+                  }}
+                  className="black-gradient w-11 h-11 flex justify-center items-center cursor-pointer"
+                >
+                  <img
+                    src={githubIconPath}
+                    alt="source code"
+                    className="w-full h-full border-4 border-black rounded-full "
+                  />
+                </div>
               </div>
             </div>
           </div>
