@@ -75,43 +75,7 @@ export default function SkinCarousel() {
     };
   }, [api, carouselView]);
   return (
-    <div className="w-full max-w-[12rem] sm:max-w-[16rem] md:max-w-[20rem] lg:max-w-[24rem] xl:max-w-[28rem] 2xl:max-w-[39.5em] h-full flex flex-col gap-2 sm:gap-3 md:gap-4 lg:gap-5 items-center justify-end text-white">
-      <div className="flex items-center gap-2 mr-7 ">
-        <Label
-          htmlFor="mode"
-          className={cn(
-            "px-2 py-0.5 sm:px-3 sm:py-1 bg-black/50 ",
-            carouselView == "portraits" ? "font-bold" : "opacity-50"
-          )}
-        >
-          Portraits
-        </Label>
-
-        <Switch
-          id="mode"
-          checked={carouselView === "portraits"}
-          onCheckedChange={(c) => setCarouselView(c ? "portraits" : "art")}
-          className="
-    data-[state=checked]:bg-[#C8AA6E] 
-    data-[state=unchecked]:bg-[#3f62a8]
-
-    [&>span]:bg-[#96a7c9]              /* thumb base */
-    border border-[#5A4634]
-    shadow-[0_0_6px_#C8AA6E66]
-    transition-colors duration-300
-  "
-        />
-
-        <Label
-          htmlFor="mode"
-          className={cn(
-            "px-2 py-0.5 sm:px-3 sm:py-1 bg-black/50",
-            carouselView == "portraits" ? "opacity-50" : "font-bold"
-          )}
-        >
-          Art
-        </Label>
-      </div>
+    <div className="w-full max-w-[12rem] sm:max-w-[16rem] md:max-w-[20rem] lg:max-w-[24rem] xl:max-w-[28rem] 2xl:max-w-[39.5em] h-full flex flex-col gap-2 sm:gap-3 md:gap-4 lg:gap-5 items-center justify-end text-white mt-5">
       <div className="px-3 py-1 sm:px-4 sm:py-1.5 md:px-5 md:py-2 bg-black/50 ">
         <p className="text-white text-sm sm:text-base md:text-lg lg:text-xl font-bold">
           {selectedSkin?.skinName}
@@ -130,6 +94,41 @@ export default function SkinCarousel() {
           <GenerateCarouselItems key={carouselView} />
         </CarouselContent>
       </Carousel>
+      <div className="flex items-center gap-2 mr-7 ">
+        <Label
+          htmlFor="mode"
+          className={cn(
+            "px-2 py-0.5 sm:px-3 sm:py-1 bg-black/50",
+            carouselView == "art" ? "font-bold" : "opacity-50"
+          )}
+        >
+          Art
+        </Label>
+        <Switch
+          id="mode"
+          checked={carouselView === "portraits"}
+          onCheckedChange={(c) => setCarouselView(c ? "portraits" : "art")}
+          className="
+    data-[state=checked]:bg-[#C8AA6E] 
+    data-[state=unchecked]:bg-[#3f62a8]
+
+    [&>span]:bg-[#96a7c9]              /* thumb base */
+    border border-[#5A4634]
+    shadow-[0_0_6px_#C8AA6E66]
+    transition-colors duration-300
+  "
+        />
+
+        <Label
+          htmlFor="mode"
+          className={cn(
+            "px-2 py-0.5 sm:px-3 sm:py-1 bg-black/50 ",
+            carouselView == "portraits" ? "font-bold" : "opacity-50"
+          )}
+        >
+          Portraits
+        </Label>
+      </div>
     </div>
   );
 }

@@ -3,7 +3,7 @@ import { gsap } from "gsap";
 
 import { queueBackground } from "@/assets/client";
 
-import { acceptedAtom, disableAnimationsAtom } from "@/atoms/queueAtom";
+import { skipAnimationsAndQueueAtom } from "@/atoms/queueAtom";
 import { useAtom } from "jotai";
 
 import { matchFoundSound, acceptSound, hoverSound } from "@/assets/sounds";
@@ -19,17 +19,15 @@ export default function QueuePop() {
   const tracerRef = useRef<SVGCircleElement>(null);
   const animationTimelineRef = useRef<gsap.core.Timeline | null>(null);
 
-  const [accepted] = useAtom(acceptedAtom);
-  const [disableAnimations] = useAtom(disableAnimationsAtom);
+  const [skipAnimationsAndQueue] = useAtom(skipAnimationsAndQueueAtom);
   const [locallyAccepted, setLocalAccepted] = useState<boolean>(false);
   const { volume } = useAudio();
   useEffect(() => {
-    if (!accepted) {
-      matchAudio.currentTime = 0;
-      matchAudio.volume = volume;
-      matchAudio.play().catch((e) => console.warn("Playback error:", e));
-    }
-  }, [accepted]);
+    if (skipAnimationsAndQueue) return;
+    matchAudio.currentTime = 0;
+    matchAudio.volume = volume;
+    matchAudio.play().catch((e) => console.warn("Playback error:", e));
+  }, [skipAnimationsAndQueue]);
 
   useEffect(() => {
     if (animationTimelineRef.current) {
@@ -37,7 +35,7 @@ export default function QueuePop() {
       animationTimelineRef.current = null;
     }
 
-    if (disableAnimations) return;
+    if (skipAnimationsAndQueue) return;
     const circle = ringRef.current;
     const tracer = tracerRef.current;
 
@@ -100,7 +98,7 @@ export default function QueuePop() {
         }
       };
     }
-  }, [accepted, locallyAccepted, disableAnimations]);
+  }, [skipAnimationsAndQueue, locallyAccepted]);
   return (
     <div className="select-none fixed inset-0 flex items-center justify-center bg-none#9E916B bg-opacity-100 z-50 backdrop-blur-2xl bg-white/5">
       <div className="border-3 border-[#dec375] rounded-full p-3 sm:p-4 md:p-6 flex justify-center justify-items-center relative">
@@ -196,6 +194,7 @@ export default function QueuePop() {
             <AcceptButton
               locallyAccepted={locallyAccepted}
               setLocalAccepted={setLocalAccepted}
+              skipAnimationsAndQueue={skipAnimationsAndQueue}
             />
           </div>
         </div>
@@ -210,19 +209,21 @@ const hoverCooldown = 300;
 interface AcceptButtonProps {
   locallyAccepted: boolean;
   setLocalAccepted: React.Dispatch<React.SetStateAction<boolean>>;
+  skipAnimationsAndQueue: boolean;
 }
 
 function AcceptButton({
   locallyAccepted,
   setLocalAccepted,
+  skipAnimationsAndQueue,
 }: AcceptButtonProps) {
-  const [accepted, setAccepted] = useAtom(acceptedAtom);
+  const [, setSkipAnimationsAndQueueAtom] = useAtom(skipAnimationsAndQueueAtom);
   const lastHoverTimeRef = useRef(0);
   const { volume } = useAudio();
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   function handleHover() {
-    if (accepted) return;
+    if (locallyAccepted) return;
     const now = Date.now();
     if (now - lastHoverTimeRef.current < hoverCooldown) return;
     lastHoverTimeRef.current = now;
@@ -232,14 +233,14 @@ function AcceptButton({
   }
 
   function handleClick() {
-    if (accepted) return;
+    if (locallyAccepted) return;
     matchAudio.pause();
     acceptedSound.currentTime = 0.2;
     acceptedSound.volume = volume;
     acceptedSound.play();
     setLocalAccepted(true);
     timeoutRef.current = setTimeout(() => {
-      setAccepted(true);
+      setSkipAnimationsAndQueueAtom(skipAnimationsAndQueue);
     }, 1600);
   }
 
