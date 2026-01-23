@@ -32,7 +32,7 @@ function SkillShowCase({ skills }: SkillShowCaseProps) {
       {skills.map((skill) => (
         <div
           key={skill.name}
-          className="flex flex-col bg-[#080F21]  justify-start border-2 border-[#6d5d2b] hover:bg-gray-200 hover:text-black transform hover:scale-x-85 active:scale-y-90 transition-transform"
+          className="flex flex-col bg-[#080F21] justify-start border-2 border-[#6d5d2b] hover:bg-[#1E272C] hover:border-[#C89B3C] transform hover:scale-105 active:scale-95 transition-transform group"
         >
           <Button
             variant="ghost"
@@ -41,11 +41,11 @@ function SkillShowCase({ skills }: SkillShowCaseProps) {
             <img
               className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7"
               src={skill.img}
-              alt={skill.name + "skill"}
+              alt={`Logo of ${skill.name}`}
               draggable={false}
             />
           </Button>
-          <span className="text-center text-[10px] sm:text-xs">
+          <span className="text-center text-[10px] sm:text-xs group-hover:text-white">
             {skill.name}
           </span>
         </div>
@@ -69,7 +69,7 @@ function WardButton() {
         <img
           className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 select-none flex-shrink-0"
           src={defaultSkill}
-          alt="THE GO GOPHER!!!"
+          alt="Go language logo"
           draggable={false}
         />
       </PopoverTrigger>
@@ -105,24 +105,16 @@ function WardButton() {
 }
 
 export default function BMSection() {
-  function handleOnClick() {
-    const link = document.createElement("a");
-
-    link.href = resumePDF;
-    link.download = "Paul_Vinueza_Resume.pdf";
-    link.click();
-  }
   return (
     <div className="flex items-center gap-1 sm:gap-1.5 md:gap-2 lg:gap-3 xl:gap-4 flex-shrink-0">
       <WardButton />
-      <Button
-        variant="ghost"
+      <a
+        href={resumePDF}
+        download="Paul_Vinueza_Resume.pdf"
         className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 joy-resume-button hover:bg-transparent flex-shrink-0"
-        size="icon"
-        onClick={handleOnClick}
       >
-        <img src={cvButton} alt="Portfolio button" draggable={false} />
-      </Button>
+        <img src={cvButton} alt="Download my resume" draggable={false} />
+      </a>
     </div>
   );
 }
