@@ -1,0 +1,9 @@
+{
+  "title": "Library Reservation Bot",
+  "date": "2024-01-15",
+  "tech": ["Selenium", "Python", "AWS EC2", "Automation"],
+  "github_url": "https://github.com/paulvinueza30/library-reservation-bot",
+  "featured": false,
+  "description": "Developed a Selenium-based bot to automate process of reserving library hours for my senior design team, hosted on an EC2 instance. The bot streamlines booking process, saving time and ensuring efficient collaboration for team.",
+  "hero_image": "hero.png"
+}

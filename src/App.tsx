@@ -1,19 +1,14 @@
+import { Routes, Route } from "react-router-dom";
 import "./App.css";
+import Portfolio from "./pages/Portfolio";
+import BlogHome from "./pages/BlogHome";
 
-import ChampSelectScreen from "./components/champ-select-screen";
-import InQueue from "./components/in-queue";
-import { AudioProvider } from "@/context/AudioContext";
-
-import { acceptedAtom } from "./atoms/queueAtom";
-import { useAtom } from "jotai";
 
 export default function App() {
-  const [accepted] = useAtom(acceptedAtom);
   return (
-    <>
-      <AudioProvider>
-        {accepted ? <ChampSelectScreen /> : <InQueue />}
-      </AudioProvider>
-    </>
+    <Routes>
+      <Route path="/" element={< Portfolio />} />
+      <Route path="/blog" element={<BlogHome />} />
+    </Routes>
   );
 }

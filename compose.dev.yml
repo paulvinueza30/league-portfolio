@@ -1,0 +1,47 @@
+name: league-portfolio
+services:
+    frontend:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: league-frontend:latest
+        container_name: portfolio-frontend
+        ports:
+            - 5173:5173
+        volumes:
+            - .:/app
+            - /app/node_modules
+        environment:
+            - API_TARGET=http://api:8080
+        env_file:
+            - .env
+
+    api:
+        build:
+          context: ./api
+          dockerfile: Dockerfile.dev
+        container_name: portfolio-backend
+        volumes:
+          - ./api:/app
+          - ./api/posts:/app/posts
+          - ./api/projects:/app/projects
+        ports:
+          - "8080:8080"
+        env_file:
+          - .env
+        environment:
+          - REDIS_ADDR=${REDIS_ADDR}
+        depends_on:
+          redis:
+            condition: service_healthy
+
+    redis:
+        image: redis:7-alpine
+        container_name: portfolio-redis
+        ports:
+          - "6379:6379"
+        healthcheck:
+          test: ["CMD", "redis-cli", "ping"]
+          interval: 5s
+          timeout: 3s
+          retries: 5

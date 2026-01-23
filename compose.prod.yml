@@ -1,0 +1,74 @@
+name: league-portfolio
+services:
+    frontend:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: league-frontend:latest
+        container_name: portfolio-frontend
+        ports:
+            - 5173:5173
+        environment:
+            - API_TARGET=http://api:8080
+        env_file:
+            - .env
+        restart: unless-stopped
+  
+    api:
+        build:
+          context: ./api
+          dockerfile: Dockerfile
+        container_name: portfolio-backend
+        ports:
+          - "8080:8080"
+        env_file:
+          - ./api/.env
+        environment:
+          - REDIS_ADDR=${REDIS_ADDR}
+          - POSTGRES_HOST=postgres
+          - POSTGRES_PORT=5432
+          - POSTGRES_USER=${POSTGRES_USER}
+          - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+          - POSTGRES_DB=${POSTGRES_DB}
+          - GIN_MODE=release
+        restart: unless-stopped
+        depends_on:
+          redis:
+            condition: service_healthy
+          postgres: 
+            condition: service_healthy
+
+    redis:
+        image: redis:7-alpine
+        container_name: portfolio-redis
+        ports:
+          - "6379:6379"
+        restart: unless-stopped
+        healthcheck:
+          test: ["CMD", "redis-cli", "ping"]
+          interval: 5s
+          timeout: 3s
+          retries: 5
+
+    postgres: 
+        image: postgres:16-alpine
+        container_name: portfolio-postgres
+        env_file:
+          - .env
+        environment:
+          - POSTGRES_DB=${POSTGRES_DB}
+          - POSTGRES_USER=${POSTGRES_USER}
+          - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+        ports:
+          - "5432:5432"
+        volumes:
+          - postgres_data:/var/lib/postgresql/data
+        restart: unless-stopped
+        healthcheck:
+          test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+          interval: 5s
+          timeout: 5s
+          retries: 5
+
+volumes: 
+  postgres_data:

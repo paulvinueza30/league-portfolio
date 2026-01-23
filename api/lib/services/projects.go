@@ -1,49 +1,97 @@
 package services
 
 import (
-	"context"
-	"database/sql"
-	"log"
-	"time"
-
-	"github.com/paulvinueza30/league-portfolio/api/lib/models"
+	"encoding/json"
+	"fmt"
+	"os"
 )
 
-type ProjectService struct {
-	db *sql.DB
+type Project struct {
+	Slug        string   `json:"slug"`
+	Title       string   `json:"title"`
+	Date        string   `json:"date"`
+	Tech        []string `json:"tech"`
+	GithubURL   string   `json:"github_url,omitempty"`
+	BlogURL     string   `json:"blog_url,omitempty"`
+	Featured    bool     `json:"featured"`
+	Description string   `json:"description"`
+	HeroImage   string   `json:"hero_image,omitempty"`
+	DemoVideo   string   `json:"demo_video,omitempty"`
 }
 
-func NewProjectService(db *sql.DB) *ProjectService {
-	return &ProjectService{
-		db: db,
-	}
-}
+func GetAllProjects() ([]Project, error) {
+	projectsDir := "api/projects"
 
-func (s *ProjectService) FetchProjects() ([]models.Project, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
+	// Define order: hyprtask, tiny, lib bot, then others
+	order := []string{"hyprtask", "tinyautomator", "library-reservation-bot"}
 
-	rows, err := s.db.QueryContext(ctx, "SELECT id, title, description, image_url, demo_url, source_url FROM projects ORDER BY id ASC")
+	var orderedProjects []Project
+	var remainingProjects []Project
+
+	dirs, err := os.ReadDir(projectsDir)
 	if err != nil {
-		log.Printf("Error querying projects: %v", err)
-		return nil, err
+		return nil, fmt.Errorf("failed to read projects directory: %w", err)
 	}
-	defer rows.Close()
 
-	var projects []models.Project
-	for rows.Next() {
-		var p models.Project
-		if err := rows.Scan(&p.ID, &p.Title, &p.Description, &p.ImageURL, &p.DemoURL, &p.SourceURL); err != nil {
-			log.Printf("Error scanning project row: %v", err)
-			return nil, err
+	// First pass: get ordered projects
+	for _, slug := range order {
+		for _, dir := range dirs {
+			if !dir.IsDir() || dir.Name() != slug {
+				continue
+			}
+
+			project, err := GetProject(slug)
+			if err != nil {
+				continue
+			}
+
+			orderedProjects = append(orderedProjects, *project)
+			break
 		}
-		projects = append(projects, p)
 	}
 
-	if err = rows.Err(); err != nil {
-		log.Printf("Error during rows iteration: %v", err)
-		return nil, err
+	// Second pass: get remaining projects
+	for _, dir := range dirs {
+		if !dir.IsDir() {
+			continue
+		}
+
+		slug := dir.Name()
+		isOrdered := false
+		for _, orderedSlug := range order {
+			if slug == orderedSlug {
+				isOrdered = true
+				break
+			}
+		}
+
+		if !isOrdered {
+			project, err := GetProject(slug)
+			if err != nil {
+				continue
+			}
+
+			remainingProjects = append(remainingProjects, *project)
+		}
 	}
 
-	return projects, nil
+	// Combine ordered + remaining
+	allProjects := append(orderedProjects, remainingProjects...)
+	return allProjects, nil
+}
+
+func GetProject(slug string) (*Project, error) {
+	projectPath := fmt.Sprintf("api/projects/%s/project.json", slug)
+	data, err := os.ReadFile(projectPath)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read project file: %w", err)
+	}
+
+	var project Project
+	if err := json.Unmarshal(data, &project); err != nil {
+		return nil, fmt.Errorf("failed to parse project JSON: %w", err)
+	}
+
+	project.Slug = slug
+	return &project, nil
 }
