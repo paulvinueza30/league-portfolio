@@ -3,7 +3,7 @@ import { gsap } from "gsap";
 
 import { queueBackground } from "@/assets/client";
 
-import { acceptedAtom } from "@/atoms/queueAtom";
+import { acceptedAtom, disableAnimationsAtom } from "@/atoms/queueAtom";
 import { useAtom } from "jotai";
 
 import { matchFoundSound, acceptSound, hoverSound } from "@/assets/sounds";
@@ -19,6 +19,7 @@ export default function QueuePop() {
   const tracerRef = useRef<SVGCircleElement>(null);
 
   const [accepted] = useAtom(acceptedAtom);
+  const [disableAnimations] = useAtom(disableAnimationsAtom);
   const [locallyAccepted, setLocalAccepted] = useState<boolean>(false);
   const { volume } = useAudio();
   useEffect(() => {
@@ -30,6 +31,7 @@ export default function QueuePop() {
   }, [accepted]);
 
   useEffect(() => {
+    if (disableAnimations) return;
     const circle = ringRef.current;
     const tracer = tracerRef.current;
 
@@ -88,7 +90,7 @@ export default function QueuePop() {
         tl.kill();
       };
     }
-  }, [accepted, locallyAccepted]);
+  }, [accepted, locallyAccepted, disableAnimations]);
   return (
     <div className="select-none fixed inset-0 flex items-center justify-center bg-none#9E916B bg-opacity-100 z-50 backdrop-blur-2xl bg-white/5">
       <div className="border-3 border-[#dec375] rounded-full p-3 sm:p-4 md:p-6 flex justify-center justify-items-center relative">
