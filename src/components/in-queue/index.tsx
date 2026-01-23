@@ -1,12 +1,9 @@
-import { useAtom } from "jotai";
 import { AudioSetupModal } from "./AudioSetupModal";
 import QueuePop from "./QueuePop";
-import { audioModalAtom } from "@/atoms/queueAtom";
 
 import { inQueueuBackground } from "@/assets/client";
 
 export default function InQueue() {
-  const [audioConfigured] = useAtom(audioModalAtom);
   return (
     <div
       className="bg-gray-200 w-screen h-screen"
@@ -18,7 +15,7 @@ export default function InQueue() {
       }}
     >
       <AudioSetupModal />
-      {audioConfigured && <QueuePop />}
+      <QueuePop />
     </div>
   );
 }
