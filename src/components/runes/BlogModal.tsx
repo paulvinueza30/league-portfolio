@@ -1,4 +1,3 @@
-import ReactMarkdown from "react-markdown";
 import { fetchBlogPost, type BlogPost } from "@/lib/blog";
 import { useQuery } from "@tanstack/react-query";
 
@@ -57,54 +56,9 @@ export function BlogModal({ slug, onClose }: BlogModalProps) {
         </header>
 
         <div className="prose prose-invert prose-lg max-w-none">
-          <ReactMarkdown
-            components={{
-              h1: ({ children }) => (
-                <h1 className="text-2xl font-bold text-[#C89B3C] mb-4">{children}</h1>
-              ),
-              h2: ({ children }) => (
-                <h2 className="text-xl font-semibold text-[#CDBE91] mb-3 mt-6">{children}</h2>
-              ),
-              h3: ({ children }) => (
-                <h3 className="text-lg font-medium text-[#CDBE91] mb-2 mt-4">{children}</h3>
-              ),
-              p: ({ children }) => (
-                <p className="text-[#F0E6D2] mb-4 leading-relaxed">{children}</p>
-              ),
-              ul: ({ children }) => (
-                <ul className="text-[#F0E6D2] mb-4 ml-6 list-disc">{children}</ul>
-              ),
-              ol: ({ children }) => (
-                <ol className="text-[#F0E6D2] mb-4 ml-6 list-decimal">{children}</ol>
-              ),
-              li: ({ children }) => (
-                <li className="text-[#F0E6D2] mb-1">{children}</li>
-              ),
-              blockquote: ({ children }) => (
-                <blockquote className="border-l-4 border-[#C89B3C] pl-4 italic text-[#CDBE91] my-4">
-                  {children}
-                </blockquote>
-              ),
-              code: (props) => {
-                const { children, className } = props;
-                const inline = !className;
-                if (inline) {
-                  return (
-                    <code className="bg-[#1E272C] px-2 py-1 rounded text-[#C89B3C] font-mono">
-                      {children}
-                    </code>
-                  );
-                }
-                return (
-                  <pre className="bg-[#1E272C] p-4 rounded overflow-x-auto my-4">
-                    <code className="text-[#CDBE91] font-mono">{children}</code>
-                  </pre>
-                );
-              },
-            }}
-          >
+          <div className="text-[#F0E6D2] whitespace-pre-wrap leading-relaxed">
             {post.content}
-          </ReactMarkdown>
+          </div>
         </div>
       </article>
     </div>
