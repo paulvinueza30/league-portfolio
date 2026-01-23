@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -8,13 +9,18 @@ import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { useAudio } from "@/context/AudioContext";
 
-import { audioModalAtom } from "@/atoms/queueAtom";
+import { audioModalAtom, acceptedAtom, disableAnimationsAtom } from "@/atoms/queueAtom";
 import { useAtom } from "jotai";
+
+import { Checkbox } from "@/components/ui/Checkbox";
 
 export function AudioSetupModal() {
   const [configured, setConfigured] = useAtom(audioModalAtom);
+  const [, setAccepted] = useAtom(acceptedAtom);
+  const [disableAnimations, setDisableAnimations] = useAtom(disableAnimationsAtom);
   const { volume, setVolume } = useAudio();
   const sliderValue = [Math.round(volume * 100)];
+  const [skipQueue, setSkipQueue] = useState(false);
 
   return (
     <Dialog open={!configured}>
@@ -40,34 +46,87 @@ export function AudioSetupModal() {
               <span className="text-xs sm:text-sm font-medium text-[#C8AA6E] uppercase tracking-wide flex-shrink-0">
                 Master Volume
               </span>
-              <span className="text-base sm:text-lg font-bold text-[#F0E6D2] bg-[#0A0E13] px-2 sm:px-3 py-1 rounded border border-[#C8AA6E] flex-shrink-0">
-                {sliderValue}%
-              </span>
+               <span className="text-base sm:text-lg font-bold text-[#F0E6D2] bg-[#0A0E13] px-2 sm:px-3 py-1 rounded border border-[#C8AA6E] flex-shrink-0">
+                 {volume === 0 ? 'Muted' : `${sliderValue}%`}
+               </span>
             </div>
 
-            <Slider
-              value={sliderValue}
-              onValueChange={(val) => setVolume(val[0] / 100)}
-              max={100}
-              min={0}
-              step={1}
-              className="w-full 
-                [&>span:first-child]:bg-[#2C2F34] 
-                [&>span:first-child]:border 
-                [&>span:first-child]:border-[#C8AA6E] 
-                [&_[role=slider]]:bg-[#E0C674] 
-                [&_[role=slider]]:border-2 
-                [&_[role=slider]]:border-[#3B2F1E] 
-                [&_[role=slider]]:shadow-lg"
-            />
-          </div>
+             <Slider
+               value={sliderValue}
+               onValueChange={(val) => setVolume(val[0] / 100)}
+               max={100}
+               min={0}
+               step={1}
+               disabled={volume === 0}
+               className="w-full
+                 [&>span:first-child]:bg-[#2C2F34]
+                 [&>span:first-child]:border
+                 [&>span:first-child]:border-[#C8AA6E]
+                 [&_[role=slider]]:bg-[#E0C674]
+                 [&_[role=slider]]:border-2
+                 [&_[role=slider]]:border-[#3B2F1E]
+                 [&_[role=slider]]:shadow-lg
+                 disabled:opacity-50"
+             />
 
-          <Button
-            onClick={() => setConfigured(true)}
-            className="w-full bg-gradient-to-b from-[#D7BA7D] to-[#5E4B2D] hover:from-[#F0E6D2] hover:to-[#C8AA6E] text-[#0A0E13] font-bold py-2.5 sm:py-3 px-4 sm:px-6 rounded border-2 transition-all duration-200 uppercase tracking-wider text-xs sm:text-sm shadow-lg hover:shadow-xl transform hover:scale-105"
-          >
-            ⚔️ Ready for Battle ⚔️
-          </Button>
+             <div className="space-y-2">
+               <label className="flex items-center gap-2 cursor-pointer">
+                 <Checkbox
+                   checked={volume === 0}
+                   onChange={(e) => setVolume(e.target.checked ? 0 : 0.5)}
+                 />
+                 <span className="text-xs sm:text-sm font-medium text-[#A09B8C] uppercase tracking-wide">
+                   Mute Audio
+                 </span>
+               </label>
+               <p className="text-xs text-[#A09B8C] ml-6">
+                 Disable all sound effects and music
+               </p>
+             </div>
+
+             <div className="space-y-2">
+               <label className="flex items-center gap-2 cursor-pointer">
+                 <Checkbox
+                   checked={skipQueue}
+                   onChange={(e) => setSkipQueue(e.target.checked)}
+                 />
+                 <span className="text-xs sm:text-sm font-medium text-[#A09B8C] uppercase tracking-wide">
+                   Skip Match Acceptance
+                 </span>
+               </label>
+               <p className="text-xs text-[#A09B8C] ml-6">
+                 Go directly to the content without the match acceptance screen
+               </p>
+             </div>
+
+             <div className="space-y-2">
+               <label className="flex items-center gap-2 cursor-pointer">
+                 <Checkbox
+                   checked={disableAnimations}
+                   onChange={(e) => setDisableAnimations(e.target.checked)}
+                 />
+                 <span className="text-xs sm:text-sm font-medium text-[#A09B8C] uppercase tracking-wide">
+                   Disable Animations
+                 </span>
+               </label>
+               <p className="text-xs text-[#A09B8C] ml-6">
+                 Skip all visual animations for faster loading
+               </p>
+             </div>
+           </div>
+
+           <Button
+             onClick={() => {
+               if (skipQueue) {
+                 setAccepted(true);
+               } else {
+                 setConfigured(true);
+               }
+             }}
+             className="w-full bg-gradient-to-b from-[#D7BA7D] to-[#5E4B2D] hover:from-[#F0E6D2] hover:to-[#C8AA6E] text-[#0A0E13] font-bold py-2.5 sm:py-3 px-4 sm:px-6 rounded border-2 transition-all duration-200 uppercase tracking-wider text-xs sm:text-sm shadow-lg hover:shadow-xl transform hover:scale-105"
+           >
+             ⚔️ Ready for Battle ⚔️
+           </Button>
         </div>
       </DialogContent>
     </Dialog>
