@@ -2,6 +2,7 @@ export interface BlogPost {
   id: number;
   title: string;
   content: string;
+  slug: string; // Added slug property
   image_url?: string;
   created_at?: string;
 }

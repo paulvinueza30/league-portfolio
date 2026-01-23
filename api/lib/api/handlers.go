@@ -35,6 +35,7 @@ func convertToModelPosts(servicesPosts []services.BlogPost) []models.Post {
 	for _, p := range servicesPosts {
 		modelPosts = append(modelPosts, models.Post{
 			ID:        0,
+			Slug:      p.Slug,
 			Title:     p.Title,
 			Content:   p.Content,
 			ImageURL:  "",

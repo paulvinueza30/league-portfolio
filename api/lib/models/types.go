@@ -43,6 +43,7 @@ type PostsResponse struct {
 
 type Post struct {
 	ID        int       `json:"id"`
+	Slug      string    `json:"slug"`
 	Title     string    `json:"title"`
 	Content   string    `json:"content"`
 	ImageURL  string    `json:"image_url"`

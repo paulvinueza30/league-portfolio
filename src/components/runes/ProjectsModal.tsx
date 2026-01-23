@@ -15,21 +15,17 @@ import { fetchProjects, type Project } from "./projects";
 import { useEffect, useRef, useState } from "react";
 
 import { useQuery } from "@tanstack/react-query";
-import { BlogPostsModal } from "./BlogPostsModal";
+import { useNavigate } from "react-router-dom";
 
 const githubIconPath = "/assets/summoner-spells/vecteezy_github-logo-git-hub-icon-on-white-background_16833872.jpg";
 
 export function ProjectsModal() {
-  const [showBlog, setShowBlog] = useState(false);
+  const navigate = useNavigate();
 
   const { data: projects, isLoading, isError, error } = useQuery<Project[], Error>({
     queryKey: ["projects"],
     queryFn: fetchProjects,
   });
-
-  if (showBlog) {
-    return <BlogPostsModal onBack={() => setShowBlog(false)} />;
-  }
 
   if (isLoading) {
     return <div className="flex justify-center items-center h-full text-[#F0E6D2]">Loading Projects...</div>;
@@ -48,7 +44,7 @@ export function ProjectsModal() {
       <Carousel className="self-end w-full flex flex-1 rounded-none relative">
         <CarouselContent className="rounded-none h-full">
           {projects.map((project: Project, idx) => (
-            <ProjectCard key={idx} project={project} onShowBlog={() => setShowBlog(true)} />
+            <ProjectCard key={idx} project={project} navigate={navigate} />
           ))}
         </CarouselContent>
         <CarouselPrevious
@@ -83,7 +79,7 @@ export function ProjectsModal() {
   );
 }
 
-function ProjectCard({ project, onShowBlog }: { project: Project; onShowBlog: () => void }) {
+function ProjectCard({ project, navigate }: { project: Project; navigate: (path: string) => void }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isVideoReady, setVideoReady] = useState(false);
 
@@ -155,7 +151,7 @@ function ProjectCard({ project, onShowBlog }: { project: Project; onShowBlog: ()
                   <div
                     onClick={(e) => {
                       e.stopPropagation();
-                      onShowBlog();
+                      navigate(`/blog/${project.blog_url}`);
                     }}
                     className="black-gradient w-11 h-11 flex justify-center items-center cursor-pointer"
                     title="View Blog"

@@ -17,7 +17,7 @@ type BlogPost struct {
 }
 
 func GetAllPosts() ([]BlogPost, error) {
-	postsDir := "api/posts"
+	postsDir := "/app/api/posts"
 	var posts []BlogPost
 
 	dirs, err := os.ReadDir(postsDir)
@@ -42,7 +42,7 @@ func GetAllPosts() ([]BlogPost, error) {
 }
 
 func GetPost(slug string) (*BlogPost, error) {
-	postPath := fmt.Sprintf("api/posts/%s/post.md", slug)
+	postPath := fmt.Sprintf("/app/api/posts/%s/post.md", slug)
 	data, err := os.ReadFile(postPath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read post file: %w", err)
