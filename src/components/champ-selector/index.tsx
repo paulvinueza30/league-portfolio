@@ -15,7 +15,7 @@ export default function ChampSelector() {
       <div className="flex flex-col items-center justify-center">
         <img
           src={greyRole}
-          alt="software engineer role"
+          alt="Grey role icon"
           className="w-3 h-3 sm:w-5 sm:h-5 md:w-6 md:h-6 lg:w-7 lg:h-7 xl:w-8 xl:h-8"
         />
         <div className="bg-[#363825] w-full h-0.5 my-0.5 sm:my-1 md:my-2 lg:my-3" />

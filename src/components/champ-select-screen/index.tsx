@@ -17,10 +17,8 @@ import { lockInAtom, skinAtom } from "@/atoms/champAtom";
 import MyJoyRide from "./MyJoyRide";
 
 import { useQueries } from "@tanstack/react-query";
-import { useGSAP } from "@gsap/react";
-import { gsapAtom } from "@/atoms/gsapAtom";
-import { gsap } from "gsap/gsap-core";
-gsap.registerPlugin(useGSAP);
+import { useChampSelectAnimation } from "@/hooks/useChampSelectAnimation";
+import { skipAnimationsAndQueueAtom } from "@/atoms/queueAtom";
 
 function Seperator() {
   return (
@@ -71,7 +69,9 @@ function HextechCircle() {
 export default function ChampSelectScreen() {
   const [isLockedIn] = useAtom(lockInAtom);
   const [selectedSkin] = useAtom(skinAtom);
-  const [, setAnimationComplete] = useAtom(gsapAtom);
+  const [skipAnimationsAndQueue] = useAtom(skipAnimationsAndQueueAtom);
+
+  useChampSelectAnimation(skipAnimationsAndQueue);
 
   const getBackgroundStyle = () => {
     if (selectedSkin) {
@@ -103,84 +103,6 @@ export default function ChampSelectScreen() {
       width: "100%",
     };
   };
-
-  useGSAP(() => {
-    // Skip animations on small screens (mobile)
-    const isMobile = window.innerWidth < 768; // md breakpoint
-
-    if (isMobile) {
-      // Skip animations, just set complete immediately
-      setAnimationComplete(true);
-      return;
-    }
-
-    const tl = gsap.timeline({
-      duration: 0.8,
-      onComplete: () => {
-        setAnimationComplete(true);
-      },
-    });
-    tl.from(".bg-picture", {
-      opacity: 0.9,
-      scale: 1.1,
-      y: -50,
-      filter: "blur(8px)",
-      duration: 0.8,
-      ease: "sine.inOut",
-    })
-      .from(
-        ".match-intro-item",
-        {
-          y: 100,
-          opacity: 0,
-          stagger: 0.05,
-          duration: 1,
-          ease: "power1.inOut",
-        },
-        ">"
-      )
-      .from(
-        ".player-section",
-        {
-          x: "-25vw",
-          opacity: 0.5,
-          duration: 0.8,
-          ease: "power2.inOut",
-        },
-        "<"
-      )
-      .from(
-        ".bottom-row-item",
-        {
-          y: "-2vh",
-          opacity: 0,
-          duration: 0.8,
-          ease: "power1.inOut",
-          stagger: 0.4,
-        },
-        "<"
-      )
-      .from(
-        ".hero-section",
-        {
-          opacity: 0,
-          duration: 0.8,
-          ease: "power3.in",
-        },
-        ">"
-      )
-      .from(
-        ".hextech-circle",
-        {
-          rotation: 480,
-          opacity: 0,
-          duration: 0.8,
-          transformOrigin: "center 50%",
-          ease: "expo.in",
-        },
-        "<"
-      );
-  }, []);
 
   const apiKeys = ["waka", "riot", "github", "leetcode", "anki"];
   useQueries({

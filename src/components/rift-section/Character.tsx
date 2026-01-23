@@ -6,15 +6,24 @@ import { CapsuleCollider, RigidBody } from "@react-three/rapier";
 
 import type { RigidBody as RapierRigidBody } from "@dimforge/rapier3d-compat";
 
-interface CharacterControllerProps {
-  onReady?: (
-    actions: Record<string, THREE.AnimationAction>,
-    ref: React.RefObject<RapierRigidBody>,
-    mixer: THREE.AnimationMixer
-  ) => void;
-  targetPos: THREE.Vector3 | null;
-  setTargetPos: (pos: THREE.Vector3 | null) => void;
-}
+const MOVEMENT_SPEED = 0.009;
+const ROTATION_THRESHOLD = 0.05;
+const STOP_THRESHOLD = 0.1;
+const MAX_STEP_HEIGHT = 0.1;
+const CAPSULE_RADIUS = 0.1;
+const CAPSULE_HEIGHT = 0.1;
+const ANIMATION_FADE_DURATION = 0.25;
+const MIXER_TIME_SCALE = 0.6;
+const CAMERA_LERP_FACTOR = 0.1;
+const CAMERA_OFFSET_X = 1;
+const CAMERA_OFFSET_Y = 4;
+const CAMERA_OFFSET_Z = 4;
+const CAMERA_LOOK_AT_OFFSET_Y = 4;
+const CAMERA_LOOK_AT_OFFSET_Z = -4;
+const RIGID_BODY_POSITION_X = -0.5;
+const RIGID_BODY_POSITION_Y = 0.3;
+const RIGID_BODY_POSITION_Z = 0;
+const RIGID_BODY_SCALE = 1;
 
 export function CharacterController({
   onReady,
@@ -33,22 +42,17 @@ export function CharacterController({
 
   const [currentAnimation, setCurrentAnimation] = useState("idle");
 
-  const movementSpeed = 0.009;
-  const rotationThreshold = 0.05;
-  const stopThreshold = 0.1;
-  const maxStepHeight = 0.1;
-
   const playAnimation = (name: string) => {
     if (!actions?.[name] || currentAnimation === name) return;
-    if (actions[currentAnimation]) actions[currentAnimation].fadeOut(0.25);
-    actions[name].reset().fadeIn(0.25).play();
+    if (actions[currentAnimation]) actions[currentAnimation].fadeOut(ANIMATION_FADE_DURATION);
+    actions[name].reset().fadeIn(ANIMATION_FADE_DURATION).play();
     setCurrentAnimation(name);
   };
 
   useEffect(() => {
     if (actions && charBodyRef.current && charMeshRef.current) {
       actions.idle?.play();
-      mixer.timeScale = 0.6;
+      mixer.timeScale = MIXER_TIME_SCALE;
       onReady?.(
         actions as Record<string, THREE.AnimationAction>,
         charBodyRef as React.RefObject<RapierRigidBody>,
@@ -64,8 +68,8 @@ export function CharacterController({
     cameraTargetRef.current.getWorldPosition(cameraLook.current);
 
     const pos = charBodyRef.current!.translation();
-    const desiredPosition = new THREE.Vector3(pos.x + 1, pos.y + 4, pos.z + 4);
-    camera.position.lerp(desiredPosition, 0.1);
+    const desiredPosition = new THREE.Vector3(pos.x + CAMERA_OFFSET_X, pos.y + CAMERA_OFFSET_Y, pos.z + CAMERA_OFFSET_Z);
+    camera.position.lerp(desiredPosition, CAMERA_LERP_FACTOR);
     camera.lookAt(pos.x, pos.y, pos.z);
   });
 
@@ -81,7 +85,7 @@ export function CharacterController({
       charBodyRef.current.translation()
     );
 
-    if (targetPos.y > currentPos.y + maxStepHeight) {
+    if (targetPos.y > currentPos.y + MAX_STEP_HEIGHT) {
       playAnimation("idle");
       setTargetPos(null);
       return;
@@ -100,13 +104,13 @@ export function CharacterController({
     if (angleDiff > Math.PI) angleDiff -= 2 * Math.PI;
     if (angleDiff < -Math.PI) angleDiff += 2 * Math.PI;
 
-    const isRotationComplete = Math.abs(angleDiff) < rotationThreshold;
+    const isRotationComplete = Math.abs(angleDiff) < ROTATION_THRESHOLD;
     const targetQuat = new THREE.Quaternion().setFromEuler(
       new THREE.Euler(0, targetAngle, 0)
     );
     charBodyRef.current.setRotation(targetQuat, true);
 
-    if (distanceToTarget > stopThreshold) {
+    if (distanceToTarget > STOP_THRESHOLD) {
       if (!isRotationComplete && actions?.turn && Math.abs(angleDiff) > 0.2) {
         playAnimation("turn");
         actions.turn.setLoop(THREE.LoopOnce, 1);
@@ -115,7 +119,7 @@ export function CharacterController({
         playAnimation("walk foward");
         actions["walk foward"]?.setLoop(THREE.LoopRepeat, Infinity);
 
-        const moveVector = direction.clone().multiplyScalar(movementSpeed);
+        const moveVector = direction.clone().multiplyScalar(MOVEMENT_SPEED);
         const nextPos = currentPos.clone().add(moveVector);
         nextPos.y = targetPos.y;
 
@@ -138,15 +142,15 @@ export function CharacterController({
       colliders={false}
       ref={charBodyRef}
       gravityScale={0}
-      position={[-0.5, 0.3, 0]}
-      scale={1}
+      position={[RIGID_BODY_POSITION_X, RIGID_BODY_POSITION_Y, RIGID_BODY_POSITION_Z]}
+      scale={RIGID_BODY_SCALE}
     >
-      <group ref={cameraPosRef} position-z={1.5} />
-      <group ref={cameraTargetRef} position-y={4} position-z={-4} />
+      <group ref={cameraPosRef} position-z={CAMERA_OFFSET_Z} />
+      <group ref={cameraTargetRef} position-y={CAMERA_LOOK_AT_OFFSET_Y} position-z={CAMERA_LOOK_AT_OFFSET_Z} />
       <group ref={charMeshRef}>
         <primitive object={scene} />
       </group>
-      <CapsuleCollider args={[0.1, 0.1]} position={[0, 0, 0]} />
+      <CapsuleCollider args={[CAPSULE_RADIUS, CAPSULE_HEIGHT]} position={[0, 0, 0]} />
     </RigidBody>
   );
 }

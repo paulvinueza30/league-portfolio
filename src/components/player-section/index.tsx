@@ -5,15 +5,7 @@ import { champPortrait } from "@/assets/self-pics";
 
 import { useAtom } from "jotai";
 import { selectedChampAtom } from "@/atoms/champAtom";
-
-function PlayerSeperator({ className = "" }: { className?: string }) {
-  return (
-    <div className={`flex flex-row items-center text-[#929189] w-full ${className}`}>
-      <Circle className="w-2 h-2 fill-[#929189]" />
-      <Separator decorative={true} className="flex-1 bg-[#929189] " />
-    </div>
-  );
-}
+import { PlayerSeperator } from "./PlayerSeperator";
 
 function PlayerCard({ isLockedIn }: { isLockedIn: boolean }) {
   const [champ] = useAtom(selectedChampAtom);
@@ -23,7 +15,7 @@ function PlayerCard({ isLockedIn }: { isLockedIn: boolean }) {
       <img
         className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 rounded-[10vw] border-2 border-[#87714D]"
         src={champ ? champPortrait : devRole}
-        alt="Software engineer dev role"
+        alt={champ ? "My champion portrait" : "My current role icon"}
       />
       <div className={`flex flex-col text-left text-[#CAB15A] text-[10px] sm:text-xs md:text-sm lg:text-md tracking-widest ${isLockedIn ? 'hidden sm:flex' : ''}`}>
         <h4 className="text-[10px] sm:text-xs md:text-sm lg:text-base">
@@ -43,11 +35,11 @@ function PlayerCard({ isLockedIn }: { isLockedIn: boolean }) {
 export default function PlayerSection({ isLockedIn }: { isLockedIn: boolean }) {
   return (
     <div className="flex-col justify-items-start w-full">
-      <h1 className="uppercase font-bold text-[10px] sm:text-xs md:text-sm lg:text-base xl:text-lg text-[#929189] tracking-widest ml-1 sm:ml-2 md:ml-3 lg:ml-5 mb-1 sm:mb-2 md:mb-2.5 lg:mb-3">
+      <h1 className="uppercase font-bold text-[10px] sm:text-xs md:text-sm lg:text-base xl:text-lg text-[var(--color-brand-separator)] tracking-widest ml-1 sm:ml-2 md:ml-3 lg:ml-5 mb-1 sm:mb-2 md:mb-2.5 lg:mb-3">
         First Pick
       </h1>
       <div className="flex flex-row w-full gap-1.5 sm:gap-2 md:gap-3 lg:gap-4">
-        <div className="bg-[#FABE0B] w-1.5 sm:w-2" />
+        <div className="bg-[var(--color-brand-accent)] w-1.5 sm:w-2" />
         <div className="w-full flex flex-col gap-1.5 sm:gap-2 md:gap-3 lg:gap-4">
           <PlayerSeperator />
           <PlayerCard isLockedIn={isLockedIn} />

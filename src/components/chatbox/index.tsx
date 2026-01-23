@@ -8,7 +8,7 @@ import {
 } from "@/atoms/chatAtom";
 import { chatSound } from "@/assets/sounds";
 import { useRef, useEffect } from "react";
-import { joyrideAtom } from "@/atoms/joyrideAtom";
+import { joyrideAtom, userHasInteractedAtom } from "@/atoms/joyrideAtom";
 import { gsapAtom } from "@/atoms/gsapAtom";
 
 import { useAudio } from "@/context/AudioContext";
@@ -55,9 +55,12 @@ function Chat() {
             {"\u00A0" + message.content}
           </span>
           {message.type === "guide" && (
-            <a onClick={() => setRunTour(true)} className="text-blue-400">
+            <button
+              onClick={() => setRunTour(true)}
+              className="text-blue-400 hover:underline focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
+            >
               {"\u00A0" + message.highlight}
-            </a>
+            </button>
           )}
         </div>
       );
@@ -101,9 +104,10 @@ export default function Chatbox() {
   const addChatMessage = useSetAtom(addChatMessageAtom);
   const [isAnimationComplete] = useAtom(gsapAtom);
   const [chat] = useAtom(chatAtom);
+  const [userHasInteracted] = useAtom(userHasInteractedAtom);
 
   useEffect(() => {
-    if (chatInitialized.current || !isAnimationComplete) return;
+    if (chatInitialized.current || !isAnimationComplete || !userHasInteracted) return;
     if (chat.length > 0) {
       chatInitialized.current = true;
       return;
@@ -116,7 +120,7 @@ export default function Chatbox() {
         addChatMessage(msg);
       }, delay);
     });
-  }, [addChatMessage, isAnimationComplete, chat.length]);
+  }, [addChatMessage, isAnimationComplete, chat.length, userHasInteracted]);
   return (
     <div className="w-full max-w-[85vw] sm:w-52 sm:max-w-52 md:w-full md:max-w-[90vw] lg:w-64 lg:max-w-64 xl:w-lg xl:max-w-lg h-[6em] sm:h-[6.5em] md:h-[12em] lg:h-[9em] xl:h-[12em] grid grid-rows-[3.5fr_1fr]">
       <Chat />

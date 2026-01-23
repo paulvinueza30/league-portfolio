@@ -33,6 +33,10 @@ function Map({ onRightClick }: MapProps) {
 }
 
 export default function Scene() {
+  const CAMERA_POSITION: [number, number, number] = [0, 0, 0];
+  const CAMERA_FOV = 20;
+  const CAMERA_NEAR = 0.1;
+  const CAMERA_FAR = 1000;
   const [, setCharacterActions] = useState<Record<
     string,
     THREE.AnimationAction
@@ -83,15 +87,12 @@ export default function Scene() {
   // TODO: MAKE THIS LEAGUE LOAD IN HEHE
   function Loading() {
     return (
-      <mesh position={[0.5, 0, -15]}>
-        <boxGeometry args={[2, 2, 2]} />
-        <meshBasicMaterial color="purple" />
-      </mesh>
+      <h1 className="text-white text-4xl">Loading...</h1>
     );
   }
   return (
     <div className="w-full h-full bg-gray-800">
-      <Canvas camera={{ position: [0, 0, 0], fov: 20, near: 0.1, far: 1000 }}>
+      <Canvas camera={{ position: CAMERA_POSITION, fov: CAMERA_FOV, near: CAMERA_NEAR, far: CAMERA_FAR }}>
         <Suspense fallback={<Loading />}>
           <ambientLight intensity={2} />
           <directionalLight position={[5, 10, 5]} intensity={1.5} />
