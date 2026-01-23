@@ -2,79 +2,78 @@ package services
 
 import (
 	"fmt"
-	"log"
-	"strconv"
+	"os"
+	"strings"
 	"time"
 
-	"github.com/paulvinueza30/league-portfolio/api/lib/directus"
-	"github.com/paulvinueza30/league-portfolio/api/lib/models"
+	front "github.com/adrg/frontmatter"
 )
 
-type PostService struct {
-	client *directus.Client
+type BlogPost struct {
+	Title   string `json:"title"`
+	Date    string `json:"date"`
+	Slug    string `json:"slug"`
+	Content string `json:"content"`
 }
 
-func NewPostService(client *directus.Client) *PostService {
-	return &PostService{
-		client: client,
-	}
-}
+func GetAllPosts() ([]BlogPost, error) {
+	postsDir := "api/posts"
+	var posts []BlogPost
 
-func (s *PostService) FetchPosts() ([]models.Post, error) {
-	data, err := s.client.GetCollection("posts")
+	dirs, err := os.ReadDir(postsDir)
 	if err != nil {
-		log.Printf("Error fetching posts from Directus: %v", err)
-		return nil, err
+		return nil, fmt.Errorf("failed to read posts directory: %w", err)
 	}
 
-	var posts []models.Post
-	for _, item := range data {
-		post, err := mapToPost(item)
-		if err != nil {
-			log.Printf("Error mapping post: %v", err)
+	for _, dir := range dirs {
+		if !dir.IsDir() {
 			continue
 		}
-		posts = append(posts, post)
+
+		post, err := GetPost(dir.Name())
+		if err != nil {
+			continue
+		}
+
+		posts = append(posts, *post)
 	}
 
 	return posts, nil
 }
 
-func mapToPost(item map[string]interface{}) (models.Post, error) {
-	var p models.Post
-
-	if id, ok := item["id"].(float64); ok {
-		p.ID = int(id)
-	} else if idStr, ok := item["id"].(string); ok {
-		id, err := strconv.Atoi(idStr)
-		if err != nil {
-			return p, fmt.Errorf("invalid id: %v", item["id"])
-		}
-		p.ID = id
+func GetPost(slug string) (*BlogPost, error) {
+	postPath := fmt.Sprintf("api/posts/%s/post.md", slug)
+	data, err := os.ReadFile(postPath)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read post file: %w", err)
 	}
 
-	if title, ok := item["title"].(string); ok {
-		p.Title = title
+	var frontmatter struct {
+		Title string `yaml:"title"`
+		Date  string `yaml:"date"`
 	}
 
-	if content, ok := item["content"].(string); ok {
-		p.Content = content
+	content, err := front.Parse(strings.NewReader(string(data)), &frontmatter)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse frontmatter: %w", err)
 	}
 
-	if imageFile, ok := item["image"].(map[string]interface{}); ok {
-		if fileID, ok := imageFile["id"].(string); ok {
-			p.ImageURL = fileID
-		}
-	} else if imageID, ok := item["image"].(string); ok {
-		p.ImageURL = imageID
+	title := frontmatter.Title
+	if title == "" {
+		title = slug
 	}
 
-	if createdAt, ok := item["date_created"].(string); ok {
-		if t, err := time.Parse(time.RFC3339, createdAt); err == nil {
-			p.CreatedAt = t
-		}
+	date := frontmatter.Date
+	if date == "" {
+		date = time.Now().Format("2006-01-02")
 	}
 
-	return p, nil
+	post := &BlogPost{
+		Title:   title,
+		Date:    date,
+		Slug:    slug,
+		Content: string(content),
+	}
+
+	return post, nil
 }
-

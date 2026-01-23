@@ -1,85 +1,97 @@
 package services
 
 import (
+	"encoding/json"
 	"fmt"
-	"log"
-	"strconv"
-	"strings"
-
-	"github.com/paulvinueza30/league-portfolio/api/lib/directus"
-	"github.com/paulvinueza30/league-portfolio/api/lib/models"
+	"os"
 )
 
-type ProjectService struct {
-	client *directus.Client
+type Project struct {
+	Slug        string   `json:"slug"`
+	Title       string   `json:"title"`
+	Date        string   `json:"date"`
+	Tech        []string `json:"tech"`
+	GithubURL   string   `json:"github_url,omitempty"`
+	BlogURL     string   `json:"blog_url,omitempty"`
+	Featured    bool     `json:"featured"`
+	Description string   `json:"description"`
+	HeroImage   string   `json:"hero_image,omitempty"`
+	DemoVideo   string   `json:"demo_video,omitempty"`
 }
 
-func NewProjectService(client *directus.Client) *ProjectService {
-	return &ProjectService{
-		client: client,
-	}
-}
+func GetAllProjects() ([]Project, error) {
+	projectsDir := "api/projects"
 
-func (s *ProjectService) FetchProjects() ([]models.Project, error) {
-	data, err := s.client.GetCollection("projects")
+	// Define order: hyprtask, tiny, lib bot, then others
+	order := []string{"hyprtask", "tinyautomator", "library-reservation-bot"}
+
+	var orderedProjects []Project
+	var remainingProjects []Project
+
+	dirs, err := os.ReadDir(projectsDir)
 	if err != nil {
-		log.Printf("Error fetching projects from Directus: %v", err)
-		return nil, err
+		return nil, fmt.Errorf("failed to read projects directory: %w", err)
 	}
 
-	var projects []models.Project
-	for _, item := range data {
-		project, err := s.mapToProject(item)
-		if err != nil {
-			log.Printf("Error mapping project: %v", err)
+	// First pass: get ordered projects
+	for _, slug := range order {
+		for _, dir := range dirs {
+			if !dir.IsDir() || dir.Name() != slug {
+				continue
+			}
+
+			project, err := GetProject(slug)
+			if err != nil {
+				continue
+			}
+
+			orderedProjects = append(orderedProjects, *project)
+			break
+		}
+	}
+
+	// Second pass: get remaining projects
+	for _, dir := range dirs {
+		if !dir.IsDir() {
 			continue
 		}
-		projects = append(projects, project)
+
+		slug := dir.Name()
+		isOrdered := false
+		for _, orderedSlug := range order {
+			if slug == orderedSlug {
+				isOrdered = true
+				break
+			}
+		}
+
+		if !isOrdered {
+			project, err := GetProject(slug)
+			if err != nil {
+				continue
+			}
+
+			remainingProjects = append(remainingProjects, *project)
+		}
 	}
 
-	return projects, nil
+	// Combine ordered + remaining
+	allProjects := append(orderedProjects, remainingProjects...)
+	return allProjects, nil
 }
 
-func (s *ProjectService) mapToProject(item map[string]interface{}) (models.Project, error) {
-	var p models.Project
-
-	if id, ok := item["id"].(float64); ok {
-		p.ID = int(id)
-	} else if idStr, ok := item["id"].(string); ok {
-		id, err := strconv.Atoi(idStr)
-		if err != nil {
-			return p, fmt.Errorf("invalid id: %v", item["id"])
-		}
-		p.ID = id
+func GetProject(slug string) (*Project, error) {
+	projectPath := fmt.Sprintf("api/projects/%s/project.json", slug)
+	data, err := os.ReadFile(projectPath)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read project file: %w", err)
 	}
 
-	if title, ok := item["title"].(string); ok {
-		p.Title = title
+	var project Project
+	if err := json.Unmarshal(data, &project); err != nil {
+		return nil, fmt.Errorf("failed to parse project JSON: %w", err)
 	}
 
-	if desc, ok := item["description"].(string); ok {
-		p.Description = desc
-	}
-
-	if imgURL, ok := item["img_url"].(string); ok && imgURL != "" {
-		if strings.HasPrefix(imgURL, "http") {
-			p.ImageURL = imgURL
-		} else {
-			p.ImageURL = s.client.AssetProxyPath(imgURL)
-		}
-	}
-
-	if demoURL, ok := item["demo_url"].(string); ok && demoURL != "" {
-		if strings.HasPrefix(demoURL, "http") {
-			p.DemoURL = demoURL
-		} else {
-			p.DemoURL = s.client.AssetProxyPath(demoURL)
-		}
-	}
-
-	if sourceURL, ok := item["source_url"].(string); ok {
-		p.SourceURL = sourceURL
-	}
-
-	return p, nil
+	project.Slug = slug
+	return &project, nil
 }
