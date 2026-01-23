@@ -1,8 +1,4 @@
 name: league-portfolio
-networks:
-  cms_default:
-    external: true
-
 services:
     frontend:
         build:
@@ -19,7 +15,7 @@ services:
             - API_TARGET=http://api:8080
         env_file:
             - .env
-  
+
     api:
         build:
           context: ./api
@@ -27,24 +23,17 @@ services:
         container_name: portfolio-backend
         volumes:
           - ./api:/app
+          - ./api/posts:/app/posts
+          - ./api/projects:/app/projects
         ports:
           - "8080:8080"
         env_file:
-          - ./api/.env
+          - .env
         environment:
           - REDIS_ADDR=${REDIS_ADDR}
-          - POSTGRES_HOST=postgres
-          - POSTGRES_PORT=5432
-          - POSTGRES_USER=${POSTGRES_USER}
-          - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-          - POSTGRES_DB=${POSTGRES_DB}
-          - DIRECTUS_URL=${DIRECTUS_URL:-http://directus:8055}
         depends_on:
           redis:
             condition: service_healthy
-        networks:
-          - default
-          - cms_default
 
     redis:
         image: redis:7-alpine
@@ -56,4 +45,3 @@ services:
           interval: 5s
           timeout: 3s
           retries: 5
-
