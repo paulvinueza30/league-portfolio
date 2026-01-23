@@ -99,7 +99,7 @@ export default function RuneSelection() {
         </DialogContent>
       </Dialog>
       <DropdownMenu>
-        <DropdownMenuTrigger className="border-3 border-[#98A0A9] bg-[#2e373f] h-8 w-40 sm:h-8 sm:w-20 md:h-12 md:w-24 lg:h-12 lg:w-28 xl:h-12 xl:w-32 2xl:h-12 2xl:w-2xs flex justify-between items-center px-1.5 sm:px-2 md:px-2.5 lg:px-3 joy-rune-dropdown">>
+        <DropdownMenuTrigger className="border-3 border-[#98A0A9] bg-[#2e373f] h-8 w-40 sm:h-8 sm:w-20 md:h-12 md:w-24 lg:h-12 lg:w-28 xl:h-12 xl:w-32 2xl:h-12 2xl:w-2xs flex justify-between items-center px-1.5 sm:px-2 md:px-2.5 lg:px-3 joy-rune-dropdown">
           <span className="text-xs sm:text-xs md:text-sm lg:text-base xl:text-lg 2xl:text-lg text-[#BCAC88]">
             {runeLabel}
           </span>

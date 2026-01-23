@@ -52,7 +52,6 @@ export default function MyJoyRide() {
       continuous
       showProgress
       showSkipButton
-      debug={true}
       callback={(data) => {
         if (["finished", "skipped"].includes(data.status)) {
           setRunTour(false);
