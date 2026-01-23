@@ -28,7 +28,7 @@ interface SkillShowCaseProps {
 
 function SkillShowCase({ skills }: SkillShowCaseProps) {
   return (
-    <div className="w-full bg-[#080F21] justify-items-center grid grid-cols-3 sm:grid-cols-4 auto-rows-min h-70 overflow-y-scroll ">
+    <div className="w-full bg-[#080F21] justify-items-center grid grid-cols-3 sm:grid-cols-4 auto-rows-min max-h-70 overflow-y-auto">
       {skills.map((skill) => (
         <div
           key={skill.name}

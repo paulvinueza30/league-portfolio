@@ -55,9 +55,12 @@ function Chat() {
             {"\u00A0" + message.content}
           </span>
           {message.type === "guide" && (
-            <a onClick={() => setRunTour(true)} className="text-blue-400">
+            <button
+              onClick={() => setRunTour(true)}
+              className="text-blue-400 hover:underline focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
+            >
               {"\u00A0" + message.highlight}
-            </a>
+            </button>
           )}
         </div>
       );
