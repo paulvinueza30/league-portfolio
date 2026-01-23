@@ -51,12 +51,25 @@ export default function ChampSelector() {
         <div
           className={`joy-lock-in-button relative w-14 h-5 sm:w-20 sm:h-8 md:w-24 md:h-9 lg:w-28 lg:h-10 xl:w-xs xl:h-12 transition-transform duration-150 ${
             champ && "hover:scale-105 active:scale-85"
-          } clip-path-lock-in ${champ ? "bg-[#5bc0de]" : "bg-[#666666]"} p-0.5`}
+          }`}
+          style={{
+            clipPath: "polygon(10% 0%, 90% 0%, 100% 100%, 0% 100%)",
+            borderBottomLeftRadius: "60% 100%",
+            borderBottomRightRadius: "60% 100%",
+            backgroundColor: champ ? "#5bc0de" : "#666666",
+            padding: "2px",
+          }}
         >
           <button
             className={`w-full h-full text-white font-bold uppercase tracking-wider flex items-center justify-center relative group ${
               !champ && " cursor-not-allowed"
-            } clip-path-lock-in border-bottom-left-radius-60 border-bottom-right-radius-60 bg-[#0c0d0e]`}
+            }`}
+            style={{
+              clipPath: "polygon(10% 0%, 90% 0%, 100% 100%, 0% 100%)",
+              borderBottomLeftRadius: "60% 100%",
+              borderBottomRightRadius: "60% 100%",
+              backgroundColor: "#0c0d0e",
+            }}
             onClick={() => champ && setLockedIn(true)}
             disabled={!champ}
           >

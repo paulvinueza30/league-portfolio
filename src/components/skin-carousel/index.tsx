@@ -16,7 +16,7 @@ export default function SkinCarousel() {
   const [selectedSkin, setSkin] = useAtom(skinAtom);
 
   const [api, setApi] = useState<CarouselApi>();
-  const [carouselView, setCarouselView] = useState<string>("art");
+  const [carouselView, setCarouselView] = useState<string>("portraits");
   function getSkinArr(): Skin[] {
     if (carouselView == "art") return artSkins;
     return portraitSkins;
@@ -81,7 +81,7 @@ export default function SkinCarousel() {
           htmlFor="mode"
           className={cn(
             "px-2 py-0.5 sm:px-3 sm:py-1 bg-black/50 ",
-            carouselView == "art" ? "opacity-50" : "font-bold"
+            carouselView == "portraits" ? "font-bold" : "opacity-50"
           )}
         >
           Portraits
@@ -89,8 +89,8 @@ export default function SkinCarousel() {
 
         <Switch
           id="mode"
-          checked={carouselView === "art"}
-          onCheckedChange={(c) => setCarouselView(c ? "art" : "portraits")}
+          checked={carouselView === "portraits"}
+          onCheckedChange={(c) => setCarouselView(c ? "portraits" : "art")}
           className="
     data-[state=checked]:bg-[#C8AA6E] 
     data-[state=unchecked]:bg-[#3f62a8]

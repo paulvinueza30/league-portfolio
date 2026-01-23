@@ -17,6 +17,7 @@ const hoveredSound = new Audio(hoverSound);
 export default function QueuePop() {
   const ringRef = useRef<SVGCircleElement>(null);
   const tracerRef = useRef<SVGCircleElement>(null);
+  const animationTimelineRef = useRef<gsap.core.Timeline | null>(null);
 
   const [accepted] = useAtom(acceptedAtom);
   const [disableAnimations] = useAtom(disableAnimationsAtom);
@@ -31,6 +32,11 @@ export default function QueuePop() {
   }, [accepted]);
 
   useEffect(() => {
+    if (animationTimelineRef.current) {
+      animationTimelineRef.current.kill();
+      animationTimelineRef.current = null;
+    }
+
     if (disableAnimations) return;
     const circle = ringRef.current;
     const tracer = tracerRef.current;
@@ -85,9 +91,13 @@ export default function QueuePop() {
         )
         .to(tracer, { strokeOpacity: 0, duration: 0.5 });
 
+      animationTimelineRef.current = tl;
+
       if (locallyAccepted) tl.kill();
       return () => {
-        tl.kill();
+        if (animationTimelineRef.current) {
+          animationTimelineRef.current.kill();
+        }
       };
     }
   }, [accepted, locallyAccepted, disableAnimations]);

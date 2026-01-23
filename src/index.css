@@ -1,16 +1,1 @@
 @import "tailwindcss";
-
-.clip-path-lock-in {
-  clip-path: polygon(10% 0%, 90% 0%, 100% 100%, 0% 100%);
-}
-.border-bottom-left-radius-60 {
-  border-bottom-left-radius: 60% 100%;
-}
-.border-bottom-right-radius-60 {
-  border-bottom-right-radius: 60% 100%;
-}
-
-:root {
-  --color-brand-separator: #929189;
-  --color-brand-accent: #FABE0B;
-}
