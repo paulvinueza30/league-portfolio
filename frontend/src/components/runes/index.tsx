@@ -28,7 +28,7 @@ import { LoreModal } from "./LoreModal";
 
 export default function RuneSelection() {
   const navigate = useNavigate();
-  const [runeLabel, setRuneLabel] = useState<string>("Projects");
+  const [runeLabel, setRuneLabel] = useState<string>("Blog");
   const [activeModal, setActiveModal] = useState<ReactNode | null>(null);
 
   const runePages: Record<string, ReactNode> = {
