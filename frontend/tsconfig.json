@@ -13,10 +13,17 @@
     "experimentalSpecifierResolution": "node"
   },
   "compilerOptions": {
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@api/*": ["server/api/*"]
+      "@/*": [
+        "./src/*"
+      ],
+      "@api/*": [
+        "server/api/*"
+      ]
     }
   }
 }
