@@ -39,9 +39,9 @@ services:
           - ./backend/data/projects:/app/projects
         env_file:
           - ./backend/.env
-        environment:
-          - GIN_MODE=release
-          - REDIS_ADDR=redis:6379
+            environment:
+              - GIN_MODE=release
+              - REDIS_ADDR=redis:6379          - REDIS_ADDR=redis:6379
         depends_on:
           redis:
             condition: service_healthy
