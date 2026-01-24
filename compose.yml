@@ -67,4 +67,4 @@ networks:
   app-network:
     driver: bridge
   proxy:
-    external: true   external: true
+    external: true
