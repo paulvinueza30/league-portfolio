@@ -11,7 +11,7 @@ node_modules
 dist
 dist-ssr
 *.local
-.env
+.env*
 
 # Editor directories and files
 .vscode/*
@@ -23,7 +23,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-.vercel
 ./api-old/
 
 # Ignore codebase switcher script
@@ -42,3 +41,6 @@ codebase_switcher.py
 
 .specstory/
 .env*.local
+
+# Builds
+*/tmp/
