@@ -6,17 +6,27 @@ services:
             dockerfile: Dockerfile
         image: league-frontend:latest
         container_name: portfolio-frontend
-        ports:
-            - 5173:5173
         volumes:
             - ./frontend:/app
             - /app/node_modules
         environment:
-            - API_TARGET=http://api:8080
+            - API_TARGET=/api
         env_file:
             - ./frontend/.env
         networks:
           - app-network
+          - proxy
+        labels:
+          - "traefik.enable=true"
+          - "traefik.http.routers.frontend.rule=Host(`${APP_HOST}`)"
+          - "traefik.http.routers.frontend.entrypoints=websecure"
+          - "traefik.http.routers.frontend.tls.certresolver=${CERT_RESOLVER}"
+          - "traefik.http.services.frontend.loadbalancer.server.port=5173"
+          - "traefik.http.routers.frontend-http.entrypoints=web"
+          - "traefik.http.routers.frontend-http.rule=Host(`${APP_HOST}`)"
+          - "traefik.http.routers.frontend-http.middlewares=redirect-to-https"
+          - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+          - "traefik.http.middlewares.redirect-to-https.redirectscheme.permanent=true"
 
     api:
         build:
@@ -27,8 +37,6 @@ services:
           - ./backend:/app
           - ./backend/data/posts:/app/posts
           - ./backend/data/projects:/app/projects
-        ports:
-          - "8080:8080"
         env_file:
           - ./backend/.env
         environment:
@@ -38,6 +46,16 @@ services:
             condition: service_healthy
         networks:
           - app-network
+          - proxy
+        labels:
+          - "traefik.enable=true"
+          - "traefik.http.routers.api.rule=Host(`${APP_HOST}`) && PathPrefix(`/api`)"
+          - "traefik.http.routers.api.entrypoints=websecure"
+          - "traefik.http.routers.api.tls.certresolver=${CERT_RESOLVER}"
+          - "traefik.http.services.api.loadbalancer.server.port=8080"
+          - "traefik.http.routers.api-http.entrypoints=web"
+          - "traefik.http.routers.api-http.rule=Host(`${APP_HOST}`) && PathPrefix(`/api`)"
+          - "traefik.http.routers.api-http.middlewares=redirect-to-https"
 
     redis:
         image: redis:7-alpine
@@ -59,3 +77,5 @@ services:
 networks:
   app-network:
     driver: bridge
+  proxy:
+    external: true
