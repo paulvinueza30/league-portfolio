@@ -21,7 +21,7 @@ services:
           - "traefik.http.routers.frontend.rule=Host(`${APP_HOST}`)"
           - "traefik.http.routers.frontend.entrypoints=websecure"
           - "traefik.http.routers.frontend.tls.certresolver=${CERT_RESOLVER}"
-          - "traefik.http.services.frontend.loadbalancer.server.port=5173"
+          - "traefik.http.services.frontend.loadbalancer.server.port=80"
           - "traefik.http.routers.frontend-http.entrypoints=web"
           - "traefik.http.routers.frontend-http.rule=Host(`${APP_HOST}`)"
           - "traefik.http.routers.frontend-http.middlewares=redirect-to-https"
