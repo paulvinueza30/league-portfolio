@@ -19,9 +19,7 @@ import MyJoyRide from "./MyJoyRide";
 import { useQueries } from "@tanstack/react-query";
 import { useChampSelectAnimation } from "@/hooks/useChampSelectAnimation";
 import { skipAnimationsAndQueueAtom } from "@/atoms/queueAtom";
-import { useNavigate } from "react-router-dom"; // Keep if still used by other parts of this component
 import BackButton from "@/components/BackButton"; // Import the reusable BackButton component
-import { ArrowLeft } from "lucide-react"; // Keep this import for now, as it might be used by other parts of the component. Will remove if unused.
 
 function Seperator() {
   return (

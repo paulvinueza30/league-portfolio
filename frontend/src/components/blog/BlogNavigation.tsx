@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { ArrowLeft, Github, Twitter, Linkedin, Mail, House } from "lucide-react"
+import { Github, Twitter, Linkedin, Mail, House } from "lucide-react"
 import { Link } from "react-router-dom"
 
 export default function BlogNavigation() {

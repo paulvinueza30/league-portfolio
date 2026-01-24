@@ -4,8 +4,7 @@ import { useAtom, useSetAtom } from "jotai";
 import { type Chat } from "@/atoms/chatAtom";
 import { chatSound } from "@/assets/sounds";
 import { useRef, useEffect } from "react";
-import { joyrideAtom, userHasInteractedAtom } from "@/atoms/joyrideAtom";
-import { gsapAtom } from "@/atoms/gsapAtom";
+import { joyrideAtom } from "@/atoms/joyrideAtom";
 import { skipAnimationsAndQueueAtom } from "@/atoms/queueAtom";
 
 import { useAudio } from "@/context/AudioContext";
@@ -103,9 +102,7 @@ function ChatInput() {
 
 export default function Chatbox() {
   const addChatMessage = useSetAtom(addChatMessageAtom);
-  const [isAnimationComplete] = useAtom(gsapAtom);
   const [chat] = useAtom(chatAtom);
-  const [userHasInteracted] = useAtom(userHasInteractedAtom);
   const [skipAnimationsAndQueue] = useAtom(skipAnimationsAndQueueAtom);
 
 

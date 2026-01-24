@@ -1,5 +1,3 @@
-import { Separator } from "@/components/ui/separator";
-import { Circle } from "lucide-react";
 import { devRole } from "@/assets/role";
 import { champPortrait } from "@/assets/self-pics";
 

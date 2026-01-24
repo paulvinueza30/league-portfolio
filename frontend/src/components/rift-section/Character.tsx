@@ -6,6 +6,16 @@ import { CapsuleCollider, RigidBody } from "@react-three/rapier";
 
 import type { RigidBody as RapierRigidBody } from "@dimforge/rapier3d-compat";
 
+interface CharacterControllerProps {
+  onReady?: (
+    actions: Record<string, THREE.AnimationAction>,
+    charBodyRef: React.RefObject<RapierRigidBody>,
+    mixer: THREE.AnimationMixer
+  ) => void;
+  targetPos: THREE.Vector3 | null;
+  setTargetPos: (pos: THREE.Vector3 | null) => void;
+}
+
 const MOVEMENT_SPEED = 0.009;
 const ROTATION_THRESHOLD = 0.05;
 const STOP_THRESHOLD = 0.1;

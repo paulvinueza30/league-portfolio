@@ -28,7 +28,6 @@ import {
   seleniumLogo,
   awsLogo,
   mernLogo,
-  mvcLogo,
   jsLogo,
 } from "@/assets/skills";
 
