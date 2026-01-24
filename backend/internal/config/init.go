@@ -26,21 +26,12 @@ func init() {
 	if err != nil {
 		panic("failed to load config: " + err.Error())
 	}
-	log.Printf("DEBUG: Loaded config with REDIS_ADDR: %s", cfg.Redis.Addr)
 
-	var rdb *redis.Client // Re-add the declaration here
-
-	opt := &redis.Options{
-		Addr:    cfg.Redis.Addr,
-		Network: "tcp4",
-	}
-
-	if opt.Password == "" {
-		opt.Password = cfg.Redis.Password
-	}
-
-
-	rdb = redis.NewClient(opt)
+	rdb := redis.NewClient(&redis.Options{
+		Addr:     cfg.Redis.Addr,
+		Password: cfg.Redis.Password,
+		Network:  "tcp4",
+	})
 
 	// Test connection to Redis
 	ctx := context.Background()

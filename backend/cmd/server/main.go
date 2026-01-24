@@ -10,7 +10,6 @@ import (
 
 func main() {
 	app := config.GetApp()
-	log.Printf("DEBUG: REDIS_ADDR: %s", app.Config.Redis.Addr)
 	_ = app
 
 	r := api.GetRouter()

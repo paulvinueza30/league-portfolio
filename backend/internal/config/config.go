@@ -33,7 +33,6 @@ func loadConfig() (*Config, error) {
 	if redisAddr == "" {
 		redisAddr = "localhost:6379"
 	}
-	log.Printf("DEBUG: REDIS_ADDR set to: %s", redisAddr)
 
 	cfg := &Config{
 		Port:                 port,
@@ -46,7 +45,7 @@ func loadConfig() (*Config, error) {
 		},
 		Redis: RedisConfig{
 			Addr:     redisAddr,
-			Password: os.Getenv("REDIS_PASSWORD"),
+			Password: os.Getenv("REDIS_PWD"),
 		},
 	}
 
