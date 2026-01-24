@@ -1,0 +1,19 @@
+name: Deploy Portfolio
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: 129.213.43.164
+          username: opc
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd ~/apps/league-portfolio
+            git pull origin main
+            docker compose up -d --build
