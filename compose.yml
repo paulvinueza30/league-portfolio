@@ -45,10 +45,13 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
-      - "traefik.http.routers.api.rule=Host(`${APP_HOST}`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.api.rule=(Host(`paulvinueza.dev`) || Host(`www.paulvinueza.dev`)) && PathPrefix(`/api`)"
       - "traefik.http.routers.api.entrypoints=websecure"
       - "traefik.http.routers.api.tls.certresolver=${CERT_RESOLVER}"
       - "traefik.http.services.api.loadbalancer.server.port=8080"
+      - "traefik.http.routers.api-http.entrypoints=web"
+      - "traefik.http.routers.api-http.rule=(Host(`paulvinueza.dev`) || Host(`www.paulvinueza.dev`)) && PathPrefix(`/api`)"
+      - "traefik.http.routers.api-http.middlewares=redirect-to-https"
 
   redis:
     image: redis:7-alpine
