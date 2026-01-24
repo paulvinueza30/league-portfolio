@@ -1,0 +1,120 @@
+import {
+  defaultSkill,
+  allSkills,
+  languageSkills,
+  frameworkSkills,
+  toolSkills,
+  utilitySkills,
+} from "@/assets/skills";
+
+import { cvButton } from "@/assets/";
+
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+import { type Skill } from "@/assets/skills";
+import { Button } from "../ui/button";
+
+import { default as resumePDF } from "/Paul_Vinueza_Resume.pdf";
+
+interface SkillShowCaseProps {
+  skills: Skill[];
+}
+
+function SkillShowCase({ skills }: SkillShowCaseProps) {
+  return (
+    <div className="w-full bg-[#080F21] justify-items-center grid grid-cols-3 sm:grid-cols-4 auto-rows-min max-h-70 overflow-y-auto">
+      {skills.map((skill) => (
+        <div
+          key={skill.name}
+          className="flex flex-col bg-[#080F21] justify-start border-2 border-[#6d5d2b] hover:bg-[#1E272C] hover:border-[#C89B3C] transform hover:scale-105 active:scale-95 transition-transform group"
+        >
+          <Button
+            variant="ghost"
+            className="border-0 bg-transparent hover:bg-transparent outline-none shadow-none "
+          >
+            <img
+              className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7"
+              src={skill.img}
+              alt={`Logo of ${skill.name}`}
+              draggable={false}
+            />
+          </Button>
+          <span className="text-center text-[10px] sm:text-xs group-hover:text-white">
+            {skill.name}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function WardButton() {
+  const categories: Record<string, Skill[]> = {
+    All: allSkills,
+    Languages: languageSkills,
+    Frameworks: frameworkSkills,
+    Tools: toolSkills,
+    Utilities: utilitySkills,
+  };
+
+  return (
+    <Popover>
+      <PopoverTrigger className="joy-skills-showcase">
+        <img
+          className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 select-none flex-shrink-0"
+          src={defaultSkill}
+          alt="Go language logo"
+          draggable={false}
+        />
+      </PopoverTrigger>
+      <PopoverContent
+        side="top"
+        className="w-full bg-[#0A1428] text-white select-none"
+      >
+        <Tabs>
+          <TabsList className="bg-[#1c2f5a] border-b border-[#C6AD66]">
+            {Object.keys(categories).map((name) => (
+              <TabsTrigger
+                key={name}
+                className="text-xs text-white data-[state=active]:text-[#C6AD66] data-[state=active]:border-b-2 data-[state=active]:border-[#C6AD66] data-[state=active]:bg-amber-100 hover:text-[#C6AD66] transition-colors duration-200 rounded-none px-2 py-1"
+                value={name}
+              >
+                {name}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+          {Object.entries(categories).map(([name, skills]) => (
+            <TabsContent
+              className="bg-transparent border border-[#333] mt-2 p-2 rounded-sm"
+              key={name}
+              value={name}
+            >
+              <SkillShowCase key={name} skills={skills} />
+            </TabsContent>
+          ))}
+        </Tabs>
+      </PopoverContent>
+    </Popover>
+  );
+}
+
+export default function BMSection() {
+  return (
+    <div className="flex items-center gap-1 sm:gap-1.5 md:gap-2 lg:gap-3 xl:gap-4 flex-shrink-0">
+      <WardButton />
+      <a
+        href={resumePDF}
+        download="Paul_Vinueza_Resume.pdf"
+        className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 joy-resume-button hover:bg-transparent flex-shrink-0"
+      >
+        <img src={cvButton} alt="Download my resume" draggable={false} />
+      </a>
+    </div>
+  );
+}
