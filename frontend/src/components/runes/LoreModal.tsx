@@ -67,7 +67,7 @@ export function LoreModal() {
             <Scene />
           </ResizablePanel>
           <ResizableHandle />
-          <ResizablePanel defaultSize={20}>
+          <ResizablePanel defaultSize={50}>
             <div className="flex h-full items-center justify-center p-6">
               <span className="font-semibold">Three</span>
             </div>

@@ -4,11 +4,11 @@ import Joyride from "react-joyride";
 
 const steps = [
   {
-    target: ".joy-rune-dropdown",
+    target: "#rune-selection-controls .joy-rune-dropdown",
     content: "Pick a portfolio section to explore different areas of me.",
   },
   {
-    target: ".joy-rune-page-opener",
+    target: "#rune-selection-controls .joy-rune-page-opener",
     content: "Click to view details for the selected section.",
   },
   {
@@ -52,6 +52,7 @@ export default function MyJoyRide() {
       continuous
       showProgress
       showSkipButton
+      disableScrolling={false}
       callback={(data) => {
         if (["finished", "skipped"].includes(data.status)) {
           setRunTour(false);

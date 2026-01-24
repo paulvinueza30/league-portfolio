@@ -5,6 +5,7 @@ import * as THREE from "three";
 import { Physics, RigidBody } from "@react-three/rapier";
 import { CharacterController } from "./Character";
 import { type ThreeEvent } from "@react-three/fiber";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 interface MapProps {
   onRightClick: (pos: THREE.Vector3) => void;
@@ -29,6 +30,21 @@ function Map({ onRightClick }: MapProps) {
         <primitive object={scene} onContextMenu={handleClick} />
       </RigidBody>
     </group>
+  );
+}
+
+function ErrorFallback() {
+  return (
+    <div className="w-full h-full flex flex-col justify-center items-center bg-black text-white">
+      <h1 className="text-2xl mb-4">Something went wrong.</h1>
+      <p className="mb-4">There was an error rendering the 3D scene.</p>
+      <button
+        className="px-4 py-2 bg-blue-500 rounded hover:bg-blue-700"
+        onClick={() => window.location.reload()}
+      >
+        Reload Page
+      </button>
+    </div>
   );
 }
 
@@ -99,26 +115,28 @@ export default function Scene() {
   }
   return (
     <div className="w-full h-full bg-gray-800">
-      <Canvas camera={{ position: CAMERA_POSITION, fov: CAMERA_FOV, near: CAMERA_NEAR, far: CAMERA_FAR }}>
-        <Suspense fallback={<Loading />}>
-          <ambientLight intensity={2} />
-          <directionalLight position={[5, 10, 5]} intensity={1.5} />
-          <pointLight position={[1, 2, -0.3]} intensity={5} />
-          <Grid args={[10, 10]} />
-          <Stats />
-          <Physics>
-            <Map onRightClick={handleRightClick} />
-            <CharacterController
-              onReady={handleCharacterReady}
-              targetPos={targetPos}
-              setTargetPos={setTargetPos}
-            />
-          </Physics>
-          {clickMarkers.map((m) => (
-            <ClickMarker key={m.id} position={m.position} />
-          ))}
-        </Suspense>
-      </Canvas>
+      <ErrorBoundary fallback={<ErrorFallback />}>
+        <Canvas camera={{ position: CAMERA_POSITION, fov: CAMERA_FOV, near: CAMERA_NEAR, far: CAMERA_FAR }}>
+          <Suspense fallback={<Loading />}>
+            <ambientLight intensity={2} />
+            <directionalLight position={[5, 10, 5]} intensity={1.5} />
+            <pointLight position={[1, 2, -0.3]} intensity={5} />
+            <Grid args={[10, 10]} />
+            <Stats />
+            <Physics>
+              <Map onRightClick={handleRightClick} />
+              <CharacterController
+                onReady={handleCharacterReady}
+                targetPos={targetPos}
+                setTargetPos={setTargetPos}
+              />
+            </Physics>
+            {clickMarkers.map((m) => (
+              <ClickMarker key={m.id} position={m.position} />
+            ))}
+          </Suspense>
+        </Canvas>
+      </ErrorBoundary>
     </div>
   );
 }

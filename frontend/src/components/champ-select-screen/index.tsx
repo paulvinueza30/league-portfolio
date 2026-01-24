@@ -148,25 +148,6 @@ export default function ChampSelectScreen() {
           </div>
         </div>
       </div>
-      {/* Small screen layout: Chat and Rune in separate rows */}
-      <div className="flex flex-col md:hidden gap-2 mb-2 items-center w-full px-1 sm:px-4">
-        {/* Chat row - centered on small screens */}
-        <div className="flex justify-center items-end bottom-row-item w-full">
-          <Chatbox />
-        </div>
-        {/* Rune row - centered on small screens */}
-        <div className="flex justify-center items-end bottom-row-item w-full">
-          <RuneSelection />
-        </div>
-      </div>
-      {/* Tablet layout: Only Chat moved up */}
-      <div className="hidden md:flex lg:hidden flex-col gap-2 sm:gap-3 mb-2 sm:mb-3 items-center w-full px-2 sm:px-4">
-        {/* Chat row - centered on tablet screens */}
-        <div className="flex justify-center items-end bottom-row-item w-full">
-          <Chatbox />
-        </div>
-      </div>
-      {/* Bottom row */}
       <div className="flex flex-row md:flex lg:grid lg:grid-cols-[1fr_auto_1fr] gap-x-0.5 sm:gap-x-1 md:gap-x-2.5 lg:gap-x-3 xl:gap-x-5 mb-4 md:mb-2.5 lg:mb-3 xl:mb-4 items-end mx-0.5 sm:mx-1.5 md:mx-2 lg:mx-3 xl:mx-6 overflow-visible">
         {/* Chat - visible on lg+ screens only */}
         <div className="bottom-row-item hidden lg:flex lg:justify-start lg:items-end">
@@ -175,10 +156,7 @@ export default function ChampSelectScreen() {
         {/* Center section */}
         <div className="flex flex-row gap-x-1 sm:gap-x-1.5 md:gap-x-2.5 lg:gap-x-1.5 xl:gap-x-2 2xl:gap-x-5 items-end bottom-row-item justify-center overflow-visible flex-nowrap">
           <Seperator />
-          {/* Rune - hidden only on small screens (moved above), visible on md+ */}
-          <div className="hidden md:flex items-end">
-            <RuneSelection />
-          </div>
+          <RuneSelection />
           <SummonerSpells />
           <div className="h-5 sm:h-6 md:h-7 lg:h-8 w-0.5 bg-[#525861] bottom-row-item flex-shrink-0" />
           <BMSection />

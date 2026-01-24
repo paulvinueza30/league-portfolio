@@ -11,6 +11,9 @@ import {
   DialogContent,
   DialogClose,
   DialogTrigger,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
 } from "@/components/ui/dialog";
 
 import { runeButton } from "@/assets/buttons";
@@ -44,7 +47,7 @@ export default function RuneSelection() {
   };
 
   return (
-    <div className="flex justify-center items-end gap-2 sm:gap-1.5 md:gap-2 lg:gap-2.5 xl:gap-3 flex-shrink-0">
+    <div id="rune-selection-controls" className="flex justify-center items-end gap-2 sm:gap-1.5 md:gap-2 lg:gap-2.5 xl:gap-3 flex-shrink-0">
       <Dialog>
         <DialogTrigger
           className="joy-rune-page-opener"
@@ -89,6 +92,12 @@ export default function RuneSelection() {
   backdrop-blur-sm
 "
         >
+          <DialogHeader>
+            <DialogTitle className="sr-only">Rune Page</DialogTitle>
+            <DialogDescription className="sr-only">
+              A modal that displays either my projects or my lore.
+            </DialogDescription>
+          </DialogHeader>
           <div className="relative h-full">{activeModal}</div>
           <DialogClose
             className="absolute top-1 right-0.5 rounded-4xl bg-[#1E272C] text-[#BBAE86] border-4 border-[#614B23] p-0.5"
