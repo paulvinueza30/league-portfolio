@@ -1,39 +1,43 @@
-name: league-portfolio
+name: league-portfolio-dev
 services:
     frontend:
         build:
-            context: .
+            context: ./frontend
             dockerfile: Dockerfile
         image: league-frontend:latest
         container_name: portfolio-frontend
         ports:
             - 5173:5173
         volumes:
-            - .:/app
+            - ./frontend:/app
             - /app/node_modules
         environment:
             - API_TARGET=http://api:8080
         env_file:
-            - .env
+            - ./frontend/.env
+        networks:
+          - app-network
 
     api:
         build:
-          context: ./api
+          context: ./backend
           dockerfile: Dockerfile.dev
         container_name: portfolio-backend
         volumes:
-          - ./api:/app
-          - ./api/posts:/app/posts
-          - ./api/projects:/app/projects
+          - ./backend:/app
+          - ./backend/data/posts:/app/posts
+          - ./backend/data/projects:/app/projects
         ports:
           - "8080:8080"
         env_file:
-          - .env
+          - ./backend/.env
         environment:
-          - REDIS_ADDR=${REDIS_ADDR}
+          - REDIS_ADDR=redis:6379
         depends_on:
           redis:
             condition: service_healthy
+        networks:
+          - app-network
 
     redis:
         image: redis:7-alpine
@@ -45,3 +49,9 @@ services:
           interval: 5s
           timeout: 3s
           retries: 5
+        networks:
+          - app-network
+
+networks:
+  app-network:
+    driver: bridge
