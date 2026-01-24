@@ -1,82 +1,70 @@
 name: league-portfolio-prod
 services:
-    frontend:
-        build:
-            context: ./frontend
-            dockerfile: Dockerfile
-        image: league-frontend:latest
-        container_name: portfolio-frontend
-        volumes:
-            - ./frontend:/app
-            - /app/node_modules
-        environment:
-            - API_TARGET=/api
-        env_file:
-            - ./frontend/.env
-        networks:
-          - app-network
-          - proxy
-        labels:
-          - "traefik.enable=true"
-          - "traefik.http.routers.frontend.rule=Host(`${APP_HOST}`)"
-          - "traefik.http.routers.frontend.entrypoints=websecure"
-          - "traefik.http.routers.frontend.tls.certresolver=${CERT_RESOLVER}"
-          - "traefik.http.services.frontend.loadbalancer.server.port=80"
-          - "traefik.http.routers.frontend-http.entrypoints=web"
-          - "traefik.http.routers.frontend-http.rule=Host(`${APP_HOST}`)"
-          - "traefik.http.routers.frontend-http.middlewares=redirect-to-https"
-          - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
-          - "traefik.http.middlewares.redirect-to-https.redirectscheme.permanent=true"
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: league-frontend:latest
+    container_name: portfolio-frontend
+    env_file:
+      - ./frontend/.env
+    networks:
+      - app-network
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.frontend.rule=Host(`${APP_HOST}`)"
+      - "traefik.http.routers.frontend.entrypoints=websecure"
+      - "traefik.http.routers.frontend.tls.certresolver=${CERT_RESOLVER}"
+      - "traefik.http.services.frontend.loadbalancer.server.port=80"
+      - "traefik.http.routers.frontend-http.entrypoints=web"
+      - "traefik.http.routers.frontend-http.rule=Host(`${APP_HOST}`)"
+      - "traefik.http.routers.frontend-http.middlewares=redirect-to-https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
 
-    api:
-        build:
-          context: ./backend
-          dockerfile: Dockerfile
-        container_name: portfolio-backend
-        volumes:
-          - ./backend:/app
-          - ./backend/data/posts:/app/posts
-          - ./backend/data/projects:/app/projects
-        env_file:
-          - ./backend/.env
-        environment:
-          - GIN_MODE=release
-          - REDIS_ADDR=redis:6379
-        depends_on:
-          redis:
-            condition: service_healthy
-        networks:
-          - app-network
-          - proxy
-        labels:
-          - "traefik.enable=true"
-          - "traefik.http.routers.api.rule=Host(`${APP_HOST}`) && PathPrefix(`/api`)"
-          - "traefik.http.routers.api.entrypoints=websecure"
-          - "traefik.http.routers.api.tls.certresolver=${CERT_RESOLVER}"
-          - "traefik.http.services.api.loadbalancer.server.port=8080"
-          - "traefik.http.routers.api-http.entrypoints=web"
-          - "traefik.http.routers.api-http.rule=Host(`${APP_HOST}`) && PathPrefix(`/api`)"
-          - "traefik.http.routers.api-http.middlewares=redirect-to-https"
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: portfolio-backend
+    volumes:
+      - ./backend/data/posts:/app/posts
+      - ./backend/data/projects:/app/projects
+    env_file:
+      - ./backend/.env
+    environment:
+      - GIN_MODE=release
+      - REDIS_ADDR=redis:6379
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - app-network
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.api.rule=Host(`${APP_HOST}`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.api.entrypoints=websecure"
+      - "traefik.http.routers.api.tls.certresolver=${CERT_RESOLVER}"
+      - "traefik.http.services.api.loadbalancer.server.port=8080"
 
-    redis:
-        image: redis:7-alpine
-        container_name: portfolio-redis
-        env_file:
-          - .env
-        command: redis-server --requirepass $REDIS_PWD
-        ports:
-          - "6379:6379"
-        restart: unless-stopped
-        healthcheck:
-          test: ["CMD-SHELL", "redis-cli -a $REDIS_PWD ping"]
-          interval: 5s
-          timeout: 3s
-          retries: 5
-        networks:
-          - app-network
+  redis:
+    image: redis:7-alpine
+    container_name: portfolio-redis
+    command: redis-server --requirepass ${REDIS_PWD}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a ${REDIS_PWD} ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - app-network
 
 networks:
   app-network:
     driver: bridge
   proxy:
-    external: true
+    external: true   external: true
