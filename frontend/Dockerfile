@@ -1,16 +1,21 @@
-FROM node:22.12.0-alpine AS base
+# Stage 1: Build the app
+FROM node:22-alpine AS build
 
 WORKDIR /app
 
 COPY ./package.json ./yarn.lock ./
+RUN yarn install --frozen-lockfile
 
-RUN yarn install --frozen-lockfile && \
-    yarn cache clean
+COPY . .
+RUN yarn run build
 
-COPY --exclude=./api/ . ./
+FROM nginx:alpine
 
-ENV PORT=5173
+COPY --from=build /app/dist /usr/share/nginx/html
 
-EXPOSE 5173
+# Optional: Copy a custom nginx config for React Router support
+# COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 
-CMD ["yarn" , "run" , "vite"]
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
