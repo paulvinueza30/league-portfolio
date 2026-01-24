@@ -41,6 +41,7 @@ services:
           - ./backend/.env
         environment:
           - GIN_MODE=release
+          - REDIS_ADDR=redis:6379
         depends_on:
           redis:
             condition: service_healthy
