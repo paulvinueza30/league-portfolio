@@ -1,0 +1,55 @@
+name: league-portfolio-prod
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_APP_EMAILJS_SERVICE_ID: ${VITE_APP_EMAILJS_SERVICE_ID:-}
+        VITE_APP_EMAILJS_TEMPLATE_ID: ${VITE_APP_EMAILJS_TEMPLATE_ID:-}
+        VITE_APP_EMAILJS_PUBLIC_KEY: ${VITE_APP_EMAILJS_PUBLIC_KEY:-}
+    image: league-frontend:latest
+    networks:
+      - app-network
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      - GIN_MODE=release
+      - PORT=${PORT:-8080}
+      - REDIS_ADDR=redis:6379
+      - REDIS_PWD=${REDIS_PWD:?}
+      - RIOT_API_KEY=${RIOT_API_KEY:-}
+      - WAKA_API_KEY=${WAKA_API_KEY:-}
+      - LEETCODE_SESSION=${LEETCODE_SESSION:-}
+      - LEETCODE_USERNAME=${LEETCODE_USERNAME:-}
+      - SELF_HOSTED_BACKEND_URL=${SELF_HOSTED_BACKEND_URL:-}
+    depends_on:
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:${PORT:-8080}/api/health >/dev/null || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - app-network
+
+  redis:
+    image: redis:7-alpine
+    command: redis-server --requirepass ${REDIS_PWD}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a ${REDIS_PWD} ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
